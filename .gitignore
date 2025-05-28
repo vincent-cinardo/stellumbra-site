@@ -40,3 +40,4 @@ yarn-error.log*
 *.snupkg
 .nuget/
 *.Publish.xml
+*.csproj
