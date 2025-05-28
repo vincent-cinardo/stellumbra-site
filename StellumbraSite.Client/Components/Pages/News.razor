@@ -1,0 +1,51 @@
+﻿@page "/news"
+@using global::StellumbraSite.Client.StellumbraSite.Server.services
+@using global::StellumbraSite.Client.StellumbraSite.Shared.Models
+
+@inject NewsService NewsService
+
+<PageTitle>News</PageTitle>
+
+@if (news == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div style="background-color: black">
+        @foreach (var item in news)
+        {
+            <div class="news-item">
+                <h2 class="dos-font">@item.Title</h2>
+                <p class="dos-font"><em>@item.Date</em></p>
+
+                @foreach (var contentItem in item.Content)
+                {
+                    if (contentItem.ContentType == "text")
+                    {
+                        <p class="dos-font">@contentItem.Content</p>
+                    }
+                    else if (contentItem.ContentType == "image")
+                    {
+                        <img src="@contentItem.Content">
+                    }
+                    else
+                    {
+                        throw new Exception("Expected either image or text content for news.");
+                    }
+                }
+
+            </div>
+        }
+    </div>
+
+}
+
+@code {
+    private List<NewsItem> news;
+
+    protected override async Task OnInitializedAsync()
+    {
+        news = await NewsService.GetNewsAsync();
+    }
+}

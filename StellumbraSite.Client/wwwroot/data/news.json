@@ -1,0 +1,18 @@
+﻿{
+  "news" : [
+    {
+      "Title": "This is a title",
+      "Date": "November 20, 2025",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    }
+  ]
+}
