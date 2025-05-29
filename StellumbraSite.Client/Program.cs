@@ -10,6 +10,12 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddScoped<NewsService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", options =>
+{
+    options.LoginPath = "/admin-login"; // Redirect here if not authenticated
+});
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -25,6 +31,9 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

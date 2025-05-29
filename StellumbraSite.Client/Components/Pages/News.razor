@@ -1,4 +1,4 @@
-﻿@page "/news"
+﻿@page "/news/{newsPage:int}"
 @using global::StellumbraSite.Client.StellumbraSite.Server.services
 @using global::StellumbraSite.Client.StellumbraSite.Shared.Models
 
@@ -12,37 +12,56 @@
 }
 else
 {
-    <div style="background-color: black">
-        @foreach (var item in news)
-        {
-            <div class="news-item">
-                <h2 class="dos-font">@item.Title</h2>
-                <p class="dos-font"><em>@item.Date</em></p>
+    <div class="news-background">
+        <div class="news-container">
+            @for (int i = (newsPage - 1) * MAX_ARTICLES_PER_PAGE; i < Math.Min(news.Count, (newsPage - 1) * MAX_ARTICLES_PER_PAGE + MAX_ARTICLES_PER_PAGE); i++)
+            {
+                <a href="@($"/newsviewer/{i + 1}")">
+                    <div class="news-item">
+                        <h2 class="dos-font">@(i + 1)  @news[i].Title</h2>
+                        <img src="@news[i].TitleImagePath">
+                        <p class="dos-font"><em>@news[i].Date</em></p>
+                        <p class="dos-font"><em>@news[i].Caption</em></p>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="news-page-select">
+            @if (newsPage - MAX_PAGES_PER_DIRECTION > FirstPage)
+            {
+                <a href="@($"/news/{FirstPage}")">
+                    <p class="dos-font"><em>First Page</em></p>
+                </a>
+            }
 
-                @foreach (var contentItem in item.Content)
-                {
-                    if (contentItem.ContentType == "text")
-                    {
-                        <p class="dos-font">@contentItem.Content</p>
-                    }
-                    else if (contentItem.ContentType == "image")
-                    {
-                        <img src="@contentItem.Content">
-                    }
-                    else
-                    {
-                        throw new Exception("Expected either image or text content for news.");
-                    }
-                }
+            @for (int i = MinPage; i <= MaxPage; i++)
+            {
+                <a href="@($"/news/{i}")">
+                    <p class="dos-font"><em>@($"{i}")</em></p>
+                </a>
+            }
 
-            </div>
-        }
+            @if (newsPage + MAX_PAGES_PER_DIRECTION < LastPage)
+            {
+                <a href="@($"/news/{LastPage}")">
+                    <p class="dos-font"><em>Last Page</em></p>
+                </a>
+            }
+        </div>
     </div>
-
 }
 
 @code {
+    private const int MAX_ARTICLES_PER_PAGE = 9;
+    private const int MAX_PAGES_PER_DIRECTION= 3;
+
+    [Parameter]
+    public int newsPage { get; set; }
     private List<NewsItem> news;
+    public int FirstPage { get => 1; }
+    public int LastPage { get => (int)Math.Round((float)news.Count / (float)MAX_ARTICLES_PER_PAGE + 0.5f); }
+    public int MinPage { get => Math.Max(1, newsPage - MAX_PAGES_PER_DIRECTION); }
+    public int MaxPage { get => Math.Min(newsPage + MAX_PAGES_PER_DIRECTION, LastPage); }
 
     protected override async Task OnInitializedAsync()
     {

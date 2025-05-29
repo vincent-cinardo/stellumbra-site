@@ -1,4 +1,9 @@
 ﻿@page "/"
+@using global::StellumbraSite.Client.StellumbraSite.Server.services
+@using global::StellumbraSite.Client.StellumbraSite.Shared.Models
+
+@inject NewsService NewsService
+@inject IJSRuntime JS
 
 <PageTitle>Home</PageTitle>
 <div style="background-color: black">
@@ -16,6 +21,9 @@
         <h1 class="dos-font" style="position: relative">Stellumbra (Some kind of background here? Gameplay GIF?)</h1>
     </div>
 
+    <canvas id="mainCanvas" @ref="_canvasRef" width="800" height="600" style="border: 1px solid black;"></canvas>
+
+
     <div style="display: flex; justify-content: center;">
         <div style="text-align: center; height: 400px; justify-content: center">
             <br>
@@ -25,19 +33,15 @@
             </h3>
 
             <div style="display: flex; gap: 2rem; justify-content: center">
-                <a href="https://store.steampowered.com/">
-                    <div class="store-page-button">
-                        <p class="dos-font" style="font-size: 1.5em;;">
-                            Steam
-                        </p>
-                    </div>
+                <a class="store-page-button" href="https://store.steampowered.com/">
+                    <p class="dos-font" style="font-size: 1.5em;">
+                        Steam
+                    </p>
                 </a>
-                <a href="https://itch.io/">
-                    <div class="store-page-button" style="font-size: 1.5em;">
-                        <p class="dos-font">
-                            Itch.io
-                        </p>
-                    </div>
+                <a class="store-page-button" href="https://itch.io/">
+                    <p class="dos-font" style="font-size: 1.5em;">
+                        Itch.io
+                    </p>
                 </a>
             </div>
 
@@ -59,60 +63,74 @@
         <div style="width: 80%">
             <h1 class="dos-font">Launch Trailer</h1>
             <iframe width="1120"
-                    height="630"
-                    src="https://www.youtube.com/embed/3tDrxOASUog"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen>
+            height="630"
+            src="https://www.youtube.com/embed/3tDrxOASUog"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
             </iframe>
         </div>
     </div>
-    
+
     <br>
     <br>
     <div style="width: 90%; justify-content: center; justify-self: center;">
         <h1 class="dos-font">News and updates</h1>
         <div style="display: flex; justify-content: center; gap: 1em;">
-            <div>
-                <iframe width="560"
-                        height="315"
-                        src="https://www.youtube.com/embed/3tDrxOASUog"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                </iframe>
-                <h3 class="dos-font">Update 1</h3>
-                <p class="dos-font">This is a description...</p>
-                <p class="dos-font">January 10, 2025</p>
-            </div>
-            <div>
-                <iframe width="560"
-                        height="315"
-                        src="https://www.youtube.com/embed/3tDrxOASUog"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                </iframe>
-                <h3 class="dos-font">Update 2</h3>
-                <p class="dos-font">This is a description...</p>
-                <p class="dos-font">January 10, 2025</p>
-            </div>
-            <div>
-                <iframe width="560"
-                        height="315"
-                        src="https://www.youtube.com/embed/3tDrxOASUog"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen>
-                </iframe>
-                <h3 class="dos-font">Update 3</h3>
-                <p class="dos-font">This is a description...</p>
-                <p class="dos-font">January 10, 2025</p>
-            </div>
+            @if (news == null)
+            {
+                <div>
+                </div>
+                <div>
+                </div>
+                <div>
+                </div>
+            }
+            else
+            {
+                @for (int i = 0; i < MAX_ARTICLES; i++)
+                {
+                    @if (i < news.Count)
+                    {
+                        <a class="navigation-link" href="/newsviewer/@($"{i}")">
+                            <div>
+
+                                <img style="width: 560px; height:315px" src="images/space.png"/>
+                                <h3 class="dos-font">Update 1</h3>
+                                <p class="dos-font">This is a description...</p>
+                                <p class="dos-font">January 10, 2025</p>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <div>
+                        </div>
+                    }
+                }
+            }
         </div>
     </div>
 </div>
+
+@code {
+    private ElementReference _canvasRef;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("initWebGL");
+        }
+    }
+}
+
+@code {
+    private const int MAX_ARTICLES = 3;
+    private List<NewsItem> news;
+
+    protected override async Task OnInitializedAsync()
+    {
+        news = await NewsService.GetNewsAsync();
+    }
+}

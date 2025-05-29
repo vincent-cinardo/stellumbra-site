@@ -1,8 +1,1114 @@
 ﻿{
-  "news" : [
+  "news": [
     {
       "Title": "This is a title",
+      "TitleImagePath": "picture.png",
       "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
+      "Content": [
+        {
+          "contentType": "text",
+          "content": "Hello news!"
+        },
+        {
+          "contentType": "image",
+          "content": "fake_logo.png"
+        }
+      ]
+    },
+    {
+      "Title": "This is a title",
+      "TitleImagePath": "picture.png",
+      "Date": "November 20, 2025",
+      "Caption": "Added dogs and cats.",
       "Content": [
         {
           "contentType": "text",
