@@ -1,4 +1,4 @@
-using StellumbraSite.Client.StellumbraSite.Server.services;
+using StellumbraSite.Server.Services;
 using StellumbraSite.Client.StellumbraSite_Client.Components;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions

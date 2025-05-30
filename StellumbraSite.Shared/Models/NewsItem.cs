@@ -1,4 +1,4 @@
-﻿namespace StellumbraSite.Client.StellumbraSite.Shared.Models
+﻿namespace StellumbraSite.Shared.Models
 {
     public class NewsItem
     {

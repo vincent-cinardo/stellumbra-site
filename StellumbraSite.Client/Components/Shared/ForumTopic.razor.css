@@ -1,0 +1,15 @@
+.forum-topic {
+    display: flex;
+    background-color: lightslategray;
+    vertical-align: middle;
+    padding-left: 2%;
+    margin-top: auto;
+    margin-bottom: auto;
+    border: solid;
+    border-width: 1px;
+    margin: 1px;
+}
+
+    .forum-topic-text {
+        margin: 0
+    }

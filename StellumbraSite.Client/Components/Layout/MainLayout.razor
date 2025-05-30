@@ -1,18 +1,22 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="top-nav px-4 py-2" style="display: flex; gap: 100rem;">
-    <div style="display:flex">
+<div class="top-nav px-4 py-2">
+    <div style="width: 20%;  display:flex; justify-content: left; height: 100%;">
         <img src="images/fake_logo.png" alt="Replace this logo later, this is a prototype." />
     </div>
 
-    <div style="display: flex; position: absolute; gap: 4rem;">
+    <div style="width: 80%; display: flex; gap: 4rem; justify-content: center;">
         <a href="/" class="navigation-link">Home</a>
         <a href="/news/1" class="navigation-link">News</a>
+        <a href="/forum" class="navigation-link">Forum</a>
         <a href="/wiki-placeholder" class="navigation-link">Wiki</a>
     </div>
 
-    <div>
-        <a href="/" class="navigation-link">Account</a>
+    <div style="width: 20%; justify-content: right;" class="social-icons">
+        <a href="https://discord.gg/YOURINVITE" target="_blank"><i class="fab fa-discord fa-2x"></i></a>
+        <a href="https://www.reddit.com/r/YOURSUB/" target="_blank"><i class="fab fa-reddit fa-2x"></i></a>
+        <a href="https://store.steampowered.com/app/YOURAPPID" target="_blank"><i class="fab fa-steam fa-2x"></i></a>
+        <a href="https://youtube.com/YOURCHANNEL" target="_blank"><i class="fab fa-youtube fa-2x"></i></a>
     </div>
 </div>
 

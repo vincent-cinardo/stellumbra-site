@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using StellumbraSite.Client.StellumbraSite.Shared.Models;
+using StellumbraSite.Shared.Models;
 
-namespace StellumbraSite.Client.StellumbraSite.Server.services
+namespace StellumbraSite.Server.Services
 {
     public class NewsService
     {

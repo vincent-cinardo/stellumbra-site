@@ -41,6 +41,12 @@ a.store-page-button {
     color: #00ff58;
 }
 
+    .scaling-dos-font {
+        font-family: 'PerfectDOSVGA437', monospace, monospace;
+        color: #00ff58;
+        font-size: 1em;
+    }
+
 .social-icons {
     display: flex;
     color: #00ff58;
@@ -64,9 +70,10 @@ a.store-page-button {
     position: sticky;
     width: 100%;
     height: 60px;
-    justify-content: center;
     background-image: url('images/navbar.png');
     z-index: 100;
+    display: flex;
+    align-items: center;
 }
 
 a.navigation-link {
@@ -107,7 +114,20 @@ div.news-background {
     max-width: 75vw;
     margin-top: 5%;
     margin-bottom: 1%;
+    justify-content: center;
+    overflow-y: hidden;
     gap: 5vw;
+}
+
+.news-item {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.news-item-img {
+    width: 100%; 
+    height: 56.25%
 }
 
 .news-container div {
@@ -141,6 +161,25 @@ div.news-viewer-background {
 
 img.news-viewer-img {
     width: 100%;
+}
+
+/*Forum*/
+
+.forum-background {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    background-color: gray;
+    height: 100vh;
+    padding: 1em;
+}
+
+.forum-content-background {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    background-color: gray;
+    height: 100vh;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
