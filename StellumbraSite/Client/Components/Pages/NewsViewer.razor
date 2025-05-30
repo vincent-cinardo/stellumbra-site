@@ -1,0 +1,49 @@
+﻿@page "/newsviewer/{i:int}"
+@using StellumbraSite.Shared.Models
+@using StellumbraSite.Server.Services
+
+@inject NewsService NewsService
+
+<PageTitle>News Viewer</PageTitle>
+
+@if (news == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="news-viewer-background">
+        <div class="news-viewer">
+
+            <h2 class="dos-font">@news[i].Title</h2>
+            <p class="dos-font"><em>@news[i].Date</em></p>
+
+            @foreach (var content in news[i].Content)
+            {
+                if (content.ContentType == "text")
+                {
+                    <p class="dos-font"><em>@content.Content</em></p>
+                }
+                else if (content.ContentType == "image")
+                {
+                    <img class="news-viewer-img" src="@content.Content"/>
+                }
+                else
+                {
+                    throw new Exception($"Unexpected content type {content.ContentType}");
+                }
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int i { get; set; }
+    private List<NewsItem> news;
+
+    protected override async Task OnInitializedAsync()
+    {
+        news = await NewsService.GetNewsAsync();
+    }
+}
