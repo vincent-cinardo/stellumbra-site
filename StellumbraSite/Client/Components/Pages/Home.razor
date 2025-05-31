@@ -1,9 +1,11 @@
 ﻿@page "/"
+@using StellumbraSite.Server.Controllers
+@using StellumbraSite.Server.Models
 @using StellumbraSite.Shared.Models
 @using StellumbraSite.Server.Services
 
+@inject HttpClient Http
 @inject NewsService NewsService
-@inject IJSRuntime JS
 
 <PageTitle>Home</PageTitle>
 <div style="background-color: black">
@@ -19,6 +21,16 @@
         justify-content: center;
     ">
         <h1 class="dos-font" style="position: relative">Stellumbra (Some kind of background here? Gameplay GIF?)</h1>
+
+        @if (users != null)
+        {
+            @foreach (var user in users)
+            {
+                <h1 class="dos-font">
+                    @user.UserName
+                </h1>
+            }
+        }
     </div>
 
     <div style="display: flex; justify-content: center;">
@@ -111,12 +123,15 @@
     </div>
 </div>
 
+
 @code {
     private const int MAX_ARTICLES = 3;
+    private List<UserProfile>? users;
     private List<NewsItem> news;
 
     protected override async Task OnInitializedAsync()
     {
+        users = await Http.GetFromJsonAsync<List<UserProfile>>("/api/Profile/GetUser");
         news = await NewsService.GetNewsAsync();
     }
 }

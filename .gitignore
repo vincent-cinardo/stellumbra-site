@@ -18,6 +18,7 @@ obj/
 secrets.json
 appsettings.Development.json
 appsettings.Local.json
+appsettings.json
 *.db
 *.sqlite
 
