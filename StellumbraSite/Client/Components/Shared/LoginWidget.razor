@@ -1,0 +1,54 @@
+﻿@using System.Net;
+@using StellumbraSite.Client.Components.Shared
+
+@layout ForumLayout
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject IHttpContextAccessor HttpContextAccessor
+
+@using System.Security.Claims
+@using StellumbraSite.Server.Models
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+
+<div>
+    <h3 class="dos-font">Login</h3>
+    <p>@loginFailedMessage</p>
+    <input class="dos-font" style="background-color: dimgray" placeholder="Username" @bind="username" />
+    <input class="dos-font" style="background-color: dimgray" type="password" placeholder="Password" @bind="password" />
+    <button class="dos-font" style="background-color: dimgray" @onclick="HandleLogin">Log in</button>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<string> OnLogin { get; set; }
+
+    private string username;
+    private string password;
+    private string loginFailedMessage;
+
+    private async Task HandleLogin()
+    {
+        loginFailedMessage = "";
+
+        var loginPayload = new UserProfile { UserName = username, Password = password };
+        var response = await Http.PostAsJsonAsync("/api/Auth/Login", loginPayload);
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            loginFailedMessage = $"The user '{username}' does not exist.";
+        }
+        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            loginFailedMessage = $"Incorrect password.";
+        }
+        else if (response.IsSuccessStatusCode)
+        {
+            await OnLogin.InvokeAsync(username);
+        }
+        else
+        {
+            throw new Exception("Unexpected status code: " + response.StatusCode);
+        }
+    }
+}

@@ -26,7 +26,10 @@ builder.Services.AddScoped(sp =>
 });
 builder.Services.AddAuthentication("MyCookieAuth").AddCookie("MyCookieAuth", options =>
 {
-    options.LoginPath = "/admin-login"; // Redirect here if not authenticated
+    options.LoginPath = "/forum";
+    options.LogoutPath = "/forum";
+    options.ExpireTimeSpan = TimeSpan.FromDays(1);
+    options.SlidingExpiration = true;
 });
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();

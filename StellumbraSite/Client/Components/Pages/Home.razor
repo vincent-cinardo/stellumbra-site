@@ -131,7 +131,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        users = await Http.GetFromJsonAsync<List<UserProfile>>("/api/Profile/GetUser");
+        users = await Http.GetFromJsonAsync<List<UserProfile>>("/api/Profile/GetUsers");
         news = await NewsService.GetNewsAsync();
     }
 }

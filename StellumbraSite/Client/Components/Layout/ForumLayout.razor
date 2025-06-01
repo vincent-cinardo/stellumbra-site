@@ -1,6 +1,35 @@
 ﻿@inherits LayoutComponentBase
+@inject HttpClient Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+@using System.Security.Claims
+@using StellumbraSite.Server.Models
+@using Microsoft.AspNetCore.Authentication
+@using StellumbraSite.Client.Components.Shared
+@using Microsoft.AspNetCore.Authentication.Cookies
 
 <main>
+    @if (loginShown)
+    {
+        <div class="login-overlay">
+            <button @onclick="() => ShowLogin(false)">
+                X
+            </button>
+            <LoginWidget OnLogin="@OnUserLogin" />
+        </div>
+    }
+
+    @if (signupShown)
+    {
+        <div class="login-overlay">
+            <button @onclick="() => ShowSignUp(false)">
+                X
+            </button>
+            <SignupWidget />
+        </div>
+    }
+
     <div class="forum-background">
         <div class="forum-navbar-background">
             <div style="display: flex; width: 100%;">
@@ -10,18 +39,60 @@
                     </a>
                 </div>
 
-                <div style="display: flex; width: 50%; justify-content: right">
-                    <a style="display: flex; width: fit-content;" href="youtube.com">
-                        <p>Exiting user? Login.</p>
-                    </a>
-                    <a style="display: flex; width: fit-content;" href="youtube.com">
-                        <div style="border: solid">
-                            <p>Sign up</p>
-                        </div>
-                    </a>
-                </div>
+                @if (userIsLogged)
+                {
+                    <div style="display: flex; width: 50%; justify-content: right">
+                        <p>@usernameLoggedIn</p>
+                        <button @onclick="SignOut" style="display: flex; width: fit-content;">
+                            <p>Sign out.</p>
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <div style="display: flex; width: 50%; justify-content: right">
+                        <button @onclick="() => ShowLogin(true)" style="display: flex; width: fit-content;">
+                            <p>Existing user? Login.</p>
+                        </button>
+                        <button @onclick="() => ShowSignUp(true)" style=" display: flex; width: fit-content;">
+                            <div style="border: solid">
+                                <p>Sign up</p>
+                            </div>
+                        </button>
+                    </div>
+                }
             </div>
         </div>
         @Body
+
     </div>
 </main>
+
+
+@code {
+    private bool loginShown;
+    private bool signupShown;
+    private bool userIsLogged;
+    private string usernameLoggedIn;
+
+    private void ShowLogin(bool shown)
+    {
+        loginShown = shown;
+    }
+    private void ShowSignUp(bool shown)
+    { 
+        signupShown = shown;
+    }
+    private async Task OnUserLogin(string user)
+    {
+        userIsLogged = true;
+        usernameLoggedIn = user;
+        loginShown = false;
+    }
+    private async Task SignOut()
+    {
+        userIsLogged = false;
+        usernameLoggedIn = "";
+        await Http.PostAsync("/api/Auth/Logout", null);
+    }
+}

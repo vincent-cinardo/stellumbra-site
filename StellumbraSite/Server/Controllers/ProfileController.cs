@@ -10,14 +10,13 @@ namespace StellumbraSite.Server.Controllers
     public class ProfileController: ControllerBase
     {
         private readonly AppDbContext _db;
-
         public ProfileController(AppDbContext db)
         {
             _db = db;
         }
 
-        [HttpGet("GetUser")]
-        public async Task<IActionResult> GetUser()
+        [HttpGet("GetUsers")]
+        public async Task<IActionResult> GetUsers()
         {
             var result = await _db.UserProfiles.Select(x => new UserProfile
             {
