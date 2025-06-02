@@ -46,5 +46,24 @@ namespace StellumbraSite.Server.Controllers
             await HttpContext.SignOutAsync("MyCookieAuth");
             return Ok();
         }
+
+        // todo
+        /*[HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            var user = await _db.UserProfiles.FirstOrDefaultAsync(u => u.UserName == userId);
+            if (user == null)
+            {
+                return BadRequest("Invalid user ID");
+            }
+
+            var result = await _db.UserProfiles.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return Ok("Email confirmed!");
+            }
+
+            return BadRequest("Email confirmation failed.");
+        }*/
     }
 }

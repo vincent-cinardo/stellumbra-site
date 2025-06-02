@@ -96,6 +96,11 @@ a.navigation-link {
     height: 100vh;
 }
 
+.generic-paginator {
+    display: flex;
+    gap: 2em
+}
+
 /*News Page*/
 
 div.news-background {
@@ -134,11 +139,6 @@ div.news-background {
     background-color: black;
     width: 20vw;
     height: 20vw;
-}
-
-.news-page-select {
-    display: flex;
-    gap: 2em
 }
 
 /*News Viewer Page*/

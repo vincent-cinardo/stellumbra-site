@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using StellumbraSite.Client.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StellumbraSite.Server.Models
@@ -8,7 +9,10 @@ namespace StellumbraSite.Server.Models
     {
         [Key]
         [Column("id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
+        [ForeignKey(nameof(Topic))]
+        [Column("topic_name")]
+        public string TopicName { get; set; }
         [Column("title")]
         public string Title { get; set; }
     }

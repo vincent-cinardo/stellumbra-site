@@ -12,11 +12,13 @@ namespace StellumbraSite.Server.Models
         [Key]
         [Column("id")]
         public int Id { get; set; }
+        [ForeignKey(nameof(ForumPost))]
         [Column("post_id")]
-        public string PostID { get; set; }
+        public int PostID { get; set; }
+        [ForeignKey(nameof(UserProfile))]
         [Column("poster_id")]
-        public string PosterID { get; set; }
-        [Column("content")] // Match column exactly — PostgreSQL is case-sensitive
+        public int PosterID { get; set; }
+        [Column("content")]
         public string Content { get; set; }
     }
 }

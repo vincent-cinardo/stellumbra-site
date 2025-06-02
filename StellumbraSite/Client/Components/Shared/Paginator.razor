@@ -1,0 +1,59 @@
+﻿<!-- Paginator assumes a path exists: "/pageRootPath/{n}" -->
+
+<div class=@($"{customPaginatorClass}")>
+    @if (page - pagesPerDirection > FirstPage)
+    {
+        <a href=@($"{pageRootPath}/{FirstPage}")>
+            <p class=@($"{customFontClass}")><em>First Page</em></p>
+        </a>
+    }
+
+    @for (int i = MinPage; i <= MaxPage; i++)
+    {
+        <a href=@($"{pageRootPath}/{i}")>
+            <p class=@($"{customFontClass}")><em>@($"{i}")</em></p>
+        </a>
+    }
+
+    @if (page + pagesPerDirection < LastPage)
+    {
+        <a href=@($"{pageRootPath}/{LastPage}")>
+            <p class=@($"{customFontClass}")><em>Last Page</em></p>
+        </a>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public int itemsPerPage { get; set; }
+    [Parameter, EditorRequired]
+    public int pagesPerDirection { get; set; }
+    [Parameter, EditorRequired]
+    public int itemCount { get; set; }
+    [Parameter, EditorRequired]
+    public int page { get; set; }
+    [Parameter, EditorRequired]
+    public string pageRootPath { get; set; }
+    [Parameter]
+    public string customPaginatorClass { get; set; }
+    [Parameter]
+    public string customFontClass { get; set; }
+
+    public int FirstPage { get => 1; }
+    public int LastPage { get => (int)Math.Round((float)itemCount / (float)itemsPerPage + 0.5f); }
+    public int MinPage { get => Math.Max(1, page - pagesPerDirection); }
+    public int MaxPage { get => Math.Min(page + pagesPerDirection, LastPage); }
+
+    protected override void OnInitialized()
+    {
+        if (customPaginatorClass == null)
+        {
+            customPaginatorClass = "generic-paginator";
+        }
+
+        if (customFontClass == null)
+        {
+            customFontClass = "dos-font";
+        }
+    }
+}

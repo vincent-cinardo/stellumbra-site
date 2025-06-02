@@ -1,0 +1,51 @@
+﻿@page "/forum/posts/{topicName}/{page:int}"
+
+@inject HttpClient Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@using System.Net;
+@using StellumbraSite.Server.Models
+@using StellumbraSite.Client.Components.Shared
+
+<h3>ForumPosts</h3>
+
+@if (posts != null)
+{
+    @foreach (var post in posts)
+    {
+        <div>
+            <a href=@($"/forum/post-opened/{post.Id}/1")>
+                <p>
+                    @post.Title
+                </p>
+            </a>
+        </div>
+    }
+}
+
+<Paginator
+    itemsPerPage=PAGE_SIZE
+    itemCount=totalPosts
+    pagesPerDirection=PAGES_PER_DIRECTION
+    page=page
+    pageRootPath=@($"/forum/posts/{topicName}")
+/>
+
+@code {
+    private const int PAGE_SIZE = 20;
+    private const int PAGES_PER_DIRECTION = 3;
+
+    [Parameter]
+    public string topicName { get; set; }
+    [Parameter]
+    public int page { get; set; }
+
+    private int totalPosts;
+    private List<ForumPost> posts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        totalPosts = await Http.GetFromJsonAsync<int>($"/api/Post/GetPostCount/{topicName}");
+        posts = await Http.GetFromJsonAsync<List<ForumPost>>($"/api/Post/GetPosts/{topicName}/{page}/{PAGE_SIZE}");
+    }
+}

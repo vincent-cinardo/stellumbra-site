@@ -1,6 +1,7 @@
 ﻿@page "/news/{newsPage:int}"
 @using StellumbraSite.Shared.Models
 @using StellumbraSite.Server.Services
+@using StellumbraSite.Client.Components.Shared
 
 @inject NewsService NewsService
 
@@ -26,28 +27,14 @@ else
                 </a>
             }
         </div>
-        <div class="news-page-select">
-            @if (newsPage - MAX_PAGES_PER_DIRECTION > FirstPage)
-            {
-                <a href="@($"/news/{FirstPage}")">
-                    <p class="dos-font"><em>First Page</em></p>
-                </a>
-            }
 
-            @for (int i = MinPage; i <= MaxPage; i++)
-            {
-                <a href="@($"/news/{i}")">
-                    <p class="dos-font"><em>@($"{i}")</em></p>
-                </a>
-            }
-
-            @if (newsPage + MAX_PAGES_PER_DIRECTION < LastPage)
-            {
-                <a href="@($"/news/{LastPage}")">
-                    <p class="dos-font"><em>Last Page</em></p>
-                </a>
-            }
-        </div>
+        <Paginator 
+            itemsPerPage=MAX_ARTICLES_PER_PAGE
+            pagesPerDirection=MAX_PAGES_PER_DIRECTION
+            itemCount=news.Count
+            page=newsPage
+            pageRootPath="/news"
+            />
     </div>
 }
 
