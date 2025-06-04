@@ -1,5 +1,6 @@
 ﻿@page "/forum/post-opened/{postID:int}/{page:int}"
 
+@inject IJSRuntime JS
 @inject HttpClient Http
 @inject IHttpContextAccessor HttpContextAccessor
 
@@ -22,6 +23,8 @@
         </div>
     }
 }
+
+<RichTextEditor/>
 
 <Paginator
     itemsPerPage=PAGE_SIZE
