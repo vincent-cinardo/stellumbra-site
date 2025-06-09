@@ -1,0 +1,29 @@
+﻿@inject IJSRuntime JS
+
+<div>
+    <div id="@EditorId" style="height: 300px;"></div>
+    <button @onclick="ShowContent">Get Content</button>
+
+    <h3>RichTextEditor</h3>
+
+    <p><strong>Preview:</strong></p>
+    <div>@HtmlContent</div>
+</div>
+
+@code {
+    private string EditorId = "editor";
+    private string HtmlContent;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("quillEditor.initialize", EditorId);
+        }
+    }
+
+    private async Task ShowContent()
+    {
+        HtmlContent = await JS.InvokeAsync<string>("quillEditor.getContent");
+    }
+}

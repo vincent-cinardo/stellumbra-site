@@ -1,0 +1,33 @@
+﻿@page "/newsviewer/{i:int}"
+@using StellumbraSite.Shared.Model
+
+@inject HttpClient Http
+
+<PageTitle>News Viewer</PageTitle>
+
+@if (news == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="news-viewer-background">
+        <div class="news-viewer">
+
+            <h2 class="dos-font">@news[i].Title</h2>
+            <p class="dos-font"><em>@news[i].Date</em></p>
+            @news[i].Content
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int i { get; set; }
+    private List<NewsItem> news;
+
+    protected override async Task OnInitializedAsync()
+    {
+        news = await Http.GetFromJsonAsync<List<NewsItem>>("/api/News/GetNews");
+    }
+}

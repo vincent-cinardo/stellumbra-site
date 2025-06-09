@@ -1,0 +1,121 @@
+﻿@page "/"
+@using StellumbraSite.Data
+@using StellumbraSite.Shared.Model
+
+@inject HttpClient Http
+
+<PageTitle>Home</PageTitle>
+<div style="background-color: black">
+    <div style="
+        width: 100vw;
+        height: 1000px;
+        background-image: url('images/space.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    ">
+        <h1 class="dos-font" style="position: relative">Stellumbra (Some kind of background here? Gameplay GIF?)</h1>
+    </div>
+
+    <div style="display: flex; justify-content: center;">
+        <div style="text-align: center; height: 400px; justify-content: center">
+            <br>
+            <br>
+            <h3 class="dos-font">
+                Now Available!
+            </h3>
+
+            <div style="display: flex; gap: 2rem; justify-content: center">
+                <a class="store-page-button" href="https://store.steampowered.com/">
+                    <p class="dos-font" style="font-size: 1.5em;">
+                        Steam
+                    </p>
+                </a>
+                <a class="store-page-button" href="https://itch.io/">
+                    <p class="dos-font" style="font-size: 1.5em;">
+                        Itch.io
+                    </p>
+                </a>
+            </div>
+
+            <br>
+            <br>
+
+            <h1 class="dos-font">
+                Endure a Dystopian Cosmic Apocalypse
+            </h1>
+
+            <div style="display: flex; justify-content: center">
+                <p class="dos-font" style="width: 80%;">
+                    Stellumbra is a real-time roguelike set in an aged universe of barren planets and dimming stars from advanced entropic collapse. One of the few white dwarves for millions of lightyears is refuge to remnants of advanced civilizations driven beyond the world of {some_world_name}.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex; justify-content: center; text-align: center;">
+        <div style="width: 80%">
+            <h1 class="dos-font">Launch Trailer</h1>
+            <iframe width="1120"
+            height="630"
+            src="https://www.youtube.com/embed/3tDrxOASUog"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <div style="width: 90%; justify-content: center; justify-self: center;">
+        <h1 class="dos-font">News and updates</h1>
+        <div style="display: flex; justify-content: center; gap: 1em;">
+            @if (news == null)
+            {
+                <div>
+                </div>
+                <div>
+                </div>
+                <div>
+                </div>
+            }
+            else
+            {
+                @for (int i = 0; i < MAX_ARTICLES; i++)
+                {
+                    @if (i < news.Count)
+                    {
+                        <a class="navigation-link" href="/newsviewer/@($"{i}")">
+                            <div>
+
+                                <img style="width: 560px; height:315px" src="images/space.png"/>
+                                <h3 class="dos-font">Update 1</h3>
+                                <p class="dos-font">This is a description...</p>
+                                <p class="dos-font">January 10, 2025</p>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private const int MAX_ARTICLES = 3;
+    private List<NewsItem> news;
+
+    protected override async Task OnInitializedAsync()
+    {
+        news = await Http.GetFromJsonAsync<List<NewsItem>>("/api/News/GetNews");
+    }
+}

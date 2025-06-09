@@ -1,0 +1,61 @@
+﻿@page "/forum/post-opened/{postID:int}/{page:int}"
+
+@inject IJSRuntime JS
+@inject HttpClient Http
+
+@using System.Net;
+@using StellumbraSite.Shared.Model
+@using StellumbraSite.Components.Shared
+@using Microsoft.AspNetCore.Components.Authorization
+
+<h3>ForumThreads</h3>
+
+@if (threads != null)
+{
+    @foreach (var thread in threads)
+    {
+        <!-- TODO: User posterID to get UserName from profile DB -->
+
+        <div>
+            <p>
+                thread.Content
+            </p>
+        </div>
+    }
+}
+
+<AuthorizeView>
+    <Authorized>
+        <RichTextEditor />
+    </Authorized>
+    <NotAuthorized>
+        <p>Login to reply to this thread.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+<Paginator
+    itemsPerPage=PAGE_SIZE
+    itemCount=totalThreads
+    pagesPerDirection=PAGES_PER_DIRECTION
+    page=page
+    pageRootPath=@($"/forum/post-opened/{postID}")
+/>
+
+@code {
+    private const int PAGE_SIZE = 20;
+    private const int PAGES_PER_DIRECTION = 3;
+
+    [Parameter]
+    public int page { get; set; }
+    [Parameter]
+    public int postID { get; set; }
+
+    private int totalThreads;
+    private List<ForumThread> threads;
+
+    protected override async Task OnInitializedAsync()
+    {
+        totalThreads = await Http.GetFromJsonAsync<int>($"/api/Thread/GetThreadCount/{postID}");
+        threads = await Http.GetFromJsonAsync<List<ForumThread>>($"/api/Thread/GetThreads/{postID}/{page}/{PAGE_SIZE}");
+    }
+}

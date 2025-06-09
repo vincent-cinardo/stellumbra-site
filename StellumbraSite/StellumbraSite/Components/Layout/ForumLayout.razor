@@ -1,0 +1,97 @@
+﻿@inherits LayoutComponentBase
+
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+@using System.Security.Claims
+
+<main>
+    @if (loginShown)
+    {
+        <div class="login-overlay">
+            <button @onclick="() => ShowLogin(false)">
+                X
+            </button>
+            <LoginWidget OnLogin="@OnUserLogin"/>
+        </div>
+    }
+
+    @if (signupShown)
+    {
+        <div class="login-overlay">
+            <button @onclick="() => ShowSignUp(false)">
+                X
+            </button>
+            <SignupWidget />
+        </div>
+    }
+
+    <div class="forum-background">
+        <div class="forum-navbar-background">
+            <div style="display: flex; width: 100%;">
+                <div style="width: 50%">
+                    <a style="display: flex; width: fit-content;" href="youtube.com">
+                        <h2>[Logo] Cintech Studios</h2>
+                    </a>
+                </div>
+
+                <AuthorizeView>
+                    <Authorized>
+                        <div style="display: flex; width: 50%; justify-content: right">
+                            <p>@usernameLoggedIn</p>
+                            <button @onclick="SignOut" style="display: flex; width: fit-content;">
+                                <p>Sign out.</p>
+                            </button>
+                        </div>
+                    </Authorized>
+                    <NotAuthorized>
+                        <div style="display: flex; width: 50%; justify-content: right">
+                            <button @onclick="() => ShowLogin(true)" style="display: flex; width: fit-content;">
+                                <p>Existing user? Login.</p>
+                            </button>
+                            <button @onclick="() => ShowSignUp(true)" style=" display: flex; width: fit-content;">
+                                <div style="border: solid">
+                                    <p>Sign up</p>
+                                </div>
+                            </button>
+                        </div>
+                    </NotAuthorized>
+
+                </AuthorizeView>
+            </div>
+        </div>
+        @Body
+
+    </div>
+</main>
+
+
+@code {
+    private bool loginShown;
+    private bool signupShown;
+    private bool userIsLogged;
+    private string usernameLoggedIn;
+
+    private void ShowLogin(bool shown)
+    {
+        loginShown = shown;
+    }
+    private void ShowSignUp(bool shown)
+    { 
+        signupShown = shown;
+    }
+    private async Task OnUserLogin(string user)
+    {
+        userIsLogged = true;
+        usernameLoggedIn = user;
+        loginShown = false;
+        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+
+    }
+    private async Task SignOut()
+    {
+        userIsLogged = false;
+        usernameLoggedIn = "";
+        await Http.PostAsync("/api/Auth/Logout", null);
+    }
+}

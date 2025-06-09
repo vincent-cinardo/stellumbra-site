@@ -1,0 +1,17 @@
+﻿<div class="forum-section">
+    <div class="forum-section-title">
+        <h1>
+            @TitleName
+        </h1>
+    </div>
+    <div>
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string TitleName { get; set; }
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

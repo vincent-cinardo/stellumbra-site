@@ -1,0 +1,57 @@
+﻿@page "/news/{newsPage:int}"
+@using StellumbraSite.Shared.Model
+@using StellumbraSite.Components.Shared
+
+@inject HttpClient Http
+
+<PageTitle>News</PageTitle>
+
+@if (news == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="news-background">
+        <div class="news-container">
+            @for (int i = (newsPage - 1) * MAX_ARTICLES_PER_PAGE; i < Math.Min(news.Count, (newsPage - 1) * MAX_ARTICLES_PER_PAGE + MAX_ARTICLES_PER_PAGE); i++)
+            {
+                <a class="news-item" href="@($"/newsviewer/{i + 1}")">
+                    <div class="news-item">
+                        <h4 class="scaling-dos-font">@(i + 1)  @news[i].Title</h4>
+                        <img class="news-item-img" src="images/@news[i].TitleImagePath">
+                        <p class="scaling-dos-font"><em>@news[i].Date</em></p>
+                        <p class="scaling-dos-font"><em>@news[i].Caption</em></p>
+                    </div>
+                </a>
+            }
+        </div>
+
+        <Paginator 
+            itemsPerPage=MAX_ARTICLES_PER_PAGE
+            pagesPerDirection=MAX_PAGES_PER_DIRECTION
+            itemCount=news.Count
+            page=newsPage
+            pageRootPath="/news"
+            />
+    </div>
+}
+
+@code {
+    private const int MAX_ARTICLES_PER_PAGE = 9;
+    private const int MAX_PAGES_PER_DIRECTION= 3;
+
+    [Parameter]
+    public int newsPage { get; set; }
+    public int FirstPage { get => 1; }
+    public int LastPage { get => (int)Math.Round((float)news.Count / (float)MAX_ARTICLES_PER_PAGE + 0.5f); }
+    public int MinPage { get => Math.Max(1, newsPage - MAX_PAGES_PER_DIRECTION); }
+    public int MaxPage { get => Math.Min(newsPage + MAX_PAGES_PER_DIRECTION, LastPage); }
+
+    private List<NewsItem> news;
+
+    protected override async Task OnInitializedAsync()
+    {
+        news = await Http.GetFromJsonAsync<List<NewsItem>>("/api/News/GetNews");
+    }
+}

@@ -1,0 +1,8 @@
+.forum-stat-section {
+    background-color: lightslategray;
+    border: solid;
+    width: 80vw;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}

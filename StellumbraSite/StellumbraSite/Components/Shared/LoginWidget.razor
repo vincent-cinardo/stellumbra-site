@@ -1,0 +1,54 @@
+﻿@using System.Net;
+
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+@using StellumbraSite.Model
+@using System.Security.Claims
+@using System.ComponentModel.DataAnnotations
+
+<div>
+    <EditForm Model="@LoginModel" OnValidSubmit="@HandleLogin" FormName="LoginForm">
+        <DataAnnotationsValidator />
+        <h3 class="dos-font">Login</h3>
+        <p>@loginFailedMessage</p>
+        <InputText @bind-Value="@LoginModel.Username" class="dos-font" style="background-color: dimgray" placeholder="Username" />
+        <ValidationMessage For="() => LoginModel.Username" />
+        <InputText @bind-Value="@LoginModel.Password" class="dos-font" style="background-color: dimgray" type="password" placeholder="Password"/>
+        <ValidationMessage For="() => LoginModel.Password" />
+        <button class="dos-font" style="background-color: dimgray">Log in</button>
+    </EditForm>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public LoginModel LoginModel { get; set; } = new();
+    [Parameter]
+    public EventCallback<string> OnLogin { get; set; }
+    private string? loginFailedMessage;
+
+    private async Task HandleLogin()
+    {
+        loginFailedMessage = "";
+        var response = await Http.PostAsJsonAsync("/api/Auth/Login", LoginModel);
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            loginFailedMessage = $"The user '{LoginModel.Username}' does not exist.";
+        }
+        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+        {
+            loginFailedMessage = $"Incorrect password.";
+        }
+        else if (response.IsSuccessStatusCode)
+        {
+            // TODO: Can make redirect path a parameter of the widget.
+            //Navigation.NavigateTo("/forum", forceLoad: true);
+            await OnLogin.InvokeAsync(LoginModel.Username);
+        }
+        else
+        {
+            throw new Exception("Unexpected status code: " + response.StatusCode);
+        }
+    }
+}

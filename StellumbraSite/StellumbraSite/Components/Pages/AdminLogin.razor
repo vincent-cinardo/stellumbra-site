@@ -1,0 +1,44 @@
+﻿@page "/admin-login"
+@inject NavigationManager Navigation
+
+@using System.Security.Claims
+
+<PageTitle>Admin-Login</PageTitle>
+
+<div class="generic-background" style="text-align: center;">
+    @inject NavigationManager Navigation
+
+    @if (loginFailed)
+    {
+        <p style="color:red;">Invalid username or password</p>
+    }
+
+    <h3 class="dos-font">Login</h3>
+    <input class="dos-font" style="background-color: dimgray"  placeholder="Username" @bind="username" />
+    <input class="dos-font" style="background-color: dimgray"  type="password" placeholder="Password" @bind="password" />
+    <button class="dos-font" style="background-color: dimgray" @onclick="HandleLogin">Log in</button>
+
+    @code {
+        private string username;
+        private string password;
+        private bool loginFailed;
+
+        private async Task HandleLogin()
+        {
+            /*if (username == "admin" && password == "yourPasswordHere")
+            {
+                var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var userPrincipal = new ClaimsPrincipal(identity);
+
+                await HttpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal);
+
+                Navigation.NavigateTo("/admin-dashboard");
+            }
+            else
+            {
+                loginFailed = true;
+            }*/
+        }
+    }
+</div>

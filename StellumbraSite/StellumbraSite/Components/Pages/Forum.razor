@@ -1,0 +1,37 @@
+﻿@page "/forum"
+@layout ForumLayout
+@using StellumbraSite.Components.Shared
+
+<PageTitle>Forum</PageTitle>
+<div class="forum-content-background">
+    <ForumSection TitleName="Stellumbra">
+        <ForumTopic Href="/forum/posts/general/1">
+            General
+        </ForumTopic>
+        <ForumTopic Href="/forum/posts/ideas/1">
+            Suggestions & Ideas
+        </ForumTopic>
+        <ForumTopic Href="/forum/posts/support/1">
+            Support
+        </ForumTopic>
+        <ForumTopic Href="/forum/posts/bugs/1">
+            Bugs
+        </ForumTopic>
+        <ForumTopic Href="/forum/posts/mods/1">
+            Mods
+        </ForumTopic>
+    </ForumSection>
+    <ForumSection TitleName="Media">
+        <ForumTopic Href="/forum/posts/videos/1">
+            Videos
+        </ForumTopic>
+        <ForumTopic Href="/forum/posts/streams/1">
+            Streams
+        </ForumTopic>
+    </ForumSection>
+    <ForumSection TitleName="Other">
+        <ForumTopic Href="/forum/posts/off-topic/1">
+            Off-Topic
+        </ForumTopic>
+    </ForumSection>
+</div>

@@ -1,0 +1,53 @@
+﻿@using StellumbraSite.Components.Shared
+
+@layout ForumLayout
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+@using System.Security.Claims
+
+<div>
+    <h3 class="dos-font">Login</h3>
+    <p>@signupFailMessage</p>
+    <input class="dos-font" style="background-color: dimgray" placeholder="Username" @bind="username" />
+    <input class="dos-font" style="background-color: dimgray" placeholder="Email" @bind="email" />
+    <input class="dos-font" style="background-color: dimgray" type="password" placeholder="Password" @bind="password" />
+    <input class="dos-font" style="background-color: dimgray" type="password" placeholder="Confirm Password" @bind="confirmPassword" />
+    <button class="dos-font" style="background-color: dimgray" @onclick="HandleSignup">Sign Up</button>
+</div>
+
+@code {
+    private string username;
+    private string email;
+    private string password;
+    private string confirmPassword;
+    private string signupFailMessage;
+
+    private async Task HandleSignup()
+    {
+        /*var user = await Http.GetFromJsonAsync<UserProfile>($"/api/Profile/GetUserByName/{username}");
+        if (user != null)
+        {
+            signupFailMessage = $"User already exists: {username}";
+            return;
+        }
+
+        try
+        {
+            var addr = new System.Net.Mail.MailAddress(email);
+        }
+        catch
+        {
+            signupFailMessage = $"Email does not follow proper format: {email}";
+            return;
+        }
+
+        var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var userPrincipal = new ClaimsPrincipal(identity);
+
+        await HttpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal);
+
+        Navigation.NavigateTo("/forum");*/
+    }
+}
