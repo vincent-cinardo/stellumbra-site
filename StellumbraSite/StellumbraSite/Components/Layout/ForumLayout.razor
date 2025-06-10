@@ -1,25 +1,29 @@
 ﻿@inherits LayoutComponentBase
 
 @inject HttpClient Http
+@inject SignInManager<ApplicationUser> SignInManager
 @inject NavigationManager Navigation
 
+@using StellumbraSite.Data
 @using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
 
 <main>
     @if (loginShown)
     {
         <div class="login-overlay">
-            <button @onclick="() => ShowLogin(false)">
+            <button type="button" @onclick="() => ShowLogin(false)">
                 X
             </button>
-            <LoginWidget OnLogin="@OnUserLogin"/>
+            <LoginWidget OnLogin=OnUserLogin ReturnUrl=@Navigation.Uri/>
         </div>
     }
 
     @if (signupShown)
     {
         <div class="login-overlay">
-            <button @onclick="() => ShowSignUp(false)">
+            <button type="button" @onclick="() => ShowSignUp(false)">
                 X
             </button>
             <SignupWidget />
@@ -38,25 +42,22 @@
                 <AuthorizeView>
                     <Authorized>
                         <div style="display: flex; width: 50%; justify-content: right">
-                            <p>@usernameLoggedIn</p>
-                            <button @onclick="SignOut" style="display: flex; width: fit-content;">
+                            <p>@context.User.Identity.Name</p>
+                            <button type="button" @onclick="SignOut" style="display: flex; width: fit-content;">
                                 <p>Sign out.</p>
                             </button>
                         </div>
                     </Authorized>
                     <NotAuthorized>
                         <div style="display: flex; width: 50%; justify-content: right">
-                            <button @onclick="() => ShowLogin(true)" style="display: flex; width: fit-content;">
+                            <button type="button" @onclick="() => ShowLogin(true)" style="display: flex; width: fit-content;">
                                 <p>Existing user? Login.</p>
                             </button>
-                            <button @onclick="() => ShowSignUp(true)" style=" display: flex; width: fit-content;">
-                                <div style="border: solid">
-                                    <p>Sign up</p>
-                                </div>
+                            <button type="button" @onclick="() => ShowSignUp(true)" style=" display: flex; width: fit-content;">
+                                <p>Sign up</p>
                             </button>
                         </div>
                     </NotAuthorized>
-
                 </AuthorizeView>
             </div>
         </div>
@@ -67,13 +68,25 @@
 
 
 @code {
+    //[CascadingParameter]
+    //private HttpContext HttpContext { get; set; } = default!;
+
+
     private bool loginShown;
     private bool signupShown;
     private bool userIsLogged;
     private string usernameLoggedIn;
 
+    private Dictionary<string, string?> ReturnQueryString 
+    {
+        get => new Dictionary<string, string?>
+        {
+            { "ReturnUrl", Navigation.Uri }
+        };
+    }
     private void ShowLogin(bool shown)
     {
+        //Navigation.NavigateTo(QueryHelpers.AddQueryString("/forum/login", ReturnQueryString), forceLoad: true);
         loginShown = shown;
     }
     private void ShowSignUp(bool shown)
@@ -86,12 +99,14 @@
         usernameLoggedIn = user;
         loginShown = false;
         Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
-
     }
     private async Task SignOut()
     {
         userIsLogged = false;
         usernameLoggedIn = "";
-        await Http.PostAsync("/api/Auth/Logout", null);
+
+        Navigation.NavigateTo(QueryHelpers.AddQueryString("/forum/logout", ReturnQueryString), forceLoad: true);
+        //Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        //await Http.PostAsync("/api/Auth/Logout", null);
     }
 }

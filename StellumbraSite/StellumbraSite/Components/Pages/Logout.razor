@@ -1,0 +1,36 @@
+﻿@page "/forum/logout"
+
+@using StellumbraSite.Data
+@using StellumbraSite.Model
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.AspNetCore.Authentication
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject NavigationManager NavigationManager
+
+<h3>Logout</h3>
+
+@code {
+	[CascadingParameter]
+	private HttpContext HttpContext { get; set; } = default!;
+
+	[SupplyParameterFromQuery]
+	public string? ReturnUrl { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+		await SignInManager.SignOutAsync();
+
+		// Redirect
+		if (!string.IsNullOrWhiteSpace(ReturnUrl) && Uri.IsWellFormedUriString(ReturnUrl, UriKind.Relative))
+		{
+			NavigationManager.NavigateTo(ReturnUrl);
+		}
+		else
+		{
+			NavigationManager.NavigateTo("/forum");
+		}
+	}
+}

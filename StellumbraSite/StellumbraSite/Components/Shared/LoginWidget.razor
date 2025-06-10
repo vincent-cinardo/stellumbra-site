@@ -1,14 +1,23 @@
 ﻿@using System.Net;
 
 @inject HttpClient Http
+@inject IJSRuntime JS
 @inject NavigationManager Navigation
+@inject IdentityRedirectManager RedirectManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IHttpContextAccessor HttpContextAccessor
 
+@using StellumbraSite.Data
 @using StellumbraSite.Model
 @using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@using StellumbraSite.Components.Account
+@using Microsoft.AspNetCore.Authentication
 @using System.ComponentModel.DataAnnotations
+@using StellumbraSite.Components.Account.Shared
 
 <div>
-    <EditForm Model="@LoginModel" OnValidSubmit="@HandleLogin" FormName="LoginForm">
+    <EditForm Model="@LoginModel" asp-route-returnUrl="@ReturnUrl" OnValidSubmit="@HandleLoginTwo" FormName="LoginForm">
         <DataAnnotationsValidator />
         <h3 class="dos-font">Login</h3>
         <p>@loginFailedMessage</p>
@@ -16,39 +25,66 @@
         <ValidationMessage For="() => LoginModel.Username" />
         <InputText @bind-Value="@LoginModel.Password" class="dos-font" style="background-color: dimgray" type="password" placeholder="Password"/>
         <ValidationMessage For="() => LoginModel.Password" />
-        <button class="dos-font" style="background-color: dimgray">Log in</button>
+        <div class="checkbox mb-3">
+            <label class="form-label">
+                <InputCheckbox @bind-Value="LoginModel.RememberMe" class="darker-border-checkbox form-check-input" />
+                Remember me
+            </label>
+        </div>
+        <button type="submit" class="dos-font" style="background-color: dimgray">Log in</button>
     </EditForm>
 </div>
 
 @code {
-    [SupplyParameterFromForm]
     public LoginModel LoginModel { get; set; } = new();
     [Parameter]
     public EventCallback<string> OnLogin { get; set; }
     private string? loginFailedMessage;
 
+    [Parameter]
+    public string? ReturnUrl { get; set; }
+
+    /*protected override async Task OnInitializedAsync()
+    {
+        if (HttpMethods.IsGet(HttpContextAccessor.HttpContext.Request.Method))
+        {
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContextAccessor.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+    }
+    }*/
     private async Task HandleLogin()
     {
-        loginFailedMessage = "";
-        var response = await Http.PostAsJsonAsync("/api/Auth/Login", LoginModel);
+        // This doesn't count login failures towards account lockout
+        // To enable password failures to trigger account lockout, set lockoutOnFailure: true
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        // TODO: Implement rememberME
+
+        //var result = Http.PostAsJsonAsync("/api/Auth/Login", LoginModel);
+        var result = await SignInManager.PasswordSignInAsync(LoginModel.Username, LoginModel.Password, LoginModel.RememberMe, lockoutOnFailure: false);
+
+        if (result.Succeeded)
+        //if (result.Result.StatusCode == HttpStatusCode.OK)
         {
-            loginFailedMessage = $"The user '{LoginModel.Username}' does not exist.";
+            //Navigation.NavigateTo("/forum", forceLoad : true);
+            RedirectManager.RedirectTo(ReturnUrl);
         }
-        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+        else if (result.RequiresTwoFactor)
         {
-            loginFailedMessage = $"Incorrect password.";
+            RedirectManager.RedirectTo(
+            "Account/LoginWith2fa",
+            new() { ["returnUrl"] = ReturnUrl, ["rememberMe"] = LoginModel.RememberMe });
         }
-        else if (response.IsSuccessStatusCode)
+        else if (result.IsLockedOut)
         {
-            // TODO: Can make redirect path a parameter of the widget.
-            //Navigation.NavigateTo("/forum", forceLoad: true);
-            await OnLogin.InvokeAsync(LoginModel.Username);
+            RedirectManager.RedirectTo("Account/Lockout");
         }
         else
         {
-            throw new Exception("Unexpected status code: " + response.StatusCode);
+            loginFailedMessage = "Error: Invalid login attempt.";
         }
+    }
+    private async Task HandleLoginTwo()
+    {
+        await JS.InvokeVoidAsync("auth.loginAndReload", LoginModel);
     }
 }
