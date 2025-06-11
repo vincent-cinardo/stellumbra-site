@@ -170,7 +170,6 @@ img.news-viewer-img {
     flex-direction: column;
     gap: 1em;
     background-color: gray;
-    height: 100vh;
     padding: 1em;
 }
 

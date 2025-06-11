@@ -1,23 +1,25 @@
 ﻿<!-- Paginator assumes a path exists: "/pageRootPath/{n}" -->
 
+@inject NavigationManager Navigation
+
 <div class=@($"{customPaginatorClass}")>
     @if (page - pagesPerDirection > FirstPage)
     {
-        <a href=@($"{pageRootPath}/{FirstPage}")>
+        <a href=@($"{pageRootPath}/{FirstPage}") @onclick=ForceReload>
             <p class=@($"{customFontClass}")><em>First Page</em></p>
         </a>
     }
 
     @for (int i = MinPage; i <= MaxPage; i++)
     {
-        <a href=@($"{pageRootPath}/{i}")>
+        <a href=@($"{pageRootPath}/{i}") @onclick=ForceReload>
             <p class=@($"{customFontClass}")><em>@($"{i}")</em></p>
         </a>
     }
 
     @if (page + pagesPerDirection < LastPage)
     {
-        <a href=@($"{pageRootPath}/{LastPage}")>
+        <a href=@($"{pageRootPath}/{LastPage}") @onclick=ForceReload>
             <p class=@($"{customFontClass}")><em>Last Page</em></p>
         </a>
     }
@@ -55,5 +57,9 @@
         {
             customFontClass = "dos-font";
         }
+    }
+    private void ForceReload()
+    {
+        Navigation.Refresh(forceReload: true);   
     }
 }

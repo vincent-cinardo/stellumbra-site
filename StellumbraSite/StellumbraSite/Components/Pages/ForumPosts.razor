@@ -1,17 +1,22 @@
 ﻿@page "/forum/posts/{topicName}/{page:int}"
+@layout ForumLayout
 
 @inject HttpClient Http
+@inject NavigationManager Navigate
 
 @using System.Net;
 @using StellumbraSite.Shared.Model
 @using StellumbraSite.Components.Shared
 @using Microsoft.AspNetCore.Components.Authorization
 
-<h3>ForumPosts</h3>
+@if (forumTopic != null)
+{
+    <h3>@forumTopic.TopicShownName</h3>
+}
 
 <AuthorizeView>
     <Authorized>
-        <button>Start New Post</button>
+        <button type="button" @onclick="StartNewPost">Start New Post</button>
     </Authorized>
     <NotAuthorized>
         <p>Login to start new posts.</p>
@@ -52,10 +57,16 @@ pageRootPath=@($"/forum/posts/{topicName}")
 
     private int totalPosts;
     private List<ForumPost> posts;
+    private ForumTopic forumTopic;
 
     protected override async Task OnInitializedAsync()
     {
+        forumTopic = await Http.GetFromJsonAsync<ForumTopic>($"/api/Topic/GetTopic/{topicName}");
         totalPosts = await Http.GetFromJsonAsync<int>($"/api/Post/GetPostCount/{topicName}");
         posts = await Http.GetFromJsonAsync<List<ForumPost>>($"/api/Post/GetPosts/{topicName}/{page}/{PAGE_SIZE}");
+    }
+    private async Task StartNewPost()
+    {
+        Navigate.NavigateTo($"/forum/new-post/{topicName}", forceLoad: true);
     }
 }

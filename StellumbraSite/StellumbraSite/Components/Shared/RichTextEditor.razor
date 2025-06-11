@@ -1,18 +1,16 @@
 ﻿@inject IJSRuntime JS
 
 <div>
-    <div id="@EditorId" style="height: 300px;"></div>
-    <button @onclick="ShowContent">Get Content</button>
-
-    <h3>RichTextEditor</h3>
-
-    <p><strong>Preview:</strong></p>
-    <div>@HtmlContent</div>
+    <div id="@EditorId" style="height: 300px; background-color: white"></div>
+    <button type="button" @onclick="Submit">Submit</button>
 </div>
 
 @code {
+    [Parameter]
+    [EditorRequired]
+    public EventCallback OnClick { get; set; }
     private string EditorId = "editor";
-    private string HtmlContent;
+    public string HtmlContent;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -21,9 +19,14 @@
             await JS.InvokeVoidAsync("quillEditor.initialize", EditorId);
         }
     }
-
-    private async Task ShowContent()
+    private async Task Submit()
     {
         HtmlContent = await JS.InvokeAsync<string>("quillEditor.getContent");
+        await OnClick.InvokeAsync();
+    }
+    public async Task<string> GetQuillHTMLContent()
+    {
+        HtmlContent = await JS.InvokeAsync<string>("quillEditor.getContent");
+        return HtmlContent;
     }
 }

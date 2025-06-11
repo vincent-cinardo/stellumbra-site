@@ -3,7 +3,7 @@
         try {
             const response = await fetch("/api/Auth/Login", {
                 method: "POST",
-                credentials: "include", // Send cookies
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -36,7 +36,6 @@
     });
 
     if (response.ok) {
-        // Reload to start a new authenticated circuit
         location.reload();
     } else {
         const error = await response.text();

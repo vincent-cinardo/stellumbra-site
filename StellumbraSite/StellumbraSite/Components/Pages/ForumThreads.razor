@@ -1,14 +1,20 @@
 ﻿@page "/forum/post-opened/{postID:int}/{page:int}"
+@layout ForumLayout
 
 @inject IJSRuntime JS
 @inject HttpClient Http
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 @using System.Net;
 @using StellumbraSite.Shared.Model
 @using StellumbraSite.Components.Shared
 @using Microsoft.AspNetCore.Components.Authorization
 
-<h3>ForumThreads</h3>
+@if (forumPost != null)
+{
+    <h3>@forumPost.Title</h3>
+}
 
 @if (threads != null)
 {
@@ -17,8 +23,8 @@
         <!-- TODO: User posterID to get UserName from profile DB -->
 
         <div>
-            <p>
-                thread.Content
+            <p style="border: solid">
+                @((MarkupString)thread.Content)
             </p>
         </div>
     }
@@ -26,7 +32,7 @@
 
 <AuthorizeView>
     <Authorized>
-        <RichTextEditor />
+        <RichTextEditor @ref=richTextEditor OnClick="SendThread" />
     </Authorized>
     <NotAuthorized>
         <p>Login to reply to this thread.</p>
@@ -34,11 +40,11 @@
 </AuthorizeView>
 
 <Paginator
-    itemsPerPage=PAGE_SIZE
-    itemCount=totalThreads
-    pagesPerDirection=PAGES_PER_DIRECTION
-    page=page
-    pageRootPath=@($"/forum/post-opened/{postID}")
+itemsPerPage=PAGE_SIZE
+itemCount=totalThreads
+pagesPerDirection=PAGES_PER_DIRECTION
+page=page
+pageRootPath=@($"/forum/post-opened/{postID}")
 />
 
 @code {
@@ -50,12 +56,39 @@
     [Parameter]
     public int postID { get; set; }
 
+    public string posterID { get; set; } = "";
+
+    private RichTextEditor richTextEditor;
+
     private int totalThreads;
+    private ForumPost forumPost;
     private List<ForumThread> threads;
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user != null && user.Identity.IsAuthenticated)
+        {
+            posterID = user.FindFirst(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        }
+
         totalThreads = await Http.GetFromJsonAsync<int>($"/api/Thread/GetThreadCount/{postID}");
+        forumPost = await Http.GetFromJsonAsync<ForumPost>($"/api/Post/GetPostByID/{postID}");
         threads = await Http.GetFromJsonAsync<List<ForumThread>>($"/api/Thread/GetThreads/{postID}/{page}/{PAGE_SIZE}");
+    }
+    private async void SendThread()
+    {
+        ForumThread forumThread = new ForumThread();
+        string htmlContent = await richTextEditor.GetQuillHTMLContent();
+
+        forumThread.Id = 0;
+        forumThread.PostID = postID;
+        forumThread.PosterID = posterID;
+        forumThread.Content = htmlContent;
+
+        await Http.PostAsJsonAsync("/api/Thread/SubmitThread", forumThread);
+        Navigation.Refresh(forceReload: true);
     }
 }

@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace StellumbraSite.Server.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ThreadController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
@@ -17,7 +17,9 @@ namespace StellumbraSite.Server.Controllers
         [HttpGet("GetThreadCount/{postID}")]
         public async Task<IActionResult> GetPostCount(int postID)
         {
-            int count = await _db.ForumThreads.CountAsync();
+            int count = await _db.ForumThreads
+                .Where(x => x.PostID == postID)
+                .CountAsync();
             return Ok(count);
         }
         [HttpGet("GetThreads/{postID}/{page}/{pageSize}")]
@@ -43,6 +45,13 @@ namespace StellumbraSite.Server.Controllers
             {
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
+        }
+        [HttpPost("SubmitThread")]
+        public async Task<IActionResult> SubmitThread([FromBody] ForumThread forumThread)
+        {
+            await _db.ForumThreads.AddAsync(forumThread);
+            await _db.SaveChangesAsync();
+            return Ok();
         }
     }
 }

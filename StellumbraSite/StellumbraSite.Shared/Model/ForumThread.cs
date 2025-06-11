@@ -17,7 +17,7 @@ namespace StellumbraSite.Shared.Model
         public int PostID { get; set; }
         [ForeignKey(nameof(UserProfile))]
         [Column("poster_id")]
-        public int PosterID { get; set; }
+        public string PosterID { get; set; }
         [Column("content")]
         public string Content { get; set; }
     }

@@ -1,0 +1,66 @@
+﻿@page "/forum/new-post/{topicName}"
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@using StellumbraSite.Shared.Model
+@layout ForumLayout
+
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@if (forumTopic != null)
+{
+    <h3>New Post: @forumTopic.TopicShownName</h3>
+}
+
+<InputText DisplayName="Title" @bind-Value="title" />
+<RichTextEditor @ref=richTextEditor OnClick="SendPost" />
+
+@code {
+    [Parameter]
+    public string topicName { get; set; }
+    private string title { get; set; }
+    public string posterID { get; set; } = "";
+
+    private ForumTopic forumTopic;
+    private RichTextEditor richTextEditor;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forumTopic = await Http.GetFromJsonAsync<ForumTopic>($"/api/Topic/GetTopic/{topicName}");
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user != null && user.Identity.IsAuthenticated)
+        {
+            posterID = user.FindFirst(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        }
+    }
+    private async void SendPost()
+    {
+        ForumPost forumPost = new ForumPost();
+        string htmlContent = await richTextEditor.GetQuillHTMLContent();
+
+        forumPost.Id = 0;
+        forumPost.Title = title;
+        forumPost.TopicName = topicName;
+        forumPost.PosterID = posterID;
+
+        // Doing this to allow SQL to set the ForumPost.Id
+        var response = await Http.PostAsJsonAsync<ForumPost>("/api/Post/SubmitPost", forumPost);
+        var jsonString = await response.Content.ReadAsStringAsync();
+        JObject jObject = JObject.Parse(jsonString);
+        forumPost = jObject.ToObject<ForumPost>();
+
+
+        ForumThread thread = new ForumThread();
+        thread.Id = 0;
+        thread.PostID = forumPost.Id;
+        thread.PosterID = posterID;
+        thread.Content = htmlContent;
+        await Http.PostAsJsonAsync("/api/Thread/SubmitThread", thread);
+
+        Navigation.NavigateTo($"/forum/post-opened/{forumPost.Id}/1", forceLoad: true);
+	}
+}

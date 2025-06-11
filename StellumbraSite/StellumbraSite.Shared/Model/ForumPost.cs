@@ -9,9 +9,11 @@ namespace StellumbraSite.Shared.Model
         [Key]
         [Column("id")]
         public int Id { get; set; }
-        [ForeignKey(nameof(Topic))]
+        [ForeignKey(nameof(ForumTopic))]
         [Column("topic_name")]
         public string TopicName { get; set; }
+        [Column("poster_id")]
+        public string PosterID { get; set; }
         [Column("title")]
         public string Title { get; set; }
     }

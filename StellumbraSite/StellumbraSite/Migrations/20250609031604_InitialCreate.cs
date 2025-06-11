@@ -51,6 +51,14 @@ namespace StellumbraSite.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "topics",
+                columns: table => new
+                {
+                    topic_name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    topic_shown_name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                });
+
+            migrationBuilder.CreateTable(
                 name: "news",
                 columns: table => new
                 {
@@ -261,6 +269,9 @@ namespace StellumbraSite.Migrations
 
             migrationBuilder.DropTable(
                 name: "news");
+
+            migrationBuilder.DropTable(
+                name: "topics");
 
             migrationBuilder.DropTable(
                 name: "posts");

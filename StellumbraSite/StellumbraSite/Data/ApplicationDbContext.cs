@@ -8,6 +8,7 @@ namespace StellumbraSite.Data
     {
         public DbSet<NewsItem> NewsItems { get; set; }
         public DbSet<ForumPost> ForumPosts { get; set; }
+        public DbSet<ForumTopic> ForumTopics { get; set; }
         public DbSet<ForumThread> ForumThreads { get; set; }
     }
 }

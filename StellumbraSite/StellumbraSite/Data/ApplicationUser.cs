@@ -6,5 +6,4 @@ namespace StellumbraSite.Data
     public class ApplicationUser : IdentityUser
     {
     }
-
 }
