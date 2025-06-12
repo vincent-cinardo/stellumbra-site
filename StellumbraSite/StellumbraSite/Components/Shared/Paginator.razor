@@ -57,6 +57,16 @@
         {
             customFontClass = "dos-font";
         }
+
+        int lastPossiblePage = (int)Math.Round((float)itemCount / (float)itemsPerPage + 0.5f);
+        if (page > lastPossiblePage)
+        {
+            page = lastPossiblePage;
+        }
+        else if (page < 1)
+        {
+            page = 1;
+        }
     }
     private void ForceReload()
     {

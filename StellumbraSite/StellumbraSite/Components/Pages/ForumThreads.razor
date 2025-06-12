@@ -2,11 +2,13 @@
 @layout ForumLayout
 
 @inject IJSRuntime JS
+@inject IOptions<CustomSettings> Config
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 @using System.Net;
+@using Microsoft.Extensions.Options
 @using StellumbraSite.Shared.Model
 @using StellumbraSite.Components.Shared
 @using Microsoft.AspNetCore.Components.Authorization
@@ -40,7 +42,7 @@
 </AuthorizeView>
 
 <Paginator
-itemsPerPage=PAGE_SIZE
+itemsPerPage=pageSize
 itemCount=totalThreads
 pagesPerDirection=PAGES_PER_DIRECTION
 page=page
@@ -48,7 +50,7 @@ pageRootPath=@($"/forum/post-opened/{postID}")
 />
 
 @code {
-    private const int PAGE_SIZE = 20;
+    private int pageSize;
     private const int PAGES_PER_DIRECTION = 3;
 
     [Parameter]
@@ -66,6 +68,7 @@ pageRootPath=@($"/forum/post-opened/{postID}")
 
     protected override async Task OnInitializedAsync()
     {
+        pageSize = Config.Value.ForumPageSize;
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
@@ -76,7 +79,7 @@ pageRootPath=@($"/forum/post-opened/{postID}")
 
         totalThreads = await Http.GetFromJsonAsync<int>($"/api/Thread/GetThreadCount/{postID}");
         forumPost = await Http.GetFromJsonAsync<ForumPost>($"/api/Post/GetPostByID/{postID}");
-        threads = await Http.GetFromJsonAsync<List<ForumThread>>($"/api/Thread/GetThreads/{postID}/{page}/{PAGE_SIZE}");
+        threads = await Http.GetFromJsonAsync<List<ForumThread>>($"/api/Thread/GetThreads/{postID}/{page}/{pageSize}");
     }
     private async void SendThread()
     {
@@ -87,6 +90,7 @@ pageRootPath=@($"/forum/post-opened/{postID}")
         forumThread.PostID = postID;
         forumThread.PosterID = posterID;
         forumThread.Content = htmlContent;
+        forumThread.IsFirstThread = false;
 
         await Http.PostAsJsonAsync("/api/Thread/SubmitThread", forumThread);
         Navigation.Refresh(forceReload: true);

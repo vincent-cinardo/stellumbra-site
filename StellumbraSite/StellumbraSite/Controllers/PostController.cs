@@ -34,7 +34,9 @@ namespace StellumbraSite.Server.Controllers
                 {
                     Id = x.Id,
                     TopicName = x.TopicName,
-                    Title = x.Title
+                    PosterID = x.PosterID,
+                    Title = x.Title,
+                    DateTime = x.DateTime,
                 })
                 .ToListAsync();
                 return Ok(result);
@@ -55,7 +57,9 @@ namespace StellumbraSite.Server.Controllers
                 {
                     Id = x.Id,
                     TopicName = x.TopicName,
-                    Title = x.Title
+                    PosterID = x.PosterID,
+                    Title = x.Title,
+                    DateTime = x.DateTime,
                 })
                 .ToListAsync();
                 try

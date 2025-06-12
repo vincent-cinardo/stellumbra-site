@@ -1,4 +1,4 @@
-﻿@page "/newsviewer/{i:int}"
+﻿@page "/newsviewer/{NewsID}"
 @using StellumbraSite.Shared.Model
 
 @inject HttpClient Http
@@ -14,20 +14,22 @@ else
     <div class="news-viewer-background">
         <div class="news-viewer">
 
-            <h2 class="dos-font">@news[i].Title</h2>
-            <p class="dos-font"><em>@news[i].Date</em></p>
-            @news[i].Content
+            <h2 class="dos-font">@news.Title</h2>
+            <p class="dos-font"><em>@news.DateTime.ToString()</em></p>
+            @firstThreadOfPost.Content
         </div>
     </div>
 }
 
 @code {
     [Parameter]
-    public int i { get; set; }
-    private List<NewsItem> news;
+    public string NewsID { get; set; }
+    private NewsItem news;
+    private ForumThread firstThreadOfPost;
 
     protected override async Task OnInitializedAsync()
     {
-        news = await Http.GetFromJsonAsync<List<NewsItem>>("/api/News/GetNews");
+        news = await Http.GetFromJsonAsync<NewsItem>($"/api/News/GetNewsById/{NewsID}");
+        firstThreadOfPost = await Http.GetFromJsonAsync<ForumThread>($"/api/Thread/GetFirstThread/{news.PostId}");
     }
 }

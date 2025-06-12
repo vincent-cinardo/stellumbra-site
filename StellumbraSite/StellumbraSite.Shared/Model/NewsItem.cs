@@ -9,15 +9,16 @@ namespace StellumbraSite.Shared.Model
         [Key]
         [Column("id")]
         public string Id { get; set; }
+        [ForeignKey(nameof(ForumPost))]
+        [Column("post_id")]
+        public int PostId { get; set; }
         [Column("title")]
         public string Title { get; set; }
         [Column("title_image_path")]
         public string TitleImagePath { get; set; }
-        [Column("date")]
-        public string Date { get; set; }
         [Column("caption")]
         public string Caption { get; set; }
-        [Column("content")]
-        public string Content { get; set; }
+        [Column("datetime")]
+        public DateTime DateTime { get; set; } = DateTime.UtcNow;
     }
 }

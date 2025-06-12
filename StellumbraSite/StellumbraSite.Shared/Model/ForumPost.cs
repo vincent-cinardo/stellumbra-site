@@ -16,5 +16,7 @@ namespace StellumbraSite.Shared.Model
         public string PosterID { get; set; }
         [Column("title")]
         public string Title { get; set; }
+        [Column("datetime")]
+        public DateTime DateTime { get; set; } = DateTime.UtcNow;
     }
 }

@@ -116,6 +116,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        news = await Http.GetFromJsonAsync<List<NewsItem>>("/api/News/GetNews");
+        news = await Http.GetFromJsonAsync<List<NewsItem>>($"/api/News/GetLatestNews/{MAX_ARTICLES}");
     }
 }

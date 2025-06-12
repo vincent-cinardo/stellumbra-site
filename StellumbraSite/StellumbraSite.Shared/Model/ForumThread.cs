@@ -15,10 +15,16 @@ namespace StellumbraSite.Shared.Model
         [ForeignKey(nameof(ForumPost))]
         [Column("post_id")]
         public int PostID { get; set; }
+
+        // TODO: This foreign key is wrong.
         [ForeignKey(nameof(UserProfile))]
         [Column("poster_id")]
         public string PosterID { get; set; }
         [Column("content")]
         public string Content { get; set; }
+        [Column("is_first_thread")]
+        public bool IsFirstThread { get; set; }
+        [Column("datetime")]
+        public DateTime DateTime { get; set; } = DateTime.UtcNow;
     }
 }

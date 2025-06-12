@@ -2,9 +2,12 @@
 @layout ForumLayout
 
 @inject HttpClient Http
+
 @inject NavigationManager Navigate
+@inject IOptions<CustomSettings> Config
 
 @using System.Net;
+@using Microsoft.Extensions.Options
 @using StellumbraSite.Shared.Model
 @using StellumbraSite.Components.Shared
 @using Microsoft.AspNetCore.Components.Authorization
@@ -38,7 +41,7 @@
 }
 
 <Paginator
-itemsPerPage=PAGE_SIZE
+itemsPerPage=pageSize
 itemCount=totalPosts
 pagesPerDirection=PAGES_PER_DIRECTION
 page=page
@@ -46,7 +49,7 @@ pageRootPath=@($"/forum/posts/{topicName}")
 />
 
 @code {
-    private const int PAGE_SIZE = 20;
+    private int pageSize;
     private const int PAGES_PER_DIRECTION = 3;
     private bool logged;
 
@@ -61,12 +64,14 @@ pageRootPath=@($"/forum/posts/{topicName}")
 
     protected override async Task OnInitializedAsync()
     {
+        pageSize = Config.Value.ForumPageSize;
         forumTopic = await Http.GetFromJsonAsync<ForumTopic>($"/api/Topic/GetTopic/{topicName}");
         totalPosts = await Http.GetFromJsonAsync<int>($"/api/Post/GetPostCount/{topicName}");
-        posts = await Http.GetFromJsonAsync<List<ForumPost>>($"/api/Post/GetPosts/{topicName}/{page}/{PAGE_SIZE}");
+        posts = await Http.GetFromJsonAsync<List<ForumPost>>($"/api/Post/GetPosts/{topicName}/{page}/{pageSize}");
     }
     private async Task StartNewPost()
     {
-        Navigate.NavigateTo($"/forum/new-post/{topicName}", forceLoad: true);
+        string uri = Navigate.GetUriWithQueryParameters($"/forum/new-post/{topicName}", new Dictionary<string, object?> { ["ReturnUrl"] = Navigate.Uri });
+        Navigate.NavigateTo(uri, forceLoad: true);
     }
 }

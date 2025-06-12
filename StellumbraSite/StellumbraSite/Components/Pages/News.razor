@@ -16,11 +16,11 @@ else
         <div class="news-container">
             @for (int i = (newsPage - 1) * MAX_ARTICLES_PER_PAGE; i < Math.Min(news.Count, (newsPage - 1) * MAX_ARTICLES_PER_PAGE + MAX_ARTICLES_PER_PAGE); i++)
             {
-                <a class="news-item" href="@($"/newsviewer/{i + 1}")">
+                <a class="news-item" href="@($"/newsviewer/{news[i].Id}")">
                     <div class="news-item">
                         <h4 class="scaling-dos-font">@(i + 1)  @news[i].Title</h4>
                         <img class="news-item-img" src="images/@news[i].TitleImagePath">
-                        <p class="scaling-dos-font"><em>@news[i].Date</em></p>
+                        <p class="scaling-dos-font"><em>@news[i].DateTime.ToString()</em></p>
                         <p class="scaling-dos-font"><em>@news[i].Caption</em></p>
                     </div>
                 </a>
@@ -52,6 +52,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        news = await Http.GetFromJsonAsync<List<NewsItem>>("/api/News/GetNews");
+        news = await Http.GetFromJsonAsync<List<NewsItem>>($"/api/News/GetNews/{newsPage}/{MAX_ARTICLES_PER_PAGE}");
     }
 }

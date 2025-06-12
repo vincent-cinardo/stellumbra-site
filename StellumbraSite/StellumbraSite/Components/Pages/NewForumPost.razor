@@ -1,30 +1,60 @@
 ﻿@page "/forum/new-post/{topicName}"
+@layout ForumLayout
+
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
 @using StellumbraSite.Shared.Model
-@layout ForumLayout
+@using Microsoft.Extensions.Options
 
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
+
+
 @if (forumTopic != null)
 {
+    @if (ReturnUrl != null)
+    {
+        <a href="@ReturnUrl">
+            Back to @forumTopic.TopicShownName
+        </a>
+    }
+
     <h3>New Post: @forumTopic.TopicShownName</h3>
 }
 
+<p>Title</p>
 <InputText DisplayName="Title" @bind-Value="title" />
+
+<!-- TODO: Ensure that SQL DB is setup to accomadate this role. -->
+
+@if (topicName == "news")
+{
+    <!-- TODO: After the owner role is set up, uncomment this.-->
+    <!-- <AuthorizeView Roles="Owner">-->
+    <AuthorizeView>
+        <Authorized>
+            <p>Caption</p>
+            <InputText DisplayName="Caption" @bind-Value="caption" />
+        </Authorized>
+    </AuthorizeView>
+}
+
 <RichTextEditor @ref=richTextEditor OnClick="SendPost" />
 
 @code {
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
     [Parameter]
-    public string topicName { get; set; }
-    private string title { get; set; }
+    public string? topicName { get; set; }
+    private string? title { get; set; }
+    private string? caption { get; set; }
     public string posterID { get; set; } = "";
 
     private ForumTopic forumTopic;
     private RichTextEditor richTextEditor;
-
     protected override async Task OnInitializedAsync()
     {
         forumTopic = await Http.GetFromJsonAsync<ForumTopic>($"/api/Topic/GetTopic/{topicName}");
@@ -53,13 +83,26 @@
         JObject jObject = JObject.Parse(jsonString);
         forumPost = jObject.ToObject<ForumPost>();
 
-
         ForumThread thread = new ForumThread();
         thread.Id = 0;
         thread.PostID = forumPost.Id;
         thread.PosterID = posterID;
         thread.Content = htmlContent;
+        thread.IsFirstThread = true;
+
         await Http.PostAsJsonAsync("/api/Thread/SubmitThread", thread);
+
+        if (topicName == "news")
+        {
+            NewsItem news = new NewsItem();
+            news.Id = "";
+            news.PostId = forumPost.Id;
+            news.Title = forumPost.Title;
+            news.TitleImagePath = "space.png";
+            news.Caption = caption;
+
+            await Http.PostAsJsonAsync("/api/News/SubmitNews", thread);
+        }
 
         Navigation.NavigateTo($"/forum/post-opened/{forumPost.Id}/1", forceLoad: true);
 	}

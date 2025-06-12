@@ -37,8 +37,23 @@ namespace StellumbraSite.Server.Controllers
                     PostID = x.PostID,
                     PosterID = x.PosterID,
                     Content = x.Content,
+                    IsFirstThread = x.IsFirstThread,
+                    DateTime = x.DateTime
                 })
                 .ToListAsync();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
+        }
+        [HttpGet("GetFirstThread/{postID}")]
+        public async Task<IActionResult> GetFirstThread(int postID)
+        {
+            try
+            {
+                var result = await _db.ForumThreads.SingleOrDefaultAsync(x => x.PostID == postID && x.IsFirstThread == true);
                 return Ok(result);
             }
             catch (Exception e)

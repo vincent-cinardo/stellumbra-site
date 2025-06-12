@@ -51,23 +51,15 @@ namespace StellumbraSite.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "topics",
-                columns: table => new
-                {
-                    topic_name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    topic_shown_name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                });
-
-            migrationBuilder.CreateTable(
                 name: "news",
                 columns: table => new
                 {
                     id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    post_id = table.Column<int>(type: "int", nullable: false),
                     title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     title_image_path = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    date = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     caption = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    content = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    datetime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,7 +73,9 @@ namespace StellumbraSite.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     topic_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    title = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    poster_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    datetime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,12 +89,26 @@ namespace StellumbraSite.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     post_id = table.Column<int>(type: "int", nullable: false),
-                    poster_id = table.Column<int>(type: "int", nullable: false),
-                    content = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    poster_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_first_thread = table.Column<bool>(type: "bit", nullable: false),
+                    datetime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_threads", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "topics",
+                columns: table => new
+                {
+                    topic_name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    topic_shown_name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_topics", x => x.topic_name);
                 });
 
             migrationBuilder.CreateTable(
@@ -271,13 +279,13 @@ namespace StellumbraSite.Migrations
                 name: "news");
 
             migrationBuilder.DropTable(
-                name: "topics");
-
-            migrationBuilder.DropTable(
                 name: "posts");
 
             migrationBuilder.DropTable(
                 name: "threads");
+
+            migrationBuilder.DropTable(
+                name: "topics");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

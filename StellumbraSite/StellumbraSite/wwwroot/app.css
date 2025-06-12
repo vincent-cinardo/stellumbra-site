@@ -171,6 +171,7 @@ img.news-viewer-img {
     gap: 1em;
     background-color: gray;
     padding: 1em;
+    min-height: 100vh;
 }
 
 .forum-content-background {
