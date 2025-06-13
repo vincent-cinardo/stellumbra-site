@@ -1,5 +1,7 @@
 ﻿@inject IJSRuntime JS
 
+@using StellumbraSite.Data
+
 <div>
     <div id="@EditorId" style="height: 300px; background-color: white"></div>
     <button type="button" @onclick="Submit">Submit</button>
@@ -12,6 +14,8 @@
     private string EditorId = "editor";
     public string HtmlContent;
 
+    private ValueTask<string> submitTask;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -21,12 +25,26 @@
     }
     private async Task Submit()
     {
-        HtmlContent = await JS.InvokeAsync<string>("quillEditor.getContent");
-        await OnClick.InvokeAsync();
+        try
+        {
+            submitTask = JS.InvokeAsync<string>("quillEditor.onSubmit");
+            HtmlContent = await submitTask;
+            await OnClick.InvokeAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Submit failed: {e.Message}");
+        }
     }
     public async Task<string> GetQuillHTMLContent()
     {
-        HtmlContent = await JS.InvokeAsync<string>("quillEditor.getContent");
+        if (submitTask == default)
+        { 
+            throw new Exception("Must submit first");
+        }
+
+        await submitTask;
+
         return HtmlContent;
     }
 }

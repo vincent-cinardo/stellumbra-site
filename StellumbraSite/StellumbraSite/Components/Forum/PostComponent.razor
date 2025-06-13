@@ -1,0 +1,32 @@
+﻿@using StellumbraSite.Data
+@using StellumbraSite.Shared.Model
+
+@inject HttpClient HttpClient;
+
+<a href=@($"/forum/post-opened/{Post.Id}/1")>
+    <div style="border: solid">
+            @if (postUserData != null)
+            {
+                <img src="@postUserData.ProfilePicturePath" />
+                <p>
+                    @postUserData.Username
+                </p>
+            }
+            <p>
+                @Post.Title
+            </p>
+    </div>
+</a>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public ForumPost Post { get; set; }
+
+    private UserData postUserData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        postUserData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{Post.PosterID}");
+    }
+}

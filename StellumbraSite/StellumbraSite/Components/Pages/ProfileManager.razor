@@ -1,0 +1,58 @@
+﻿@page "/forum/profile-manager"
+@layout ForumLayout
+
+@inject IJSRuntime JS
+@inject HttpClient HttpClient
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@using StellumbraSite.Data
+@using System.Security.Claims
+
+<PageTitle>Profile-Manager</PageTitle>
+
+@if (userIsLogged)
+{
+    <img src="@userData.ProfilePicturePath"/>
+    <InputFile OnChange="HandleFileSelected" />
+}
+else
+{ 
+    <p>Sign in to edit profile.</p>
+}
+
+@code {
+    private UserData userData;
+    private bool userIsLogged;
+    protected override async Task OnInitializedAsync()
+    {
+        userIsLogged = false;
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user != null && user.Identity.IsAuthenticated)
+        {
+            var userID = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            userData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{userID}");
+            userIsLogged = true;
+        }
+    }
+    private async void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file == null)
+        {
+            return;
+        }
+
+        using var stream = file.OpenReadStream(5 * 1024 * 1024);
+        using var ms = new MemoryStream();
+        await stream.CopyToAsync(ms);
+        var bytes = ms.ToArray();
+        var base64String = Convert.ToBase64String(bytes);
+        string format = Path.GetExtension(file.Name).Replace(".", "");
+
+        string filepath = await JS.InvokeAsync<string>("apiRequests.addImage", base64String, format);
+        userData.ProfilePicturePath = filepath;
+        await HttpClient.PostAsJsonAsync($"/api/User/SetProfilePicture", userData);
+    }
+}

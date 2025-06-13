@@ -1,19 +1,11 @@
-﻿using StellumbraSite.Data;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Text;
+using StellumbraSite.Data;
 using StellumbraSite.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Logging;
-using System.Text.Encodings.Web;
-using System.Text;
 
 namespace StellumbraSite.Server.Controllers
 {
@@ -21,11 +13,13 @@ namespace StellumbraSite.Server.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
+        private Random random;
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         public AuthController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
+            random = new Random();
             _db = db;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -53,6 +47,8 @@ namespace StellumbraSite.Server.Controllers
         {
             string username = register.Username;
             var user = Activator.CreateInstance<ApplicationUser>();
+            int randomInt = random.Next(3);
+            user.ProfilePicturePath = $"images/profile{randomInt}.png";
 
             await _userManager.SetUserNameAsync(user, register.Username);
             await _userManager.SetEmailAsync(user, register.Email);
@@ -66,6 +62,7 @@ namespace StellumbraSite.Server.Controllers
             var userId = await _userManager.GetUserIdAsync(user);
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
             /*var callbackUrl = Navigation.GetUriWithQueryParameters(
                 Navigation.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
                 new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });*/
@@ -86,7 +83,7 @@ namespace StellumbraSite.Server.Controllers
             await _signInManager.SignInAsync(user, isPersistent: false);
             return Ok();
         }
-
+        
         // todo
         /*[HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)

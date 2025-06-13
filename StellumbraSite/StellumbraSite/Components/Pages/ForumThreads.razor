@@ -8,12 +8,13 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 @using System.Net;
+@using System.Security.Claims
 @using StellumbraSite.Shared.Model
 @using Microsoft.Extensions.Options
-@using StellumbraSite.Components.Shared
 @using StellumbraSite.Components.Other
+@using StellumbraSite.Components.Forum
+@using StellumbraSite.Components.Shared
 @using Microsoft.AspNetCore.Components.Authorization
-@using System.Security.Claims
 
 @if (deletingThread)
 {
@@ -36,19 +37,12 @@
     {
         <!-- TODO: User posterID to get UserName from profile DB -->
 
-        <div>
-            <p style="border: solid">
-                @((MarkupString)thread.Content)
-            </p>
-
-            <!-- TODO: Allow admins to delete threads but not if that thread is an owner thread. -->
-            @if (userID == thread.PosterID || userRole == "Owner")
-            {
-                <button @onclick="() => OnClickDeleteThread(thread)">
-                    X
-                </button>
-            }
-        </div>
+        <ThreadComponent
+            Thread="thread"
+            ViewingUserId="userID"
+            ViewingUserRole="userRole"
+            OnClickDelete="OnClickDeleteThread"
+        />
     }
 }
 
@@ -82,6 +76,7 @@ pageRootPath=@($"/forum/post-opened/{postID}")
     public int postID { get; set; }
 
     public string userID { get; set; } = "";
+    public string username { get; set; } = "";
     public string userRole { get; set; } = "";
 
     private string ThreadDeletePrompt
@@ -128,7 +123,6 @@ pageRootPath=@($"/forum/post-opened/{postID}")
         await Http.PostAsJsonAsync("/api/Thread/SubmitThread", forumThread);
         Navigation.Refresh(forceReload: true);
     }
-
     private async void ConfirmDeleteThread()
     {
         if (threadSelectedForDeletion.IsFirstThread)

@@ -7,8 +7,9 @@
 @inject IOptions<CustomSettings> Config
 
 @using System.Net;
-@using Microsoft.Extensions.Options
 @using StellumbraSite.Shared.Model
+@using Microsoft.Extensions.Options
+@using StellumbraSite.Components.Forum
 @using StellumbraSite.Components.Shared
 @using Microsoft.AspNetCore.Components.Authorization
 
@@ -30,13 +31,9 @@
 {
     @foreach (var post in posts)
     {
-        <div>
-            <a href=@($"/forum/post-opened/{post.Id}/1")>
-                <p>
-                    @post.Title
-                </p>
-            </a>
-        </div>
+       <PostComponent
+           Post="post"
+        />
     }
 }
 

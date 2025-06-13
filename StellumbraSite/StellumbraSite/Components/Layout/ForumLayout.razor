@@ -42,7 +42,9 @@
                 <AuthorizeView>
                     <Authorized>
                         <div style="display: flex; width: 50%; justify-content: right">
-                            <p>@context.User.Identity.Name</p>
+                            <a href="/forum/profile-manager">
+                                <p>@context.User.Identity.Name</p>
+                            </a>
                             <button type="button" @onclick="SignOut" style="display: flex; width: fit-content;">
                                 <p>Sign out.</p>
                             </button>

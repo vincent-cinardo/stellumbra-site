@@ -1,0 +1,46 @@
+﻿@using StellumbraSite.Data
+@using StellumbraSite.Shared.Model
+
+@inject HttpClient HttpClient;
+
+<div style="border: solid">
+    @if (threadUserData != null)
+    {
+        <img src="@threadUserData.ProfilePicturePath" />
+        <p>
+            @threadUserData.Username
+        </p>
+        <p>
+            @((MarkupString)Thread.Content)
+        </p>
+    }
+
+    <!-- TODO: Allow admins to delete threads but not if that thread is an owner thread. -->
+    @if (ViewingUserId == Thread.PosterID || ViewingUserRole == "Owner")
+    {
+        <button @onclick="() => OnClickDelete.InvokeAsync(Thread)">
+            X
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public ForumThread Thread { get; set; }
+    [Parameter]
+    [EditorRequired]
+    public string ViewingUserId { get; set; }
+    [Parameter]
+    [EditorRequired]
+    public string ViewingUserRole { get; set; }
+    [Parameter]
+    public EventCallback<ForumThread> OnClickDelete { get; set; }
+
+    private UserData threadUserData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        threadUserData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{Thread.PosterID}");
+    }
+}

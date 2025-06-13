@@ -22,6 +22,7 @@ builder.Services.AddScoped(sp => new HttpClient
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
