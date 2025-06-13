@@ -1,0 +1,19 @@
+﻿@using StellumbraSite.Shared.Model
+
+@if (NewsItem != null)
+{
+    <a class="navigation-link" href="/newsviewer/@($"{NewsItem.Id}")">
+        <div>
+
+            <img style="width: 560px; height:315px" src=@NewsItem.TitleImagePath />
+            <h3 class="dos-font">@NewsItem.Title</h3>
+            <p class="dos-font">@NewsItem.Caption</p>
+            <p class="dos-font">@NewsItem.DateTime.ToString()</p>
+        </div>
+    </a>
+}
+
+@code {
+    [Parameter]
+    public NewsItem NewsItem { get; set; }
+}

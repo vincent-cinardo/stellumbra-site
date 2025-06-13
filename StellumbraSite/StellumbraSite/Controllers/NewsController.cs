@@ -116,7 +116,7 @@ namespace StellumbraSite.Controllers
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
-        [HttpGet("SubmitNews")]
+        [HttpPost("SubmitNews")]
         public async Task<IActionResult> SubmitNews([FromBody] NewsItem newsItem)
         {
             await _db.NewsItems.AddAsync(newsItem);

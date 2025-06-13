@@ -64,6 +64,12 @@ namespace StellumbraSite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_news", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_news_post",
+                        column: x => x.post_id,
+                        principalTable: "posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,6 +103,12 @@ namespace StellumbraSite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_threads", x => x.id);
+                    table.ForeignKey(
+                        name:"FK_thread_post",
+                        column: x => x.post_id,
+                        principalTable: "posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

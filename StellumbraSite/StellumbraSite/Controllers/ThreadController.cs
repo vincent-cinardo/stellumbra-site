@@ -68,5 +68,17 @@ namespace StellumbraSite.Server.Controllers
             await _db.SaveChangesAsync();
             return Ok();
         }
+        [HttpGet("DeleteThread/{Id}")]
+        public async Task<IActionResult> DeleteThread(int id)
+        {
+            var item = await _db.ForumThreads.FindAsync(id);
+            if (item != null)
+            {
+                _db.ForumThreads.Remove(item);
+                await _db.SaveChangesAsync();
+                return Ok();
+            }
+            return StatusCode(500, $"Internal server error: The thread whose ID is {id} did not exist.");
+        }
     }
 }

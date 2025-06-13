@@ -182,7 +182,9 @@ img.news-viewer-img {
     height: 100vh;
 }
 
-.login-overlay {
+.modal-overlay {
+    left: 0px;
+    top: 0px;
     position: fixed;
     width: 100vw;
     height: 100vh;

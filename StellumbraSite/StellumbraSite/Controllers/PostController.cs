@@ -83,5 +83,17 @@ namespace StellumbraSite.Server.Controllers
             await _db.SaveChangesAsync();
             return Ok(forumPost);
         }
+        [HttpGet("DeletePost/{Id}")]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            var item = await _db.ForumPosts.FindAsync(id);
+            if (item != null)
+            {
+                _db.ForumPosts.Remove(item);
+                await _db.SaveChangesAsync();
+                return Ok();
+            }
+            return StatusCode(500, $"Internal server error: The post whose ID is {id} did not exist.");
+        }
     }
 }

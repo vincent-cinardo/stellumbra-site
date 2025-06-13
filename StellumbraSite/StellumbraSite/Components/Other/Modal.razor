@@ -1,0 +1,19 @@
+﻿
+<div class="modal-overlay">
+	<h2>@PromptText</h2>
+	<button @onclick=OnConfirm>@ConfirmText</button>
+	<button @onclick=OnDeny>@DenyText</button>
+</div>
+
+@code {
+	[Parameter]
+	public string PromptText { get; set; }
+	[Parameter]
+	public string ConfirmText { get; set; }
+	[Parameter]
+	public string DenyText { get; set; }
+	[Parameter]
+	public EventCallback OnConfirm { get; set; }
+	[Parameter]
+	public EventCallback OnDeny { get; set; }
+}

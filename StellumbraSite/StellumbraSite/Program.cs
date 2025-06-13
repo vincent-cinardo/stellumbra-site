@@ -102,6 +102,4 @@ app.MapRazorComponents<App>()
 app.MapAdditionalIdentityEndpoints();
 app.MapControllers();
 
-
-
 app.Run();

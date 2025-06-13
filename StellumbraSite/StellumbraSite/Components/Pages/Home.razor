@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using StellumbraSite.Data
 @using StellumbraSite.Shared.Model
+@using StellumbraSite.Components.News;
 
 @inject HttpClient Http
 
@@ -72,38 +73,13 @@
     <br>
     <br>
     <div style="width: 90%; justify-content: center; justify-self: center;">
-        <h1 class="dos-font">News and updates</h1>
+        <h1 class="dos-font">Latest News</h1>
         <div style="display: flex; justify-content: center; gap: 1em;">
-            @if (news == null)
+            @if (news != null)
             {
-                <div>
-                </div>
-                <div>
-                </div>
-                <div>
-                </div>
-            }
-            else
-            {
-                @for (int i = 0; i < MAX_ARTICLES; i++)
+                @for (int i = 0; i < news.Count; i++)
                 {
-                    @if (i < news.Count)
-                    {
-                        <a class="navigation-link" href="/newsviewer/@($"{i}")">
-                            <div>
-
-                                <img style="width: 560px; height:315px" src="images/space.png"/>
-                                <h3 class="dos-font">Update 1</h3>
-                                <p class="dos-font">This is a description...</p>
-                                <p class="dos-font">January 10, 2025</p>
-                            </div>
-                        </a>
-                    }
-                    else
-                    {
-                        <div>
-                        </div>
-                    }
+                    <NewsWidget NewsItem="news[i]"/>
                 }
             }
         </div>

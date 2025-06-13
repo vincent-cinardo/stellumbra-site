@@ -12,7 +12,7 @@
 <main>
     @if (loginShown)
     {
-        <div class="login-overlay">
+        <div class="modal-overlay">
             <button type="button" @onclick="() => ShowLogin(false)">
                 X
             </button>
@@ -22,7 +22,7 @@
 
     @if (signupShown)
     {
-        <div class="login-overlay">
+        <div class="modal-overlay">
             <button type="button" @onclick="() => ShowSignUp(false)">
                 X
             </button>
@@ -34,7 +34,7 @@
         <div class="forum-navbar-background">
             <div style="display: flex; width: 100%;">
                 <div style="width: 50%">
-                    <a style="display: flex; width: fit-content;" href="youtube.com">
+                    <a style="display: flex; width: fit-content;" href="/">
                         <h2>[Logo] Cintech Studios</h2>
                     </a>
                 </div>
