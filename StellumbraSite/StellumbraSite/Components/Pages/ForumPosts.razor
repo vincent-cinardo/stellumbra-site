@@ -9,43 +9,56 @@
 @using System.Net;
 @using StellumbraSite.Shared.Model
 @using Microsoft.Extensions.Options
+@using StellumbraSite.Components.Text
 @using StellumbraSite.Components.Forum
 @using StellumbraSite.Components.Shared
 @using Microsoft.AspNetCore.Components.Authorization
 
-@if (forumTopic != null)
-{
-    <h3>@forumTopic.TopicShownName</h3>
-}
-
-<AuthorizeView>
-    <Authorized>
-        <button type="button" @onclick="StartNewPost">Start New Post</button>
-    </Authorized>
-    <NotAuthorized>
-        <p>Login to start new posts.</p>
-    </NotAuthorized>
-</AuthorizeView>
-
-@if (posts != null)
-{
-    @foreach (var post in posts)
+<ForumContentFrame>
+    @if (forumTopic != null)
     {
-       <PostComponent
-           Post="post"
-        />
+        <h3 class="dos-font">@forumTopic.TopicShownName</h3>
     }
-}
 
-<Paginator
-itemsPerPage=pageSize
-itemCount=totalPosts
-pagesPerDirection=PAGES_PER_DIRECTION
-page=page
-pageRootPath=@($"/forum/posts/{topicName}")
-/>
+    <div style="display:flex; justify-content: right">
+        <AuthorizeView>
+            <Authorized>
+                <button class="dos-font" style="width: 128px" type="button" @onclick="StartNewPost">Start New Post</button>
+            </Authorized>
+            <NotAuthorized>
+                <DosP>Login to start new posts.</DosP>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+
+    @if (posts != null)
+    {
+        @for (int i = 0; i < posts.Count; i++)
+        {
+            @if (i == posts.Count - 1)
+            {
+                <ForumPostComponent Style="@LastStyle" Post="posts[i]" />
+            }
+            else
+            {
+                <ForumPostComponent Style="@DefaultStyle" Post="posts[i]" />
+            }
+        }
+    }
+
+    <Paginator itemsPerPage=pageSize
+               itemCount=totalPosts
+               pagesPerDirection=PAGES_PER_DIRECTION
+               page=page
+               pageRootPath=@($"/forum/posts/{topicName}") />
+</ForumContentFrame>
 
 @code {
+
+    // TODO: These are reduntant see ForumThreads.razor
+    private string DefaultStyle { get => "border-top: 2px solid black !important;"; }
+    private string LastStyle { get => "border-top: 2px solid black !important; border-bottom: 2px solid black !important;"; }
+
     private int pageSize;
     private const int PAGES_PER_DIRECTION = 3;
     private bool logged;

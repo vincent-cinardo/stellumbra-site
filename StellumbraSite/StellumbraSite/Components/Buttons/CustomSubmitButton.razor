@@ -1,0 +1,13 @@
+﻿<button class="custom-button" type="submit">
+    <p class="dos-font" style="font-size: @(FontSize)px;">
+        @ChildContent
+    </p>
+</button>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public int FontSize { get; set; } = 16;
+}

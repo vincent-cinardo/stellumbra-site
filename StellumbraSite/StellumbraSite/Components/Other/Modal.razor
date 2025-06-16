@@ -1,8 +1,9 @@
-﻿
+﻿@using StellumbraSite.Components.Buttons
+
 <div class="modal-overlay">
 	<h2>@PromptText</h2>
-	<button @onclick=OnConfirm>@ConfirmText</button>
-	<button @onclick=OnDeny>@DenyText</button>
+	<CustomFuncButton OnClick=OnConfirm>@ConfirmText</CustomFuncButton>
+	<CustomFuncButton OnClick=OnDeny>@DenyText</CustomFuncButton>
 </div>
 
 @code {

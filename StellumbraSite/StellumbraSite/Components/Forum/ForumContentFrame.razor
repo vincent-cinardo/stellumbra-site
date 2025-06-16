@@ -1,0 +1,10 @@
+﻿<div class="forum-content-frame">
+    <div class="forum-content-list">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

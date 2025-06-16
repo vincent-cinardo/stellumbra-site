@@ -1,6 +1,5 @@
 .forum-section {
-    background-color: lightslategray;
-    border: solid;
+    border-color: #00ff58;
     width: 80vw;
     justify-content: center;
     margin-left: auto;
@@ -9,14 +8,13 @@
 
 .forum-section-title {
     border-bottom: solid;
-    padding-left: 1%;
+    border-color: #00ff58;
     margin-top: auto;
-    margin-bottom: auto;
+    margin-bottom: 10px;
 }
 
 .forum-section-child {
     display: flex;
-    background-color: lightslategray;
     border: solid;
     vertical-align: middle;
     padding-left: 2%;

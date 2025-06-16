@@ -1,0 +1,44 @@
+﻿<div class="custom-toggle"
+     @onclick="Toggle"
+     @onmouseenter="()=>SetMouseOver(true)"
+     @onmouseleave="()=>SetMouseOver(false)">
+    <div class="custom-toggle-inner" style="background-color: @(InnerColor);" />
+</div>
+
+@code {
+    [Parameter]
+    public bool Value { get; set; } = false;
+
+    private bool mouseOver = false;
+
+    [Parameter]
+    public EventCallback<bool> ValueChanged { get; set; }
+
+    private async Task Toggle(MouseEventArgs e)
+    {
+        Value = !Value;
+        await ValueChanged.InvokeAsync(Value);
+    }
+
+    private Task SetMouseOver(bool isOver)
+    {
+        mouseOver = isOver;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    private string InnerColor
+    {
+        get
+        {
+            if (mouseOver)
+            {
+                return Value ? "#00ff58" : "rgb(159, 255, 127)";
+            }
+            else
+            {
+                return Value ? "rgb(159, 255, 127)" : "black";
+            }
+        }
+    }
+}

@@ -1,0 +1,62 @@
+﻿@using StellumbraSite.Data
+@using StellumbraSite.Shared.Model
+@using StellumbraSite.Components.Text
+
+@inject HttpClient HttpClient;
+
+<div style="@Style" class="forum-listed-content">
+    <!-- TODO: Replace redundant 'style' css here. Same as ForumThreadComponent.-->
+    @if (postUserData != null)
+    {
+        <div style="display: flex; flex-direction: row;">
+            <div style="width: 50%">
+                <a href=@($"/forum/post-opened/{Post.Id}/1")>
+                    <DosP>
+                        @Post.Title
+                    </DosP>
+                </a>
+                <DosP FontSize="12">
+                    @Post.DateTime
+                </DosP>
+            </div>
+
+            <div style="display: flex; width: 50%; justify-content: right; gap: 8px;">
+                <div style="display: flex; flex-direction: column;">
+                    <div style="margin:auto; height: 50%">
+                        <DosP FontSize="12">
+                            x Replies
+                        </DosP>
+                    </div>
+                    <div>
+                        <DosP FontSize="12">
+                            y Views
+                        </DosP>
+                    </div>
+                </div>
+                <div>
+                    <img style="margin: auto" width="48" height="48" src="@postUserData.ProfilePicturePath" alt="images/profile0.png" />
+                </div>
+                <div style="margin-top: auto; margin-bottom:auto">
+                    <DosP FontSize="12">
+                        @postUserData.Username
+                    </DosP>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public ForumPost Post { get; set; }
+    [Parameter]
+    public string Style { get; set; } = string.Empty;
+
+    private UserData postUserData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        postUserData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{Post.PosterID}");
+    }
+}

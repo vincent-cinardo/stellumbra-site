@@ -1,0 +1,19 @@
+﻿<div class="custom-button">
+    <a href=@Href>
+        <p class="dos-font" style="font-size: @(FontSize)px;">
+            @ChildContent
+        </p>
+    </a>
+</div>
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string Href { get; set; }
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public int FontSize { get; set; } = 16;
+}

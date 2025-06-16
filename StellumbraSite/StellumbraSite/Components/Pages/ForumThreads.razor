@@ -11,6 +11,7 @@
 @using System.Security.Claims
 @using StellumbraSite.Shared.Model
 @using Microsoft.Extensions.Options
+@using StellumbraSite.Components.Text
 @using StellumbraSite.Components.Other
 @using StellumbraSite.Components.Forum
 @using StellumbraSite.Components.Shared
@@ -25,45 +26,55 @@
     OnConfirm="ConfirmDeleteThread"
     OnDeny="() => deletingThread = false"/>
 }
-
-@if (forumPost != null)
-{
-    <h3>@forumPost.Title</h3>
-}
-
-@if (threads != null)
-{
-    @foreach (var thread in threads)
+<ForumContentFrame>
+    @if (forumPost != null)
     {
-        <!-- TODO: User posterID to get UserName from profile DB -->
-
-        <ThreadComponent
-            Thread="thread"
-            ViewingUserId="userID"
-            ViewingUserRole="userRole"
-            OnClickDelete="OnClickDeleteThread"
-        />
+        <h3 class="dos-font">@forumPost.Title</h3>
     }
-}
 
-<AuthorizeView>
-    <Authorized>
-        <RichTextEditor @ref=richTextEditor OnClick="SendThread" />
-    </Authorized>
-    <NotAuthorized>
-        <p>Login to reply to this thread.</p>
-    </NotAuthorized>
-</AuthorizeView>
+    @if (threads != null)
+    {
+        @for (int i = 0; i < threads.Count; i++)
+        {
+            <!-- TODO: User posterID to get UserName from profile DB -->
+            @if (i == threads.Count - 1)
+            {
+                <ForumThreadComponent Style="@LastStyle" Thread="threads[i]"
+                    ViewingUserId="userID"
+                    ViewingUserRole="userRole"
+                    OnClickDelete="OnClickDeleteThread" />
+            }
+            else
+            {
+                <ForumThreadComponent Style="@DefaultStyle" Thread="threads[i]"
+                    ViewingUserId="userID"
+                    ViewingUserRole="userRole"
+                    OnClickDelete="OnClickDeleteThread" />
+            }
+        }
+    }
 
-<Paginator
-itemsPerPage=pageSize
-itemCount=totalThreads
-pagesPerDirection=PAGES_PER_DIRECTION
-page=page
-pageRootPath=@($"/forum/post-opened/{postID}")
-/>
+    <AuthorizeView>
+        <Authorized>
+            <RichTextEditor @ref=richTextEditor OnClick="SendThread" />
+        </Authorized>
+        <NotAuthorized>
+            <DosP>Login to reply to this thread.</DosP>
+        </NotAuthorized>
+    </AuthorizeView>
+
+    <Paginator itemsPerPage=pageSize
+               itemCount=totalThreads
+               pagesPerDirection=PAGES_PER_DIRECTION
+               page=page
+               pageRootPath=@($"/forum/post-opened/{postID}") />
+</ForumContentFrame>
 
 @code {
+    // TODO: These are reduntant see ForumThreads.razor
+    private string DefaultStyle { get => "border-top: 2px solid black !important;"; }
+    private string LastStyle { get => "border-top: 2px solid black !important; border-bottom: 2px solid black !important;"; }
+
     private int pageSize;
     private const int PAGES_PER_DIRECTION = 3;
 

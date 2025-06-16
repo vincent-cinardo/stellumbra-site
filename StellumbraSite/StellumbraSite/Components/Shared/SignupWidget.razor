@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using StellumbraSite.Components.Buttons
 @using StellumbraSite.Components.Shared
 @using Microsoft.AspNetCore.WebUtilities
 @using StellumbraSite.Components.Account
@@ -25,11 +26,13 @@
     <EditForm Model="Registration" method="post" OnValidSubmit="RegisterTwo" FormName="register">
         <h3 class="dos-font">Register</h3>
         <p>@signupFailMessage</p>
-        <InputText class="dos-font" style="background-color: dimgray" placeholder="Email" @bind-Value="Registration.Email" />
-        <InputText class="dos-font" style="background-color: dimgray" placeholder="Username" @bind-Value="Registration.Username" />
-        <InputText class="dos-font" style="background-color: dimgray" type="password" placeholder="Password" @bind-Value="Registration.Password" />
-        <InputText class="dos-font" style="background-color: dimgray" type="password" placeholder="Confirm Password" @bind-Value="Registration.ConfirmPassword" />
-        <button type="submit" class="dos-font" style="background-color: dimgray">Sign Up</button>
+        <input class="custom-text-input" id="email" placeholder="Email" @bind-value="Registration.Email" />
+        <input class="custom-text-input" id="username" placeholder="Username" @bind-value="Registration.Username" />
+        <input class="custom-text-input" id="password" type="password" placeholder="Password" @bind-value="Registration.Password" />
+        <input class="custom-text-input" id="confirmPassword" type="password" placeholder="Confirm Password" @bind-value="Registration.ConfirmPassword" />
+        <CustomSubmitButton>
+            Sign Up
+        </CustomSubmitButton>
     </EditForm>
 </div>
 

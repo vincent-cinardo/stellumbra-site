@@ -1,7 +1,8 @@
 ﻿@page "/"
 @using StellumbraSite.Data
 @using StellumbraSite.Shared.Model
-@using StellumbraSite.Components.News;
+@using StellumbraSite.Components.News
+@using StellumbraSite.Components.Buttons
 
 @inject HttpClient Http
 
@@ -18,7 +19,7 @@
         align-items: center;
         justify-content: center;
     ">
-        <h1 class="dos-font" style="position: relative">Stellumbra (Some kind of background here? Gameplay GIF?)</h1>
+        <h1 class="dos-font" style="position: relative">Stellumbra</h1>
     </div>
 
     <div style="display: flex; justify-content: center;">
@@ -30,16 +31,12 @@
             </h3>
 
             <div style="display: flex; gap: 2rem; justify-content: center">
-                <a class="store-page-button" href="https://store.steampowered.com/">
-                    <p class="dos-font" style="font-size: 1.5em;">
-                        Steam
-                    </p>
-                </a>
-                <a class="store-page-button" href="https://itch.io/">
-                    <p class="dos-font" style="font-size: 1.5em;">
-                        Itch.io
-                    </p>
-                </a>
+                <CustomNavButton Href="https://store.steampowered.com/" FontSize=24>
+                    Steam
+                </CustomNavButton>
+                <CustomNavButton Href="https://store.steampowered.com/" FontSize=24>
+                    Itch.io
+                </CustomNavButton>
             </div>
 
             <br>

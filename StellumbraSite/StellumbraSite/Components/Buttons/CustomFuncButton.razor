@@ -1,0 +1,16 @@
+﻿<div class="custom-button" onclick=@OnClick>
+    <p class="dos-font" style="font-size: @(FontSize)px;">
+        @ChildContent
+    </p>
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public EventCallback OnClick { get; set; }
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public int FontSize { get; set; } = 16;
+}

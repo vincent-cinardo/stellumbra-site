@@ -7,6 +7,17 @@ html, body {
     min-height: 100%;
 }
 
+/* Override _reboot.scss */
+p {
+    margin: 0rem !important;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
 @font-face {
     font-family: 'PerfectDOSVGA437';
     src: url('/fonts/PerfectDOSVGA437.ttf') format('truetype');
@@ -15,30 +26,68 @@ html, body {
     font-display: swap;
 }
 
-a.store-page-button {
+/*STARTREGION: Custom Input*/
+
+.custom-toggle {
+    background-color: #00ff58;
+    width: 24px;
+    height: 24px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    align-content: center;
-    text-align: center;
-    background-image: url('images/store-page-button.png');
-    width: 180px;
-    height: 90px;
-    text-decoration: none;
+    align-items: center;
 }
 
-    .store-page-button p {
+.custom-toggle-inner {
+    width: 20px;
+    height: 20px;
+    margin: auto;
+}
+
+input.custom-text-input {
+    background-color: black !important;
+    font-family: 'PerfectDOSVGA437', monospace, monospace;
+    color: #00ff58;
+    margin: 0 !important;
+    border: solid 2px;
+    border-color: #00ff58;
+}
+
+    input.custom-text-input:focus {
+        border: solid 2px;
+        border-color: #00ff58;
+        outline: none;
+    }
+
+    input.custom-text-input::placeholder {
+        color: rgb(159, 255, 127) 
+    }
+
+.custom-button {
+    background-image: url('images/store-page-button.png');
+    background-repeat: no-repeat;
+    text-decoration: none;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding: 8px;
+    width: fit-content;
+    height: fit-content;
+}
+
+    .custom-button p {
         margin: 0;
     }
 
-    .store-page-button:hover {
+    .custom-button:hover {
         background-image: url('images/store-page-button-hovered.png');
         color: #00ff58
     }
 
+/*ENDREGION: Custom Input*/
+
 .dos-font {
     font-family: 'PerfectDOSVGA437', monospace, monospace;
     color: #00ff58;
+    margin: 0 !important;
 }
 
     .scaling-dos-font {
@@ -163,14 +212,41 @@ img.news-viewer-img {
     width: 100%;
 }
 
-/*Forum*/
+/*STARTREGION: Forum*/
+
+.crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    /* Scanlines */
+    background-image: repeating-linear-gradient( to bottom, rgba(0, 255, 0, 0.05), rgba(0, 255, 0, 0.05) 1px, transparent 1px, transparent 5px );
+    /* Optional slight tint without making everything white */
+    /*background-color: rgba(0, 0, 0, 0.5); Transparent so it doesn't block view */
+    /* CRT glow on edges (optional) */
+    /*box-shadow: inset 0 0 50px rgba(0, 255, 0, 0.5);*/
+    /* Flicker effect */
+    /*animation: crtFlicker 0.1s infinite;*/
+}
+
+@keyframes crtFlicker {
+    0%, 100% {
+        opacity: 0.97;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
 
 .forum-background {
     display: flex;
     flex-direction: column;
     gap: 1em;
-    background-color: gray;
-    padding: 1em;
+    background-color: rgb(20, 20, 20);
     min-height: 100vh;
 }
 
@@ -178,8 +254,26 @@ img.news-viewer-img {
     display: flex;
     flex-direction: column;
     gap: 1em;
-    background-color: gray;
+    background-color: rgb(20, 20, 20);
     height: 100vh;
+}
+
+.forum-content-frame {
+    display: flex;
+    justify-content: center;
+}
+
+.forum-content-list {
+    display: flex;
+    flex-direction: column;
+    width: 80vw;
+}
+
+.forum-listed-content {
+    display: flex;
+    flex-direction: column;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 .modal-overlay {
@@ -191,6 +285,8 @@ img.news-viewer-img {
     z-index: 1000;
     background-color: rgba(0, 0, 0, 0.5);
 }
+
+/*ENDREGION: Forum*/
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;

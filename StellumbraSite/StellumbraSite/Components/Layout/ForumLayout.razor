@@ -7,15 +7,17 @@
 @using StellumbraSite.Data
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Identity
+@using StellumbraSite.Components.Text
 @using Microsoft.AspNetCore.WebUtilities
+@using StellumbraSite.Components.Buttons
 
 <main>
     @if (loginShown)
     {
         <div class="modal-overlay">
-            <button type="button" @onclick="() => ShowLogin(false)">
+            <CustomFuncButton OnClick="() => ShowLogin(false)">
                 X
-            </button>
+            </CustomFuncButton>
             <LoginWidget OnLogin=OnUserLogin ReturnUrl=@Navigation.Uri/>
         </div>
     }
@@ -23,19 +25,20 @@
     @if (signupShown)
     {
         <div class="modal-overlay">
-            <button type="button" @onclick="() => ShowSignUp(false)">
+            <CustomFuncButton OnClick="() => ShowSignUp(false)">
                 X
-            </button>
+            </CustomFuncButton>
             <SignupWidget />
         </div>
     }
 
+    <div class="crt-overlay"/>
     <div class="forum-background">
         <div class="forum-navbar-background">
             <div style="display: flex; width: 100%;">
                 <div style="width: 50%">
                     <a style="display: flex; width: fit-content;" href="/">
-                        <h2>[Logo] Cintech Studios</h2>
+                        <h2 class="dos-font">[Logo] Cintech Studios</h2>
                     </a>
                 </div>
 
@@ -43,28 +46,27 @@
                     <Authorized>
                         <div style="display: flex; width: 50%; justify-content: right">
                             <a href="/forum/profile-manager">
-                                <p>@context.User.Identity.Name</p>
+                                <DosP>@context.User.Identity.Name</DosP>
                             </a>
-                            <button type="button" @onclick="SignOut" style="display: flex; width: fit-content;">
-                                <p>Sign out.</p>
-                            </button>
+                            <CustomFuncButton OnClick="SignOut">
+                                Sign out
+                            </CustomFuncButton>
                         </div>
                     </Authorized>
                     <NotAuthorized>
                         <div style="display: flex; width: 50%; justify-content: right">
-                            <button type="button" @onclick="() => ShowLogin(true)" style="display: flex; width: fit-content;">
-                                <p>Existing user? Login.</p>
-                            </button>
-                            <button type="button" @onclick="() => ShowSignUp(true)" style=" display: flex; width: fit-content;">
-                                <p>Sign up</p>
-                            </button>
+                            <CustomFuncButton OnClick="() => ShowLogin(true)">
+                                Log In
+                            </CustomFuncButton>
+                            <CustomFuncButton OnClick="() => ShowSignUp(true)">
+                                Sign Up
+                            </CustomFuncButton>
                         </div>
                     </NotAuthorized>
                 </AuthorizeView>
             </div>
         </div>
         @Body
-
     </div>
 </main>
 

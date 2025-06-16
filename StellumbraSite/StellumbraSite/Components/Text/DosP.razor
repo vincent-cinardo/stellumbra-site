@@ -1,0 +1,10 @@
+﻿<p class="dos-font" style="font-size: @(FontSize)px">
+	@ChildContent
+</p>
+
+@code {
+	[Parameter]
+	public RenderFragment ChildContent { get; set; }
+	[Parameter]
+	public int FontSize { get; set; } = 16;
+}

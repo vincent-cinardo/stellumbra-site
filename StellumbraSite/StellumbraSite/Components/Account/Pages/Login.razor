@@ -5,6 +5,8 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
+@using StellumbraSite.Components.Buttons
+@using StellumbraSite.Components.Text
 @using StellumbraSite.Data
 @using StellumbraSite.Model
 
@@ -38,11 +40,15 @@
                 <div class="checkbox mb-3">
                     <label class="form-label">
                         <InputCheckbox @bind-Value="Input.RememberMe" class="darker-border-checkbox form-check-input" />
-                        Remember me
+                        <DosP>
+                            Remember me
+                        </DosP>
                     </label>
                 </div>
                 <div>
-                    <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                    <CustomSubmitButton>
+                        Log in
+                    </CustomSubmitButton>
                 </div>
                 <div>
                     <p>

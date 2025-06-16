@@ -1,18 +1,28 @@
 ﻿@using StellumbraSite.Data
 @using StellumbraSite.Shared.Model
+@using StellumbraSite.Components.Text
 
 @inject HttpClient HttpClient;
 
-<div style="border: solid">
+<div style="@Style" class="forum-listed-content">
     @if (threadUserData != null)
     {
-        <img src="@threadUserData.ProfilePicturePath" />
-        <p>
-            @threadUserData.Username
-        </p>
-        <p>
-            @((MarkupString)Thread.Content)
-        </p>
+        <!-- TODO: Replace redundant 'style' css here. Same as ForumThreadComponent.-->
+        <div style="display: flex; flex-direction: row; gap: 12px">
+            <img width="48" height="48" src="@threadUserData.ProfilePicturePath" alt="images/profile0.png" />
+            <DosP>
+                @threadUserData.Username
+            </DosP>
+        </div>
+
+        <div style="margin-left: 60px;">
+            <DosP>
+                @((MarkupString)Thread.Content)
+            </DosP>
+            <DosP FontSize="12">
+                @Thread.DateTime
+            </DosP>
+        </div>
     }
 
     <!-- TODO: Allow admins to delete threads but not if that thread is an owner thread. -->
@@ -36,6 +46,8 @@
     public string ViewingUserRole { get; set; }
     [Parameter]
     public EventCallback<ForumThread> OnClickDelete { get; set; }
+    [Parameter]
+    public string Style { get; set; } = string.Empty;
 
     private UserData threadUserData;
 
