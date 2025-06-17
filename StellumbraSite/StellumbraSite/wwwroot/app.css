@@ -26,6 +26,58 @@ a {
     font-display: swap;
 }
 
+@keyframes blink {
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    0% {
+        opacity: 1;
+    }
+}
+
+@keyframes blink-underline {
+    0% {
+        border-bottom: 2px solid rgb(159, 255, 127);
+        border-bottom-color: rgb(159, 255, 127);
+    }
+
+    50% {
+        border-bottom-color: transparent;
+    }
+
+    100% {
+        border-bottom: 2px solid rgb(159, 255, 127);
+        border-bottom-color: rgb(159, 255, 127);
+    }
+}
+
+.custom-hypertext {
+    color: #00ff58;
+}
+
+    .custom-hypertext:hover {
+        color: rgb(159, 255, 127) !important;
+    }
+
+.blinking-underline-hypertext {
+    border-bottom: solid 2px;
+    border-bottom-color: transparent;
+}
+
+    .blinking-underline-hypertext:hover {
+        color: rgb(159, 255, 127);
+        border-bottom-color: rgb(159, 255, 127);
+        animation: blink-underline 0.6s step-end infinite;
+    }
+
+.custom-hypertext-arrow {
+    color: rgb(159, 255, 127);
+    animation: blink 0.6s step-end infinite;
+}
+
 /*STARTREGION: Custom Input*/
 
 .custom-toggle {
@@ -71,6 +123,7 @@ input.custom-text-input {
     padding: 8px;
     width: fit-content;
     height: fit-content;
+    cursor: pointer;
 }
 
     .custom-button p {
@@ -87,7 +140,6 @@ input.custom-text-input {
 .dos-font {
     font-family: 'PerfectDOSVGA437', monospace, monospace;
     color: #00ff58;
-    margin: 0 !important;
 }
 
     .scaling-dos-font {
@@ -99,19 +151,20 @@ input.custom-text-input {
 .social-icons {
     display: flex;
     color: #00ff58;
-    transition: color 0.3s;
+    transition: color 0.0s;
     gap: 1rem;
     z-index: 8;
 }
 
     .social-icons i {
         color: #00ff58;
-        transition: color 0.3s;
+        transition: color 0.0s;
         z-index: 8;
     }
 
         .social-icons i:hover {
-            color: #00ff58;
+            color: rgb(159, 255, 127);
+            transition: color 0.0s;
         }
 
 .top-nav {
@@ -287,6 +340,88 @@ img.news-viewer-img {
 }
 
 /*ENDREGION: Forum*/
+
+/*STARTREGION: Quill text editor.*/
+
+.ql-bold::before {
+    content: 'B <br>';
+    font-family: 'PerfectDOSVGA437', monospace, monospace;
+    font-size: 16px;
+    color: #00ff58;
+}
+
+.ql-bold:hover::before {
+    color: rgb(159, 255, 127);
+}
+
+.ql-italic::before {
+    content: 'I <br>';
+    font-family: 'PerfectDOSVGA437', monospace, monospace;
+    font-size: 16px;
+    color: #00ff58;
+    font-style: italic;
+}
+
+
+.ql-italic:hover::before {
+    color: rgb(159, 255, 127);
+}
+
+.ql-underline::before {
+    content: 'U <br>';
+    font-family: 'PerfectDOSVGA437', monospace, monospace;
+    font-size: 16px;
+    color: #00ff58;
+    text-decoration: underline;
+    text-align: start;
+}
+
+.ql-underline:hover::before {
+    color: rgb(159, 255, 127);
+}
+
+.ql-italic:hover::before {
+    color: rgb(159, 255, 127);
+}
+
+.ql-toolbar .ql-stroke {
+    stroke: #00ff58 !important;
+}
+
+.ql-toolbar .ql-stroke:hover {
+    stroke: rgb(159, 255, 127);
+}
+
+.ql-toolbar *:hover {
+    font-weight: bold;
+    color: rgb(159, 255, 127);
+}
+
+.ql-toolbar .ql-picker {
+    color: #00ff58 !important;
+}
+
+.ql-toolbar button {
+    color: #00ff58 !important;
+}
+
+.ql-toolbar.ql-snow {
+    border: 2px solid #00ff58 !important;
+    align-items: center;
+}
+
+.ql-active {
+    font-weight: bold;
+    color: rgb(159, 255, 127);
+}
+
+.ql-editor {
+    /* Example: center text and change color */
+    font-family: 'PerfectDOSVGA437', monospace, monospace, monospace;
+    color: #00ff58;
+}
+
+/*ENDREGION: Quill text editor.*/
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;

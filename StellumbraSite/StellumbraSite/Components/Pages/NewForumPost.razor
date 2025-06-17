@@ -3,43 +3,47 @@
 
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
+@using StellumbraSite.Components.Hypertext
 @using StellumbraSite.Shared.Model
 @using Microsoft.Extensions.Options
+@using StellumbraSite.Components.Text
+@using StellumbraSite.Components.Forum
 
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-@if (forumTopic != null)
-{
-    @if (ReturnUrl != null)
+<ForumContentFrame>
+    @if (forumTopic != null)
     {
-        <a href="@ReturnUrl">
-            Back to @forumTopic.TopicShownName
-        </a>
+        @if (ReturnUrl != null)
+        {
+            <CustomHypertext HasBlinkingArrow href="@ReturnUrl">
+                Back to @forumTopic.TopicShownName
+            </CustomHypertext>
+        }
+
+        <h3 class="dos-font">New Post: @forumTopic.TopicShownName</h3>
     }
 
-    <h3>New Post: @forumTopic.TopicShownName</h3>
-}
+    <DosP>Title</DosP>
+    <input class="custom-text-input" id="title" @bind-value="title" />
 
-<p>Title</p>
-<InputText DisplayName="Title" @bind-Value="title" />
+    <!-- TODO: Ensure that SQL DB is setup to accomadate this role. -->
+    @if (topicName == "news")
+    {
+        <!-- TODO: After the owner role is set up, uncomment this.-->
+        <!-- <AuthorizeView Roles="Owner">-->
+        <AuthorizeView>
+            <Authorized>
+                <DosP>Caption</DosP>
+                <input class="custom-text-input" id="caption" @bind-value="caption" />
+            </Authorized>
+        </AuthorizeView>
+    }
 
-<!-- TODO: Ensure that SQL DB is setup to accomadate this role. -->
-
-@if (topicName == "news")
-{
-    <!-- TODO: After the owner role is set up, uncomment this.-->
-    <!-- <AuthorizeView Roles="Owner">-->
-    <AuthorizeView>
-        <Authorized>
-            <p>Caption</p>
-            <InputText DisplayName="Caption" @bind-Value="caption" />
-        </Authorized>
-    </AuthorizeView>
-}
-
-<RichTextEditor @ref=richTextEditor OnClick="SendPost" />
+    <RichTextEditor @ref=richTextEditor OnClick="SendPost" />
+</ForumContentFrame>
 
 @code {
     [SupplyParameterFromQuery]

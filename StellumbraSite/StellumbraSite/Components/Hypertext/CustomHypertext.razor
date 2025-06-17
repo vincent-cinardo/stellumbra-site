@@ -1,0 +1,44 @@
+﻿<a class="dos-font @contentClass" style="display: inline-block; @(Style)" href="@Href"
+@onmouseenter="OnEnter"
+@onmouseleave="OnLeave">
+    @if (showArrow && HasBlinkingArrow)
+    {
+        <span class="custom-hypertext-arrow">
+            >
+        </span>
+    }
+
+    <span>
+        @ChildContent
+    </span>
+</a> 
+
+@code {
+    [Parameter]
+    public string Href { get; set; }
+
+    [Parameter]
+    public string Style { get; set; } = string.Empty;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public bool HasBlinkingArrow { get; set; } = false;
+    [Parameter]
+    public bool HasBlinkingUnderline { get; set; } = false;
+
+    private string contentClass { get => HasBlinkingUnderline ? "blinking-underline-hypertext" : "custom-hypertext"; }
+
+    private bool showArrow { get; set; } = false;
+
+    private void OnEnter()
+    {
+        showArrow = true;
+    }
+
+    private void OnLeave()
+    {
+        showArrow = false;
+    }
+}

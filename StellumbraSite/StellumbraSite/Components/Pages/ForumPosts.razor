@@ -12,24 +12,32 @@
 @using StellumbraSite.Components.Text
 @using StellumbraSite.Components.Forum
 @using StellumbraSite.Components.Shared
+@using StellumbraSite.Components.Buttons
 @using Microsoft.AspNetCore.Components.Authorization
 
 <ForumContentFrame>
-    @if (forumTopic != null)
-    {
-        <h3 class="dos-font">@forumTopic.TopicShownName</h3>
-    }
-
-    <div style="display:flex; justify-content: right">
-        <AuthorizeView>
-            <Authorized>
-                <button class="dos-font" style="width: 128px" type="button" @onclick="StartNewPost">Start New Post</button>
-            </Authorized>
-            <NotAuthorized>
-                <DosP>Login to start new posts.</DosP>
-            </NotAuthorized>
-        </AuthorizeView>
+    <div>
+        @if (forumTopic != null)
+        {
+            <h3 class="dos-font">@forumTopic.TopicShownName</h3>
+        }
     </div>
+    <div style="display:flex; margin-bottom: 1rem; align-items: flex-end;">
+        <div style="display: flex; width: 50%; height: fit-content;">
+            <DosP>Some kind of description?.</DosP>
+        </div>
+        <div style="display: flex; width: 50%; justify-content: right;">
+            <AuthorizeView>
+                <Authorized>
+                    <CustomFuncButton OnClick="StartNewPost">Start New Post</CustomFuncButton>
+                </Authorized>
+                <NotAuthorized>
+                    <DosP>Login to start new posts.</DosP>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+    </div>
+
 
     @if (posts != null)
     {
@@ -56,8 +64,8 @@
 @code {
 
     // TODO: These are reduntant see ForumThreads.razor
-    private string DefaultStyle { get => "border-top: 2px solid black !important;"; }
-    private string LastStyle { get => "border-top: 2px solid black !important; border-bottom: 2px solid black !important;"; }
+    private string DefaultStyle { get => "border-top: 2px solid #00ff58 !important;"; }
+    private string LastStyle { get => "border-top: 2px solid #00ff58 !important; border-bottom: 2px solid #00ff58 !important;"; }
 
     private int pageSize;
     private const int PAGES_PER_DIRECTION = 3;

@@ -1,8 +1,8 @@
 ﻿@inherits LayoutComponentBase
 
 @inject HttpClient Http
-@inject SignInManager<ApplicationUser> SignInManager
 @inject NavigationManager Navigation
+@inject SignInManager<ApplicationUser> SignInManager
 
 @using StellumbraSite.Data
 @using System.Security.Claims
@@ -10,6 +10,7 @@
 @using StellumbraSite.Components.Text
 @using Microsoft.AspNetCore.WebUtilities
 @using StellumbraSite.Components.Buttons
+@using StellumbraSite.Components.Hypertext
 
 <main>
     @if (loginShown)
@@ -37,24 +38,24 @@
         <div class="forum-navbar-background">
             <div style="display: flex; width: 100%;">
                 <div style="width: 50%">
-                    <a style="display: flex; width: fit-content;" href="/">
-                        <h2 class="dos-font">[Logo] Cintech Studios</h2>
-                    </a>
+                    <CustomHypertext HasBlinkingUnderline=true Href="/">
+                        <h2>[Logo] Cintech Studios</h2>
+                    </CustomHypertext>
                 </div>
 
                 <AuthorizeView>
                     <Authorized>
-                        <div style="display: flex; width: 50%; justify-content: right">
-                            <a href="/forum/profile-manager">
-                                <DosP>@context.User.Identity.Name</DosP>
-                            </a>
+                        <div style="display: flex; width: 50%; justify-content: right; align-items: center; gap: 1rem;">
+                            <CustomHypertext HasBlinkingUnderline=true Href="/forum/profile-manager">
+                                @context.User.Identity.Name
+                            </CustomHypertext>
                             <CustomFuncButton OnClick="SignOut">
                                 Sign out
                             </CustomFuncButton>
                         </div>
                     </Authorized>
                     <NotAuthorized>
-                        <div style="display: flex; width: 50%; justify-content: right">
+                        <div style="display: flex; width: 50%; justify-content: right; align-items: center; gap: 1rem;">
                             <CustomFuncButton OnClick="() => ShowLogin(true)">
                                 Log In
                             </CustomFuncButton>
@@ -69,7 +70,6 @@
         @Body
     </div>
 </main>
-
 
 @code {
     //[CascadingParameter]

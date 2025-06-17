@@ -1,6 +1,6 @@
 ﻿<div class="custom-button">
     <a href=@Href>
-        <p class="dos-font" style="font-size: @(FontSize)px;">
+        <p class="dos-font" style="@style">
             @ChildContent
         </p>
     </a>
@@ -15,5 +15,5 @@
     [EditorRequired]
     public RenderFragment ChildContent { get; set; }
     [Parameter]
-    public int FontSize { get; set; } = 16;
+    public string style { get; set; }
 }

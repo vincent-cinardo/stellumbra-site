@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using StellumbraSite.Components.Hypertext
+@inherits LayoutComponentBase
 
 <div class="top-nav px-4 py-2">
     <div style="width: 20%;  display:flex; justify-content: left; height: 100%;">
@@ -6,10 +7,10 @@
     </div>
 
     <div style="width: 80%; display: flex; gap: 4rem; justify-content: center;">
-        <a href="/" class="navigation-link">Home</a>
-        <a href="/news/1" class="navigation-link">News</a>
-        <a href="/forum" class="navigation-link">Forum</a>
-        <a href="/wiki-placeholder" class="navigation-link">Wiki</a>
+        <CustomHypertext Style="font-size: 20px" HasBlinkingUnderline=true href="/">Home</CustomHypertext>
+        <CustomHypertext Style="font-size: 20px" HasBlinkingUnderline=true href="/news/1">News</CustomHypertext>
+        <CustomHypertext Style="font-size: 20px" HasBlinkingUnderline=true href="/forum">Forum</CustomHypertext>
+        <CustomHypertext Style="font-size: 20px" HasBlinkingUnderline=true href="/wiki-placeholder">Wiki</CustomHypertext>
     </div>
 
     <div style="width: 20%; justify-content: right;" class="social-icons">

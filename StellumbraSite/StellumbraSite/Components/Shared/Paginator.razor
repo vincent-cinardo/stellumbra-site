@@ -1,27 +1,29 @@
-﻿<!-- Paginator assumes a path exists: "/pageRootPath/{n}" -->
+﻿@using StellumbraSite.Components.Hypertext
+<!-- Paginator assumes a path exists: "/pageRootPath/{n}" -->
 
 @inject NavigationManager Navigation
 
 <div class=@($"{customPaginatorClass}")>
     @if (page - pagesPerDirection > FirstPage)
     {
-        <a href=@($"{pageRootPath}/{FirstPage}") @onclick=ForceReload>
-            <p class=@($"{customFontClass}")><em>First Page</em></p>
-        </a>
+        <CustomHypertext HasBlinkingUnderline=true href=@($"{pageRootPath}/{FirstPage}")>
+            First Page
+        </CustomHypertext>
     }
 
     @for (int i = MinPage; i <= MaxPage; i++)
     {
-        <a href=@($"{pageRootPath}/{i}") @onclick=ForceReload>
-            <p class=@($"{customFontClass}")><em>@($"{i}")</em></p>
-        </a>
+        int pageNumber = i;
+        <CustomHypertext HasBlinkingUnderline=true href=@($"{pageRootPath}/{pageNumber}")>
+            @($"{pageNumber}")
+        </CustomHypertext>
     }
 
     @if (page + pagesPerDirection < LastPage)
     {
-        <a href=@($"{pageRootPath}/{LastPage}") @onclick=ForceReload>
-            <p class=@($"{customFontClass}")><em>Last Page</em></p>
-        </a>
+        <CustomHypertext HasBlinkingUnderline=true href=@($"{pageRootPath}/{LastPage}")>
+            Last Page
+        </CustomHypertext>
     }
 </div>
 

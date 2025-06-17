@@ -1,8 +1,10 @@
-﻿<div class="forum-topic">
+﻿@using StellumbraSite.Components.Hypertext
+
+<div class="forum-topic">
     <div class="forum-section-child">
-        <NavLink class="dos-font" href=@($"{@Href}")>
+        <CustomHypertext HasBlinkingArrow Href=@($"{@Href}")>
             @ChildContent
-        </NavLink>
+        </CustomHypertext>
     </div>
 </div>
 
