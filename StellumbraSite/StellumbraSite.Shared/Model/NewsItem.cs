@@ -10,8 +10,8 @@ namespace StellumbraSite.Shared.Model
         [Column("id")]
         public int Id { get; set; }
         [ForeignKey(nameof(ForumThread))]
-        [Column("post_id")]
-        public int PostId { get; set; }
+        [Column("thread_id")]
+        public int ThreadId { get; set; }
         [Column("title")]
         public string Title { get; set; }
         [Column("title_image_path")]
