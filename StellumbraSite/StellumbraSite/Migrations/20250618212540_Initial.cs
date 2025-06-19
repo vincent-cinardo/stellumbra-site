@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StellumbraSite.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,6 +30,7 @@ namespace StellumbraSite.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProfilePicturePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -43,8 +44,7 @@ namespace StellumbraSite.Migrations
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false),
-                    ProfilePicturePath = table.Column<string>(type: "nvarchar(256)", nullable: false)
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -55,7 +55,8 @@ namespace StellumbraSite.Migrations
                 name: "news",
                 columns: table => new
                 {
-                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     post_id = table.Column<int>(type: "int", nullable: false),
                     title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     title_image_path = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -65,28 +66,23 @@ namespace StellumbraSite.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_news", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_news_post",
-                        column: x => x.post_id,
-                        principalTable: "posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "posts",
+                name: "post",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    topic_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    thread_id = table.Column<int>(type: "int", nullable: false),
                     poster_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_first_thread = table.Column<bool>(type: "bit", nullable: false),
                     datetime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_posts", x => x.id);
+                    table.PrimaryKey("PK_post", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,21 +91,15 @@ namespace StellumbraSite.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    post_id = table.Column<int>(type: "int", nullable: false),
+                    topic_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     poster_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    is_first_thread = table.Column<bool>(type: "bit", nullable: false),
+                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    views = table.Column<int>(type: "int", nullable: false),
                     datetime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_threads", x => x.id);
-                    table.ForeignKey(
-                        name:"FK_thread_post",
-                        column: x => x.post_id,
-                        principalTable: "posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -117,7 +107,8 @@ namespace StellumbraSite.Migrations
                 columns: table => new
                 {
                     topic_name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    topic_shown_name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    topic_shown_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -292,7 +283,7 @@ namespace StellumbraSite.Migrations
                 name: "news");
 
             migrationBuilder.DropTable(
-                name: "posts");
+                name: "post");
 
             migrationBuilder.DropTable(
                 name: "threads");

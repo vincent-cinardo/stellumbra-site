@@ -17,7 +17,8 @@ else
         <div class="news-container">
             @for (int i = (newsPage - 1) * MAX_ARTICLES_PER_PAGE; i < Math.Min(news.Count, (newsPage - 1) * MAX_ARTICLES_PER_PAGE + MAX_ARTICLES_PER_PAGE); i++)
             {
-                <NewsWidget NewsItem="news[i]"/>
+                int index = i;
+                <NewsWidget NewsItem="news[index]" />
             }
         </div>
 

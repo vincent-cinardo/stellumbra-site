@@ -1,47 +1,36 @@
-﻿@using StellumbraSite.Components.Hypertext
-@using StellumbraSite.Data
+﻿@using StellumbraSite.Data
 @using StellumbraSite.Shared.Model
 @using StellumbraSite.Components.Text
 
 @inject HttpClient HttpClient;
 
 <div style="@Style" class="forum-listed-content">
-    <!-- TODO: Replace redundant 'style' css here. Same as ForumThreadComponent.-->
-    @if (postUserData != null)
+    @if (threadUserData != null)
     {
-        <div style="display: flex; flex-direction: row;">
-            <div style="width: 50%">
-                <CustomHypertext HasBlinkingArrow=true href=@($"/forum/post-opened/{Post.Id}/1")>
-                    @Post.Title
-                </CustomHypertext>
-                <DosP style="font-size: 12px">
-                    @Post.DateTime
-                </DosP>
-            </div>
-
-            <div style="display: flex; width: 50%; justify-content: right; gap: 8px;">
-                <div style="display: flex; flex-direction: column;">
-                    <div style="margin:auto; height: 50%">
-                        <DosP style="font-size: 12px">
-                            x Replies
-                        </DosP>
-                    </div>
-                    <div>
-                        <DosP style="font-size: 12px">
-                            y Views
-                        </DosP>
-                    </div>
-                </div>
-                <div>
-                    <img style="margin: auto" width="48" height="48" src="@postUserData.ProfilePicturePath" alt="images/profile0.png" />
-                </div>
-                <div style="margin-top: auto; margin-bottom:auto">
-                    <DosP style="font-size: 12px">
-                        @postUserData.Username
-                    </DosP>
-                </div>
-            </div>
+        <!-- TODO: Replace redundant 'style' css here. Same as ForumThreadComponent.-->
+        <div style="display: flex; flex-direction: row; gap: 12px">
+            <img width="48" height="48" src="@threadUserData.ProfilePicturePath" alt="images/profile0.png" />
+            <DosP>
+                @threadUserData.Username
+            </DosP>
         </div>
+
+        <div style="margin-left: 60px;">
+            <DosP>
+                @((MarkupString)Post.Content)
+            </DosP>
+            <DosP Style="font-size: 12px">
+                @Post.DateTime
+            </DosP>
+        </div>
+    }
+
+    <!-- TODO: Allow admins to delete threads but not if that thread is an owner thread. -->
+    @if (ViewingUserId == Post.PosterID || ViewingUserRole == "Owner")
+    {
+        <button @onclick="() => OnClickDelete.InvokeAsync(Post)">
+            X
+        </button>
     }
 </div>
 
@@ -50,12 +39,20 @@
     [EditorRequired]
     public ForumPost Post { get; set; }
     [Parameter]
+    [EditorRequired]
+    public string ViewingUserId { get; set; }
+    [Parameter]
+    [EditorRequired]
+    public string ViewingUserRole { get; set; }
+    [Parameter]
+    public EventCallback<ForumPost> OnClickDelete { get; set; }
+    [Parameter]
     public string Style { get; set; } = string.Empty;
 
-    private UserData postUserData;
+    private UserData threadUserData;
 
     protected override async Task OnInitializedAsync()
     {
-        postUserData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{Post.PosterID}");
+        threadUserData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{Post.PosterID}");
     }
 }

@@ -33,8 +33,7 @@
         </div>
     }
 
-    <div class="crt-overlay"/>
-    <div class="forum-background">
+    <div class="crt-overlay forum-background">
         <div class="forum-navbar-background">
             <div style="display: flex; width: 100%;">
                 <div style="width: 50%">
@@ -69,12 +68,17 @@
         </div>
         @Body
     </div>
+
 </main>
+
+<footer>
+    <div class="forum-footer-background crt-overlay">
+    </div>
+</footer>
 
 @code {
     //[CascadingParameter]
     //private HttpContext HttpContext { get; set; } = default!;
-
 
     private bool loginShown;
     private bool signupShown;

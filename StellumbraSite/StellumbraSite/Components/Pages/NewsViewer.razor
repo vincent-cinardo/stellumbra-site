@@ -16,7 +16,7 @@ else
 
             <h2 class="dos-font">@news.Title</h2>
             <p class="dos-font"><em>@news.DateTime.ToString()</em></p>
-            @firstThreadOfPost.Content
+            @firstPostThreadOfPost.Content
         </div>
     </div>
 }
@@ -25,11 +25,11 @@ else
     [Parameter]
     public string NewsID { get; set; }
     private NewsItem news;
-    private ForumThread firstThreadOfPost;
+    private ForumPost firstPostThreadOfPost;
 
     protected override async Task OnInitializedAsync()
     {
         news = await Http.GetFromJsonAsync<NewsItem>($"/api/News/GetNewsById/{NewsID}");
-        firstThreadOfPost = await Http.GetFromJsonAsync<ForumThread>($"/api/Thread/GetFirstThread/{news.PostId}");
+        firstPostThreadOfPost = await Http.GetFromJsonAsync<ForumPost>($"/api/Post/GetFirstPost/{news.PostId}");
     }
 }

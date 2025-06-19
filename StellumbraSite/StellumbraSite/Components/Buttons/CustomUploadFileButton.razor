@@ -1,0 +1,18 @@
+﻿@using StellumbraSite.Components.Text
+
+<label class="custom-button">
+    <DosP>
+        @ChildContent
+    </DosP>
+    <InputFile class="custom-button" onchange="OnChange" hidden />
+</label>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<InputFileChangeEventArgs> OnChange { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment? ChildContent { get; set; }
+}

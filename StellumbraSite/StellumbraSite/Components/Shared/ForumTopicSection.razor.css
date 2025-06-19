@@ -2,14 +2,13 @@
     display: flex;
     vertical-align: middle;
     margin-top: auto;
-    margin-bottom: auto;
     border-bottom: solid;
     border-width: 1px;
-    margin: 1px;
     border-color: #00ff58;
-    width: 99%;
+    width: 98%;
     margin-right: 0;
     margin-left: auto;
+    height: 4em;
 }
 
     .forum-topic-text {

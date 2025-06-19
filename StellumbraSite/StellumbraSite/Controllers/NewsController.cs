@@ -84,7 +84,7 @@ namespace StellumbraSite.Controllers
             }
         }
         [HttpGet("GetNewsByID/{newsID}")]
-        public async Task<IActionResult> GetPostByID(string newsID)
+        public async Task<IActionResult> GetNewsByID(int newsID)
         {
             try
             {

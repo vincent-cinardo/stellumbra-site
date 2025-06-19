@@ -11,5 +11,7 @@ namespace StellumbraSite.Shared.Model
         public string TopicName { get; set; }
         [Column("topic_shown_name")]
         public string TopicShownName { get; set; }
+        [Column("description")]
+        public string Description { get; set; }
     }
 }

@@ -37,7 +37,7 @@
                 }
             }
 
-            let filepath = addImage(base64str, format, imageIndex);
+            let filepath = window.apiRequests.addImage(base64str, format, imageIndex);
             imageIndex++;
 
             img.removeAttribute('src');

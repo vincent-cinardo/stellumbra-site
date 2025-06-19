@@ -7,13 +7,25 @@
 
 @using StellumbraSite.Data
 @using System.Security.Claims
+@using StellumbraSite.Helpers
+@using StellumbraSite.Components.Text
+@using StellumbraSite.Components.Buttons
 
 <PageTitle>Profile-Manager</PageTitle>
 
 @if (userIsLogged)
 {
-    <img src="@userData.ProfilePicturePath"/>
-    <InputFile OnChange="HandleFileSelected" />
+    <img width="48" height="48" src="@userData.ProfilePicturePath"/>
+    <CustomUploadFileButton OnChange="HandleFileSelected">
+        Upload Profile Picture
+    </CustomUploadFileButton>
+
+    <DosP>
+        @postCount Posts
+    </DosP>
+    <DosP>
+        @replyCount Replies
+    </DosP>
 }
 else
 { 
@@ -23,6 +35,7 @@ else
 @code {
     private UserData userData;
     private bool userIsLogged;
+    private int postCount, replyCount;
     protected override async Task OnInitializedAsync()
     {
         userIsLogged = false;
@@ -33,25 +46,14 @@ else
         {
             var userID = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             userData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{userID}");
+            postCount = await HttpClient.GetFromJsonAsync<int>($"/api/Post/GetUserPostCount/{userID}");
+            replyCount = await HttpClient.GetFromJsonAsync<int>($"/api/Thread/GetUserReplyCount/{userID}");
             userIsLogged = true;
         }
     }
-    private async void HandleFileSelected(InputFileChangeEventArgs e)
+    private async void HandleFileSelected(InputFileChangeEventArgs args)
     {
-        var file = e.File;
-        if (file == null)
-        {
-            return;
-        }
-
-        using var stream = file.OpenReadStream(5 * 1024 * 1024);
-        using var ms = new MemoryStream();
-        await stream.CopyToAsync(ms);
-        var bytes = ms.ToArray();
-        var base64String = Convert.ToBase64String(bytes);
-        string format = Path.GetExtension(file.Name).Replace(".", "");
-
-        string filepath = await JS.InvokeAsync<string>("apiRequests.addImage", base64String, format);
+        string filepath = await FileHelper.UploadImage(args.File, JS);
         userData.ProfilePicturePath = filepath;
         await HttpClient.PostAsJsonAsync($"/api/User/SetProfilePicture", userData);
     }

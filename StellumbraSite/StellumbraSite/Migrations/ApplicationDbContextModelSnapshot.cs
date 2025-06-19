@@ -197,6 +197,11 @@ namespace StellumbraSite.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfilePicturePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ProfilePicturePath");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -229,6 +234,42 @@ namespace StellumbraSite.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("content");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("datetime");
+
+                    b.Property<bool>("IsFirstPost")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_first_thread");
+
+                    b.Property<string>("PosterID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("poster_id");
+
+                    b.Property<int>("ThreadID")
+                        .HasColumnType("int")
+                        .HasColumnName("thread_id");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("post");
+                });
+
+            modelBuilder.Entity("StellumbraSite.Shared.Model.ForumThread", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("datetime");
@@ -248,41 +289,9 @@ namespace StellumbraSite.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("topic_name");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("posts");
-                });
-
-            modelBuilder.Entity("StellumbraSite.Shared.Model.ForumThread", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("Views")
                         .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("content");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("datetime");
-
-                    b.Property<bool>("IsFirstThread")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_first_thread");
-
-                    b.Property<int>("PostID")
-                        .HasColumnType("int")
-                        .HasColumnName("post_id");
-
-                    b.Property<string>("PosterID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("poster_id");
+                        .HasColumnName("views");
 
                     b.HasKey("Id");
 
@@ -294,6 +303,11 @@ namespace StellumbraSite.Migrations
                     b.Property<string>("TopicName")
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("topic_name");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("description");
 
                     b.Property<string>("TopicShownName")
                         .IsRequired()
@@ -307,9 +321,12 @@ namespace StellumbraSite.Migrations
 
             modelBuilder.Entity("StellumbraSite.Shared.Model.NewsItem", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Caption")
                         .IsRequired()

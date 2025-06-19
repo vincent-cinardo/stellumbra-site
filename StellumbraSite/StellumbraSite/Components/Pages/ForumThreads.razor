@@ -1,155 +1,102 @@
-﻿@page "/forum/post-opened/{postID:int}/{page:int}"
+﻿@page "/forum/threads/{topicName}/{page:int}"
 @layout ForumLayout
 
-@inject IJSRuntime JS
-@inject IOptions<CustomSettings> Config
 @inject HttpClient Http
-@inject NavigationManager Navigation
-@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@inject NavigationManager Navigate
+@inject IOptions<CustomSettings> Config
 
 @using System.Net;
-@using System.Security.Claims
 @using StellumbraSite.Shared.Model
 @using Microsoft.Extensions.Options
 @using StellumbraSite.Components.Text
-@using StellumbraSite.Components.Other
 @using StellumbraSite.Components.Forum
 @using StellumbraSite.Components.Shared
+@using StellumbraSite.Components.Buttons
+@using StellumbraSite.Components.Hypertext
 @using Microsoft.AspNetCore.Components.Authorization
 
-@if (deletingThread)
-{
-    <Modal 
-    PromptText=@ThreadDeletePrompt
-    ConfirmText="Yes"
-    DenyText="No"
-    OnConfirm="ConfirmDeleteThread"
-    OnDeny="() => deletingThread = false"/>
-}
 <ForumContentFrame>
-    @if (forumPost != null)
-    {
-        <h3 class="dos-font">@forumPost.Title</h3>
-    }
+    <CustomHypertext HasBlinkingArrow=true Href="/forum">
+        Back to Topics
+    </CustomHypertext>
+    <div>
+        @if (forumTopic != null)
+        {
+            <h3 class="dos-font">@forumTopic.TopicShownName</h3>
+        }
+    </div>
+    <div style="display:flex; margin-bottom: 1rem; align-items: flex-end;">
+        <div style="display: flex; width: 50%; height: fit-content;">
+            @if (forumTopic != null)
+            {
+                <DosP>@forumTopic.Description</DosP>
+            }
+        </div>
+        <div style="display: flex; width: 50%; justify-content: right;">
+            <AuthorizeView>
+                <Authorized>
+                    <CustomFuncButton OnClick="StartNewPost">Start New Post</CustomFuncButton>
+                </Authorized>
+                <NotAuthorized>
+                    <DosP>Login to start new posts.</DosP>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+    </div>
+
 
     @if (threads != null)
     {
         @for (int i = 0; i < threads.Count; i++)
         {
-            <!-- TODO: User posterID to get UserName from profile DB -->
             @if (i == threads.Count - 1)
             {
-                <ForumThreadComponent Style="@LastStyle" Thread="threads[i]"
-                    ViewingUserId="userID"
-                    ViewingUserRole="userRole"
-                    OnClickDelete="OnClickDeleteThread" />
+                <ForumThreadComponent Style="@LastStyle" Thread="threads[i]" ReturnUrl="@Navigate.Uri" />
             }
             else
             {
-                <ForumThreadComponent Style="@DefaultStyle" Thread="threads[i]"
-                    ViewingUserId="userID"
-                    ViewingUserRole="userRole"
-                    OnClickDelete="OnClickDeleteThread" />
+                <ForumThreadComponent Style="@DefaultStyle" Thread="threads[i]" ReturnUrl="@Navigate.Uri" />
             }
         }
     }
-
-    <AuthorizeView>
-        <Authorized>
-            <RichTextEditor @ref=richTextEditor OnClick="SendThread" />
-        </Authorized>
-        <NotAuthorized>
-            <DosP>Login to reply to this thread.</DosP>
-        </NotAuthorized>
-    </AuthorizeView>
 
     <Paginator itemsPerPage=pageSize
                itemCount=totalThreads
                pagesPerDirection=PAGES_PER_DIRECTION
                page=page
-               pageRootPath=@($"/forum/post-opened/{postID}") />
+               pageRootPath=@($"/forum/threads/{topicName}") />
 </ForumContentFrame>
 
 @code {
+
     // TODO: These are reduntant see ForumThreads.razor
     private string DefaultStyle { get => "border-top: 2px solid #00ff58 !important;"; }
-    private string LastStyle { get => "border-top: 2px solid #00ff58 !important; border-bottom: 2px solid black !important;"; }
+    private string LastStyle { get => "border-top: 2px solid #00ff58 !important; border-bottom: 2px solid #00ff58 !important;"; }
 
     private int pageSize;
     private const int PAGES_PER_DIRECTION = 3;
+    private bool logged;
 
-    private bool deletingThread = false;
-    private ForumThread threadSelectedForDeletion;
-
+    [Parameter]
+    public string topicName { get; set; }
     [Parameter]
     public int page { get; set; }
-    [Parameter]
-    public int postID { get; set; }
-
-    public string userID { get; set; } = "";
-    public string username { get; set; } = "";
-    public string userRole { get; set; } = "";
-
-    private string ThreadDeletePrompt
-    {
-        get => threadSelectedForDeletion.IsFirstThread ?
-        "Are you sure? Deleting the first thread will delete the post." :
-        "Are you sure you want to delete this thread?";
-    }
-
-    private RichTextEditor richTextEditor;
 
     private int totalThreads;
-    private ForumPost forumPost;
     private List<ForumThread> threads;
+    private ForumTopic forumTopic;
 
     protected override async Task OnInitializedAsync()
     {
-        threadSelectedForDeletion = null;
         pageSize = Config.Value.ForumPageSize;
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user != null && user.Identity.IsAuthenticated)
-        {
-            userID = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            userRole = user.FindFirst(ClaimTypes.Role)?.Value;
-        }
-
-        totalThreads = await Http.GetFromJsonAsync<int>($"/api/Thread/GetThreadCount/{postID}");
-        forumPost = await Http.GetFromJsonAsync<ForumPost>($"/api/Post/GetPostByID/{postID}");
-        threads = await Http.GetFromJsonAsync<List<ForumThread>>($"/api/Thread/GetThreads/{postID}/{page}/{pageSize}");
+        forumTopic = await Http.GetFromJsonAsync<ForumTopic>($"/api/Topic/GetTopic/{topicName}");
+        totalThreads = await Http.GetFromJsonAsync<int>($"/api/Thread/GetThreadCount/{topicName}");
+        threads = await Http.GetFromJsonAsync<List<ForumThread>>($"/api/Thread/GetThreads/{topicName}/{page}/{pageSize}");
     }
-    private async void SendThread()
+    private async Task StartNewPost()
     {
-        ForumThread forumThread = new ForumThread();
-        string htmlContent = await richTextEditor.GetQuillHTMLContent();
-
-        forumThread.Id = 0;
-        forumThread.PostID = postID;
-        forumThread.PosterID = userID;
-        forumThread.Content = htmlContent;
-        forumThread.IsFirstThread = false;
-
-        await Http.PostAsJsonAsync("/api/Thread/SubmitThread", forumThread);
-        Navigation.Refresh(forceReload: true);
-    }
-    private async void ConfirmDeleteThread()
-    {
-        if (threadSelectedForDeletion.IsFirstThread)
-        {
-            await Http.GetAsync($"/api/Post/DeletePost/{forumPost.Id}");
-            Navigation.NavigateTo($"/forum/posts/{forumPost.TopicName}/1", forceLoad: true);
-        }
-        else
-        {
-            await Http.GetAsync($"/api/Thread/DeleteThread/{threadSelectedForDeletion.Id}");
-            Navigation.Refresh(forceReload: true);
-        }
-    }
-    private async void OnClickDeleteThread(ForumThread forumThread)
-    {
-        threadSelectedForDeletion = forumThread;
-        deletingThread = true;
+        string uri = Navigate.GetUriWithQueryParameters($"/forum/new-thread/{topicName}", new Dictionary<string, object?> { ["ReturnUrl"] = Navigate.Uri });
+        Navigate.NavigateTo(uri, forceLoad: true);
     }
 }

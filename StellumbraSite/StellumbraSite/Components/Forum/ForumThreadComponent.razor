@@ -1,36 +1,48 @@
 ﻿@using StellumbraSite.Data
 @using StellumbraSite.Shared.Model
 @using StellumbraSite.Components.Text
+@using Microsoft.AspNetCore.WebUtilities
+@using StellumbraSite.Components.Hypertext
 
 @inject HttpClient HttpClient;
 
 <div style="@Style" class="forum-listed-content">
+    <!-- TODO: Replace redundant 'style' css here. Same as ForumThreadComponent.-->
     @if (threadUserData != null)
     {
-        <!-- TODO: Replace redundant 'style' css here. Same as ForumThreadComponent.-->
-        <div style="display: flex; flex-direction: row; gap: 12px">
-            <img width="48" height="48" src="@threadUserData.ProfilePicturePath" alt="images/profile0.png" />
-            <DosP>
-                @threadUserData.Username
-            </DosP>
-        </div>
+        <div style="display: flex; flex-direction: row;">
+            <div style="width: 50%">
+                <CustomHypertext HasBlinkingArrow=true href=@(FullThreadUrl) OnClick="AddView">
+                    @Thread.Title
+                </CustomHypertext>
+                <DosP Style="font-size: 12px">
+                    @Thread.DateTime
+                </DosP>
+            </div>
 
-        <div style="margin-left: 60px;">
-            <DosP>
-                @((MarkupString)Thread.Content)
-            </DosP>
-            <DosP style="font-size: 12px">
-                @Thread.DateTime
-            </DosP>
+            <div style="display: flex; width: 50%; justify-content: right; gap: 8px;">
+                <div style="display: flex; flex-direction: column;">
+                    <div style="margin:auto; height: 50%">
+                        <DosP Style="font-size: 12px">
+                            @replies Replies
+                        </DosP>
+                    </div>
+                    <div>
+                        <DosP Style="font-size: 12px">
+                            @views Views
+                        </DosP>
+                    </div>
+                </div>
+                <div>
+                    <img style="margin: auto" width="48" height="48" src="@threadUserData.ProfilePicturePath" alt="images/profile0.png" />
+                </div>
+                <div style="margin-top: auto; margin-bottom:auto">
+                    <DosP Style="font-size: 12px">
+                        @threadUserData.Username
+                    </DosP>
+                </div>
+            </div>
         </div>
-    }
-
-    <!-- TODO: Allow admins to delete threads but not if that thread is an owner thread. -->
-    @if (ViewingUserId == Thread.PosterID || ViewingUserRole == "Owner")
-    {
-        <button @onclick="() => OnClickDelete.InvokeAsync(Thread)">
-            X
-        </button>
     }
 </div>
 
@@ -38,21 +50,27 @@
     [Parameter]
     [EditorRequired]
     public ForumThread Thread { get; set; }
+
     [Parameter]
     [EditorRequired]
-    public string ViewingUserId { get; set; }
-    [Parameter]
-    [EditorRequired]
-    public string ViewingUserRole { get; set; }
-    [Parameter]
-    public EventCallback<ForumThread> OnClickDelete { get; set; }
+    public string ReturnUrl { get; set;}
+
     [Parameter]
     public string Style { get; set; } = string.Empty;
 
+    private string FullThreadUrl { get => QueryHelpers.AddQueryString($"/forum/thread-opened/{Thread.Id}/1", new Dictionary<string, string?> { { "ReturnUrl" , ReturnUrl } }); }
+
     private UserData threadUserData;
+    private int views, replies;
 
     protected override async Task OnInitializedAsync()
     {
         threadUserData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{Thread.PosterID}");
+        views = await HttpClient.GetFromJsonAsync<int>($"/api/Thread/GetViews/{Thread.Id}");
+        replies = await HttpClient.GetFromJsonAsync<int>($"/api/Thread/GetReplies/{Thread.Id}");
+    }
+    private async Task AddView()
+    {
+        await HttpClient.GetAsync($"/api/Thread/AddView/{Thread.Id}");
     }
 }

@@ -1,4 +1,6 @@
-﻿<a class="dos-font @contentClass" style="display: inline-block; @(Style)" href="@Href"
+﻿@inject NavigationManager Navigation
+
+<a class="dos-font @contentClass" style="@(Style)" href="@Href" @onclick="@HandleClick"
 @onmouseenter="OnEnter"
 @onmouseleave="OnLeave">
     @if (showArrow && HasBlinkingArrow)
@@ -15,10 +17,13 @@
 
 @code {
     [Parameter]
-    public string Href { get; set; }
+    public string Href { get; set; } = string.Empty;
 
     [Parameter]
     public string Style { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }
@@ -40,5 +45,14 @@
     private void OnLeave()
     {
         showArrow = false;
+    }
+    private async void HandleClick(MouseEventArgs args)
+    {
+        if (OnClick.HasDelegate)
+        {
+            await OnClick.InvokeAsync();
+        }
+
+        Navigation.NavigateTo(Href, forceLoad: true);
     }
 }

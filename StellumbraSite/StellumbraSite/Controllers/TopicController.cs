@@ -24,10 +24,31 @@ namespace StellumbraSite.Server.Controllers
                 .Select(x => new ForumTopic
                 {
                     TopicName = x.TopicName,
-                    TopicShownName = x.TopicShownName
+                    TopicShownName = x.TopicShownName,
+                    Description = x.Description
                 })
                 .ToListAsync();
                 return Ok(result[0]);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
+        }
+        [HttpGet("GetAllTopics")]
+        public async Task<IActionResult> GetAllTopics()
+        {
+            try
+            {
+                var result = await _db.ForumTopics
+                .Select(x => new ForumTopic
+                {
+                    TopicName = x.TopicName,
+                    TopicShownName = x.TopicShownName,
+                    Description = x.Description
+                })
+                .ToListAsync();
+                return Ok(result);
             }
             catch (Exception e)
             {

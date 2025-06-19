@@ -1,11 +1,13 @@
-﻿@using StellumbraSite.Shared.Model
+﻿@inject HttpClient Http
+
+@using StellumbraSite.Shared.Model
 
 @if (NewsItem != null)
 {
-    <a class="navigation-link" href="/newsviewer/@($"{NewsItem.Id}")">
+    <a class="navigation-link" href="/newsviewer/@NewsItem.Id">
         <div>
 
-            <img style="width: 560px; height:315px" src=@NewsItem.TitleImagePath />
+            <img width="100%" src=@NewsItem.TitleImagePath />
             <h3 class="dos-font">@NewsItem.Title</h3>
             <p class="dos-font">@NewsItem.Caption</p>
             <p class="dos-font">@NewsItem.DateTime.ToString()</p>
@@ -15,5 +17,6 @@
 
 @code {
     [Parameter]
+    [EditorRequired]
     public NewsItem NewsItem { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿<p class="dos-font" style="@style">
+﻿<p class="@Class" style="@Style">
 	@ChildContent
 </p>
 
@@ -6,5 +6,7 @@
 	[Parameter]
 	public RenderFragment ChildContent { get; set; }
 	[Parameter]
-	public string style { get; set; }
+	public string Class { get; set; } = "dos-font";
+	[Parameter]
+	public string? Style { get; set; }
 }

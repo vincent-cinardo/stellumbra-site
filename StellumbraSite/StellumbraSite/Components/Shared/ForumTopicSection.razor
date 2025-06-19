@@ -1,16 +1,10 @@
 ﻿@using StellumbraSite.Components.Hypertext
 
 <div class="forum-topic">
-    <div class="forum-section-child">
-        <CustomHypertext HasBlinkingArrow Href=@($"{@Href}")>
-            @ChildContent
-        </CustomHypertext>
-    </div>
+    @ChildContent
 </div>
 
 @code {
     [Parameter]
     public RenderFragment ChildContent { get; set; }
-    [Parameter]
-    public string Href { get; set; }
 }

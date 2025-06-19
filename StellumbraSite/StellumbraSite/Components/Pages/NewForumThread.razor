@@ -1,14 +1,18 @@
-﻿@page "/forum/new-post/{topicName}"
+﻿@page "/forum/new-thread/{topicName}"
 @layout ForumLayout
 
+@using Microsoft.AspNetCore.WebUtilities
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
-@using StellumbraSite.Components.Hypertext
+@using StellumbraSite.Helpers
 @using StellumbraSite.Shared.Model
 @using Microsoft.Extensions.Options
 @using StellumbraSite.Components.Text
 @using StellumbraSite.Components.Forum
+@using StellumbraSite.Components.Buttons
+@using StellumbraSite.Components.Hypertext
 
+@inject IJSRuntime JS
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -38,11 +42,20 @@
             <Authorized>
                 <DosP>Caption</DosP>
                 <input class="custom-text-input" id="caption" @bind-value="caption" />
+                <CustomUploadFileButton OnChange="HandleFileSelected">
+                    Upload Title Picture    
+                </CustomUploadFileButton>
+
+                @if (newsImage != null)
+                {
+                    <img src="@base64newsImage" />
+                }
+
             </Authorized>
         </AuthorizeView>
     }
 
-    <RichTextEditor @ref=richTextEditor OnClick="SendPost" />
+    <RichTextEditor @ref=richTextEditor OnClick="SendThread" />
 </ForumContentFrame>
 
 @code {
@@ -53,6 +66,8 @@
     public string? topicName { get; set; }
     private string? title { get; set; }
     private string? caption { get; set; }
+    private IBrowserFile? newsImage { get; set; }
+    private string? base64newsImage { get; set; }
     public string posterID { get; set; } = "";
 
     private ForumTopic forumTopic;
@@ -69,43 +84,63 @@
             posterID = user.FindFirst(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         }
     }
-    private async void SendPost()
+    private async void SendThread()
     {
-        ForumPost forumPost = new ForumPost();
+        ForumThread forumThread = new ForumThread();
         string htmlContent = await richTextEditor.GetQuillHTMLContent();
 
-        forumPost.Id = 0;
-        forumPost.Title = title;
-        forumPost.TopicName = topicName;
-        forumPost.PosterID = posterID;
+        forumThread.Id = 0;
+        forumThread.Title = title;
+        forumThread.TopicName = topicName;
+        forumThread.Views = 0;
+        forumThread.PosterID = posterID;
 
         // Doing this to allow SQL to set the ForumPost.Id
-        var response = await Http.PostAsJsonAsync<ForumPost>("/api/Post/SubmitPost", forumPost);
+        var response = await Http.PostAsJsonAsync<ForumThread>("/api/Thread/SubmitThread", forumThread);
         var jsonString = await response.Content.ReadAsStringAsync();
         JObject jObject = JObject.Parse(jsonString);
-        forumPost = jObject.ToObject<ForumPost>();
+        forumThread = jObject.ToObject<ForumThread>();
 
-        ForumThread thread = new ForumThread();
-        thread.Id = 0;
-        thread.PostID = forumPost.Id;
-        thread.PosterID = posterID;
-        thread.Content = htmlContent;
-        thread.IsFirstThread = true;
+        ForumPost post = new ForumPost();
+        post.Id = 0;
+        post.ThreadID = forumThread.Id;
+        post.PosterID = posterID;
+        post.Content = htmlContent;
+        post.IsFirstPost = true;
 
-        await Http.PostAsJsonAsync("/api/Thread/SubmitThread", thread);
+        await Http.PostAsJsonAsync("/api/Post/SubmitPost", post);
 
         if (topicName == "news")
         {
+            // TODO: Be more specific in the exception.
+            if (newsImage == null)
+            {
+                throw new Exception("News requires a new image.");
+            }
+
+            string titleImagePath = await FileHelper.UploadImage(newsImage, JS);
+
             NewsItem news = new NewsItem();
-            news.Id = "";
-            news.PostId = forumPost.Id;
-            news.Title = forumPost.Title;
-            news.TitleImagePath = "space.png";
+            news.PostId = forumThread.Id;
+            news.Title = forumThread.Title;
+            news.TitleImagePath = titleImagePath;
             news.Caption = caption;
 
             await Http.PostAsJsonAsync("/api/News/SubmitNews", news);
         }
 
-        Navigation.NavigateTo($"/forum/post-opened/{forumPost.Id}/1", forceLoad: true);
-	}
+        string urlWithReturnQuery = QueryHelpers.AddQueryString(
+            $"/forum/thread-opened/{forumThread.Id}/1", 
+            new Dictionary<string, string> { { "ReturnUrl", ReturnUrl } }
+        );
+
+        Navigation.NavigateTo(urlWithReturnQuery, forceLoad: true);
+    }
+    private async void HandleFileSelected(InputFileChangeEventArgs args)
+    {
+        // TODO: Check the file format. Ensure it is a png or jpg.
+
+        newsImage = args.File;
+        base64newsImage = await FileHelper.ConvertToBase64(newsImage, fullURL : true);
+    }
 }

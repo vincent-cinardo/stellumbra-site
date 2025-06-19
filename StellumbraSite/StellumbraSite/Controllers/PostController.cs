@@ -14,29 +14,38 @@ namespace StellumbraSite.Server.Controllers
         {
             _db = db;
         }
-        [HttpGet("GetPostCount/{topicName}")]
-        public async Task<IActionResult> GetPostCount(string topicName)
+        [HttpGet("GetPostCount/{threadID}")]
+        public async Task<IActionResult> GetThreadCount(int threadID)
         {
-            int count = await _db.ForumPosts.CountAsync();
+            int count = await _db.ForumPosts
+                .Where(x => x.ThreadID == threadID)
+                .CountAsync();
             return Ok(count);
         }
-        [HttpGet("GetPosts/{topicName}/{page}/{pageSize}")]
-        public async Task<IActionResult> GetPosts(string topicName, int page, int pageSize)
+        [HttpGet("GetUserReplyCount/{posterID}")]
+        public async Task<IActionResult> GetUserReplyCount(string posterID)
+        {
+            int count = await _db.ForumPosts
+                .CountAsync(x => x.PosterID == posterID && !x.IsFirstPost);
+            return Ok(count);
+        }
+        [HttpGet("GetPosts/{threadID}/{page}/{pageSize}")]
+        public async Task<IActionResult> GetPosts(int threadID, int page, int pageSize)
         {
             try
             {
                 var result = await _db.ForumPosts
-                .Where(x => x.TopicName == topicName)
-                .OrderByDescending(x => x.Id)
+                .Where(x => x.ThreadID == threadID)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(x => new ForumPost
                 {
                     Id = x.Id,
-                    TopicName = x.TopicName,
+                    ThreadID = x.ThreadID,
                     PosterID = x.PosterID,
-                    Title = x.Title,
-                    DateTime = x.DateTime,
+                    Content = x.Content,
+                    IsFirstPost = x.IsFirstPost,
+                    DateTime = x.DateTime
                 })
                 .ToListAsync();
                 return Ok(result);
@@ -46,30 +55,13 @@ namespace StellumbraSite.Server.Controllers
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
-        [HttpGet("GetPostByID/{postID}")]
-        public async Task<IActionResult> GetPostByID(int postID)
+        [HttpGet("GetFirstPost/{threadID}")]
+        public async Task<IActionResult> GetFirstPost(int threadID)
         {
             try
             {
-                var result = await _db.ForumPosts
-                .Where(x => x.Id == postID)
-                .Select(x => new ForumPost
-                {
-                    Id = x.Id,
-                    TopicName = x.TopicName,
-                    PosterID = x.PosterID,
-                    Title = x.Title,
-                    DateTime = x.DateTime,
-                })
-                .ToListAsync();
-                try
-                {
-                    return Ok(result[0]);
-                }
-                catch
-                {
-                    throw new IndexOutOfRangeException($"A post does not exist whose ID is {postID}");
-                }
+                var result = await _db.ForumPosts.SingleOrDefaultAsync(x => x.ThreadID == threadID && x.IsFirstPost == true);
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -86,14 +78,14 @@ namespace StellumbraSite.Server.Controllers
         [HttpGet("DeletePost/{Id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
-            var item = await _db.ForumPosts.FindAsync(id);
+            var item = await _db.ForumThreads.FindAsync(id);
             if (item != null)
             {
-                _db.ForumPosts.Remove(item);
+                _db.ForumThreads.Remove(item);
                 await _db.SaveChangesAsync();
                 return Ok();
             }
-            return StatusCode(500, $"Internal server error: The post whose ID is {id} did not exist.");
+            return StatusCode(500, $"Internal server error: The thread whose ID is {id} did not exist.");
         }
     }
 }

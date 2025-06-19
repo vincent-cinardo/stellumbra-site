@@ -1,40 +1,164 @@
 ﻿@page "/forum"
 @layout ForumLayout
+@using System.Security.Claims
+@using Microsoft.AspNetCore.WebUtilities
+@using StellumbraSite.Shared.Model
+@using StellumbraSite.Components.Text
+@using StellumbraSite.Components.Forum
 @using StellumbraSite.Components.Shared
+@using StellumbraSite.Components.Hypertext
+
+@inject HttpClient Http
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Forum</PageTitle>
-<div class="forum-content-background">
-    <ForumSection TitleName="Stellumbra">
-        <ForumTopicSection Href="/forum/posts/news/1">
-            News
-        </ForumTopicSection>
-        <ForumTopicSection Href="/forum/posts/general/1">
-            General
-        </ForumTopicSection>
-        <ForumTopicSection Href="/forum/posts/ideas/1">
-            Suggestions & Ideas
-        </ForumTopicSection>
-        <ForumTopicSection Href="/forum/posts/support/1">
-            Support
-        </ForumTopicSection>
-        <ForumTopicSection Href="/forum/posts/bugs/1">
-            Bugs
-        </ForumTopicSection>
-        <ForumTopicSection Href="/forum/posts/mods/1">
-            Mods
-        </ForumTopicSection>
-    </ForumSection>
-    <ForumSection TitleName="Media">
-        <ForumTopicSection Href="/forum/posts/videos/1">
-            Videos
-        </ForumTopicSection>
-        <ForumTopicSection Href="/forum/posts/streams/1">
-            Streams
-        </ForumTopicSection>
-    </ForumSection>
-    <ForumSection TitleName="Other">
-        <ForumTopicSection Href="/forum/posts/off-topic/1">
-            Off-Topic
-        </ForumTopicSection>
-    </ForumSection>
+
+<div class="forum-main">
+    <div class="forum-main-column">
+        @if (topics != null)
+        {
+            <ForumSection TitleName="Stellumbra">
+                <ForumTopicSection>
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/news/1">
+                        News
+                        <DosP Class="dos-font light-green" Style="font-size: 12px">
+                            @topics[0].Description
+                        </DosP>
+                    </CustomHypertext>
+                </ForumTopicSection>
+                <ForumTopicSection>
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/general/1">
+                        General
+                        <DosP Class="dos-font light-green" Style="font-size: 12px">
+                            @topics[1].Description
+                        </DosP>
+                    </CustomHypertext>
+                </ForumTopicSection>
+                <ForumTopicSection>
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/ideas/1">
+                        Suggestions & Ideas
+                        <DosP Class="dos-font light-green" Style="font-size: 12px">
+                            @topics[2].Description
+                        </DosP>
+                    </CustomHypertext>
+                </ForumTopicSection>
+                <ForumTopicSection>
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/support/1">
+                        Support
+                        <DosP Class="dos-font light-green" Style="font-size: 12px">
+                            @topics[3].Description
+                        </DosP>
+                    </CustomHypertext>
+                </ForumTopicSection>
+                <ForumTopicSection>
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/bugs/1">
+                        Bugs
+                        <DosP Class="dos-font light-green" Style="font-size: 12px">
+                            @topics[4].Description
+                        </DosP>
+                    </CustomHypertext>
+                </ForumTopicSection>
+                <ForumTopicSection>
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/mods/1">
+                        Mods
+                        <DosP Class="dos-font light-green" Style="font-size: 12px">
+                            @topics[5].Description
+                        </DosP>
+                    </CustomHypertext>
+                </ForumTopicSection>
+            </ForumSection>
+            <ForumSection TitleName="Media">
+                <ForumTopicSection>
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/videos/1">
+                        Videos
+                        <DosP Class="dos-font light-green" Style="font-size: 12px">
+                            @topics[6].Description
+                        </DosP>
+                    </CustomHypertext>
+                </ForumTopicSection>
+                <ForumTopicSection>
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/streams/1">
+                        Streams
+                        <DosP Class="dos-font light-green" Style="font-size: 12px">
+                            @topics[7].Description
+                        </DosP>
+                    </CustomHypertext>
+                </ForumTopicSection>
+            </ForumSection>
+            <ForumSection TitleName="Other">
+                <ForumTopicSection>
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/off-topic/1">
+                        Off-Topic
+                        <DosP Class="dos-font light-green" Style="font-size: 12px">
+                            @topics[8].Description
+                        </DosP>
+                    </CustomHypertext>
+                </ForumTopicSection>
+            </ForumSection>
+        }
+    </div>
+    <div class="forum-main-column">
+        <ForumSection TitleName="Recent Threads">
+            @if (threadsInitialized)
+            { 
+                for (int i = 0; i < threads.Count; i++)
+                {
+                    var index = i;
+                    var thread = threads[index];
+                    var urlWithQuery = QueryHelpers.AddQueryString(
+                        $"/forum/thread-opened/{thread.Id}/1",
+                        new Dictionary<string, string?> { { "ReturnUrl", $"/forum/threads/{thread.TopicName}/1" } }
+                    );
+
+                    <ForumTopicSection>
+                        <div style="width: 70%">
+                            <CustomHypertext HasBlinkingArrow Href=@urlWithQuery>
+                                @thread.Title
+                                <DosP Class="dos-font light-green" Style="font-size: 12px">
+                                    @thread.DateTime
+                                </DosP>
+                            </CustomHypertext>
+                        </div>
+                        <div style="width: 30%;">
+                            <DosSpan Class="dos-font light-green" Style="font-size: 12px; vertical-align: bottom;">
+                                @($"{replies[index]}") Replies
+                            </DosSpan>
+                        </div>
+                    </ForumTopicSection>
+                }
+            }
+        </ForumSection>
+    </div>
 </div>
+
+@code {
+    private bool threadsInitialized = false;
+    private List<ForumTopic> topics;
+    private List<ForumThread> threads;
+    private int[] replies;
+    private string userID, userRole;
+    protected override async Task OnInitializedAsync()
+    {
+        // TODO: Redundant code, reuse it somewhere.
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user != null && user.Identity.IsAuthenticated)
+        {
+            userID = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            userRole = user.FindFirst(ClaimTypes.Role)?.Value;
+        }
+
+        int recentThreadLimit = 15;
+        topics = await Http.GetFromJsonAsync<List<ForumTopic>>("/api/Topic/GetAllTopics");
+        threads = await Http.GetFromJsonAsync<List<ForumThread>>($"/api/Thread/GetRecentThreads/{recentThreadLimit}");
+        replies = new int[threads.Count];
+        for (int i = 0; i < threads.Count; i++)
+        {
+            var thread = threads[i];
+            replies[i] = await Http.GetFromJsonAsync<int>($"api/Thread/GetReplies/{thread.Id}");
+        }
+
+        threadsInitialized = true;
+    }
+}

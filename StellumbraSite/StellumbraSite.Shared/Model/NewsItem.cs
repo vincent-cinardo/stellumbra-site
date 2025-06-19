@@ -8,8 +8,8 @@ namespace StellumbraSite.Shared.Model
     {
         [Key]
         [Column("id")]
-        public string Id { get; set; }
-        [ForeignKey(nameof(ForumPost))]
+        public int Id { get; set; }
+        [ForeignKey(nameof(ForumThread))]
         [Column("post_id")]
         public int PostId { get; set; }
         [Column("title")]
