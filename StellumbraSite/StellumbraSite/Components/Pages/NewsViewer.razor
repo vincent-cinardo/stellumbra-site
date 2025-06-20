@@ -1,5 +1,5 @@
 ﻿@page "/newsviewer/{NewsID}"
-@using StellumbraSite.Shared.Model
+@using StellumbraSite.Model
 
 @inject HttpClient Http
 
@@ -30,6 +30,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         news = await Http.GetFromJsonAsync<NewsItem>($"/api/News/GetNewsById/{NewsID}");
-        firstPostThreadOfPost = await Http.GetFromJsonAsync<ForumPost>($"/api/Post/GetFirstPost/{news.PostId}");
+        firstPostThreadOfPost = await Http.GetFromJsonAsync<ForumPost>($"/api/Post/GetFirstPost/{news.ThreadId}");
     }
 }

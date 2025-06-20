@@ -52,57 +52,6 @@ namespace StellumbraSite.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "news",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    post_id = table.Column<int>(type: "int", nullable: false),
-                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    title_image_path = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    caption = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    datetime = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_news", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "post",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    thread_id = table.Column<int>(type: "int", nullable: false),
-                    poster_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    is_first_thread = table.Column<bool>(type: "bit", nullable: false),
-                    datetime = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_post", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "threads",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    topic_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    poster_id = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    views = table.Column<int>(type: "int", nullable: false),
-                    datetime = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_threads", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "topics",
                 columns: table => new
                 {
@@ -221,6 +170,87 @@ namespace StellumbraSite.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "threads",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    topic_name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    poster_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    views = table.Column<int>(type: "int", nullable: false),
+                    datetime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_threads", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_threads_AspNetUsers_poster_id",
+                        column: x => x.poster_id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_threads_topics_topic_name",
+                        column: x => x.topic_name,
+                        principalTable: "topics",
+                        principalColumn: "topic_name",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "news",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    thread_id = table.Column<int>(type: "int", nullable: false),
+                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    title_image_path = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    caption = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    datetime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_news", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_news_threads_thread_id",
+                        column: x => x.thread_id,
+                        principalTable: "threads",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "post",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    thread_id = table.Column<int>(type: "int", nullable: false),
+                    poster_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_first_post = table.Column<bool>(type: "bit", nullable: false),
+                    datetime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_post", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_post_AspNetUsers_poster_id",
+                        column: x => x.poster_id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_post_threads_thread_id",
+                        column: x => x.thread_id,
+                        principalTable: "threads",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -259,6 +289,31 @@ namespace StellumbraSite.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_news_thread_id",
+                table: "news",
+                column: "thread_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_post_poster_id",
+                table: "post",
+                column: "poster_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_post_thread_id",
+                table: "post",
+                column: "thread_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_threads_poster_id",
+                table: "threads",
+                column: "poster_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_threads_topic_name",
+                table: "threads",
+                column: "topic_name");
         }
 
         /// <inheritdoc />
@@ -286,16 +341,16 @@ namespace StellumbraSite.Migrations
                 name: "post");
 
             migrationBuilder.DropTable(
-                name: "threads");
-
-            migrationBuilder.DropTable(
-                name: "topics");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "threads");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "topics");
         }
     }
 }

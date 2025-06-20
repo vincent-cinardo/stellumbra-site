@@ -1,6 +1,6 @@
 ﻿using StellumbraSite.Data;
+using StellumbraSite.Model;
 using Microsoft.AspNetCore.Mvc;
-using StellumbraSite.Shared.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace StellumbraSite.Server.Controllers
@@ -23,7 +23,7 @@ namespace StellumbraSite.Server.Controllers
         [HttpGet("GetThreadPostCount/{userID}")]
         public async Task<IActionResult> GetUserPostCount(string userID)
         {
-            int count = await _db.ForumThreads.CountAsync(x => x.PosterID == userID);
+            int count = await _db.ForumThreads.CountAsync(x => x.PosterId == userID);
             return Ok(count);
         }
         [HttpGet("GetThreads/{topicName}/{page}/{pageSize}")]
@@ -40,10 +40,12 @@ namespace StellumbraSite.Server.Controllers
                 {
                     Id = x.Id,
                     TopicName = x.TopicName,
-                    PosterID = x.PosterID,
+                    PosterId = x.PosterId,
                     Title = x.Title,
                     Views = x.Views,
                     DateTime = x.DateTime,
+                    Topic = x.Topic,
+                    ApplicationUser = x.ApplicationUser,
                 })
                 .ToListAsync();
                 return Ok(result);
@@ -64,10 +66,12 @@ namespace StellumbraSite.Server.Controllers
                 {
                     Id = x.Id,
                     TopicName = x.TopicName,
-                    PosterID = x.PosterID,
+                    PosterId = x.PosterId,
                     Title = x.Title,
                     Views = x.Views,
-                    DateTime = x.DateTime
+                    DateTime = x.DateTime,
+                    Topic = x.Topic,
+                    ApplicationUser = x.ApplicationUser,
                 })
                 .ToListAsync();
                 return Ok(result);
@@ -77,21 +81,23 @@ namespace StellumbraSite.Server.Controllers
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
-        [HttpGet("GetThreadByID/{postID}")]
-        public async Task<IActionResult> GetThreadByID(int postID)
+        [HttpGet("GetThreadByID/{threadID}")]
+        public async Task<IActionResult> GetThreadByID(int threadID)
         {
             try
             {
                 var result = await _db.ForumThreads
-                .Where(x => x.Id == postID)
+                .Where(x => x.Id == threadID)
                 .Select(x => new ForumThread
                 {
                     Id = x.Id,
                     TopicName = x.TopicName,
-                    PosterID = x.PosterID,
+                    PosterId = x.PosterId,
                     Title = x.Title,
                     Views = x.Views,
                     DateTime = x.DateTime,
+                    Topic = x.Topic,
+                    ApplicationUser = x.ApplicationUser,
                 })
                 .ToListAsync();
                 try
@@ -100,7 +106,7 @@ namespace StellumbraSite.Server.Controllers
                 }
                 catch
                 {
-                    throw new IndexOutOfRangeException($"A post does not exist whose ID is {postID}");
+                    throw new IndexOutOfRangeException($"A post does not exist whose ID is {threadID}");
                 }
             }
             catch (Exception e)
@@ -109,8 +115,15 @@ namespace StellumbraSite.Server.Controllers
             }
         }
         [HttpPost("SubmitThread")]
-        public async Task<IActionResult> SubmitThread([FromBody] ForumThread forumThread)
+        public async Task<IActionResult> SubmitThread([FromBody] ForumThreadDto forumThreadDto)
         {
+            ForumThread forumThread = new ForumThread();
+            forumThread.Id = forumThreadDto.Id;
+            forumThread.TopicName = forumThreadDto.TopicName;
+            forumThread.PosterId = forumThreadDto.PosterId;
+            forumThread.Title = forumThreadDto.Title;
+            forumThread.Views = forumThreadDto.Views;
+
             await _db.ForumThreads.AddAsync(forumThread);
             await _db.SaveChangesAsync();
             return Ok(forumThread);
@@ -118,7 +131,7 @@ namespace StellumbraSite.Server.Controllers
         [HttpGet("GetReplies/{Id}")]
         public async Task<IActionResult> GetReplies(int id)
         {
-            var item = await _db.ForumPosts.FindAsync(id);
+            var item = await _db.ForumThreads.FindAsync(id);
             if (item != null)
             {
                 int replyCount = await _db.ForumPosts.CountAsync(x => x.ThreadID == id) - 1;

@@ -9,14 +9,14 @@
 
 @using System.Net;
 @using System.Security.Claims
-@using StellumbraSite.Shared.Model
-@using Microsoft.Extensions.Options
-@using StellumbraSite.Components.Text
-@using StellumbraSite.Components.Other
-@using StellumbraSite.Components.Forum
-@using StellumbraSite.Components.Shared
-@using StellumbraSite.Components.Hypertext
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.Extensions.Options
+@using StellumbraSite.Components.Forum
+@using StellumbraSite.Components.Hypertext
+@using StellumbraSite.Components.Other
+@using StellumbraSite.Components.Shared
+@using StellumbraSite.Components.Text
+@using StellumbraSite.Model
 
 @if (deletingPost)
 {
@@ -31,7 +31,7 @@
     @if (forumThread != null && forumThread != null)
     {
         <CustomHypertext Href="@ReturnUrl" HasBlinkingArrow=true>
-            Back to @forumTopic.TopicShownName Posts
+            Back to threads: @forumTopic.TopicShownName
         </CustomHypertext>
         <h3 class="dos-font">@forumThread.Title</h3>
     }
@@ -41,16 +41,17 @@
         @for (int i = 0; i < posts.Count; i++)
         {
             <!-- TODO: User posterID to get UserName from profile DB -->
-            @if (i == posts.Count - 1)
+            int index = i;
+            @if (index == posts.Count - 1)
             {
-                <ForumPostComponent Style="@LastStyle" Post="posts[i]"
+                <ForumPostComponent Style="@LastStyle" Post="posts[index]"
                 ViewingUserId="userID"
                 ViewingUserRole="userRole"
                 OnClickDelete="OnClickDeletePost" />
             }
             else
             {
-                <ForumPostComponent Style="@DefaultStyle" Post="posts[i]"
+                <ForumPostComponent Style="@DefaultStyle" Post="posts[index]"
                 ViewingUserId="userID"
                 ViewingUserRole="userRole"
                 OnClickDelete="OnClickDeletePost" />
@@ -133,12 +134,12 @@
     }
     private async void SendPost()
     {
-        ForumPost forumPost = new ForumPost();
+        ForumPostDto forumPost = new ForumPostDto();
         string htmlContent = await richTextEditor.GetQuillHTMLContent();
 
         forumPost.Id = 0;
         forumPost.ThreadID = threadID;
-        forumPost.PosterID = userID;
+        forumPost.PosterId = userID;
         forumPost.Content = htmlContent;
         forumPost.IsFirstPost = false;
 

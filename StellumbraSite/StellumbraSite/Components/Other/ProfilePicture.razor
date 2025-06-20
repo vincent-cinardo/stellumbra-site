@@ -1,0 +1,23 @@
+﻿@using StellumbraSite.Data
+
+@if (UserData.ProfilePicturePath == "images/profile0.png")
+{
+	<img style="image-rendering: pixelated; @Style" width="@Width" height="@Height" src="@UserData.ProfilePicturePath" alt="images/profile0.png" />
+}
+else
+{
+	<img style="@Style" width="@Width" height="@Height" src="@UserData.ProfilePicturePath" alt="images/profile0.png" />
+}
+
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public UserData UserData { get; set; }
+	[Parameter]
+	public string Style { get; set; }
+	[Parameter]
+	public int Width { get; set; } = 48;
+	[Parameter]
+	public int Height { get; set; } = 48;
+}

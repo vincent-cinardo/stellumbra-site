@@ -1,6 +1,6 @@
 ﻿using StellumbraSite.Data;
+using StellumbraSite.Model;
 using Microsoft.AspNetCore.Mvc;
-using StellumbraSite.Shared.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace StellumbraSite.Server.Controllers
@@ -26,7 +26,7 @@ namespace StellumbraSite.Server.Controllers
         public async Task<IActionResult> GetUserReplyCount(string posterID)
         {
             int count = await _db.ForumPosts
-                .CountAsync(x => x.PosterID == posterID && !x.IsFirstPost);
+                .CountAsync(x => x.PosterId == posterID && !x.IsFirstPost);
             return Ok(count);
         }
         [HttpGet("GetPosts/{threadID}/{page}/{pageSize}")]
@@ -42,10 +42,12 @@ namespace StellumbraSite.Server.Controllers
                 {
                     Id = x.Id,
                     ThreadID = x.ThreadID,
-                    PosterID = x.PosterID,
+                    PosterId = x.PosterId,
                     Content = x.Content,
                     IsFirstPost = x.IsFirstPost,
-                    DateTime = x.DateTime
+                    DateTime = x.DateTime,
+                    ForumThread = x.ForumThread,
+                    ApplicationUser = x.ApplicationUser,
                 })
                 .ToListAsync();
                 return Ok(result);
@@ -69,8 +71,15 @@ namespace StellumbraSite.Server.Controllers
             }
         }
         [HttpPost("SubmitPost")]
-        public async Task<IActionResult> SubmitPost([FromBody] ForumPost forumPost)
+        public async Task<IActionResult> SubmitPost([FromBody] ForumPostDto forumPostDto)
         {
+            ForumPost forumPost = new ForumPost();
+            forumPost.Id = forumPostDto.Id;
+            forumPost.ThreadID = forumPostDto.ThreadID;
+            forumPost.PosterId = forumPostDto.PosterId;
+            forumPost.Content = forumPostDto.Content;
+            forumPost.IsFirstPost = forumPostDto.IsFirstPost;
+
             await _db.ForumPosts.AddAsync(forumPost);
             await _db.SaveChangesAsync();
             return Ok(forumPost);

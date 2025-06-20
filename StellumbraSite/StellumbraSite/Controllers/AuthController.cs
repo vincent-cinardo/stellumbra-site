@@ -47,8 +47,7 @@ namespace StellumbraSite.Server.Controllers
         {
             string username = register.Username;
             var user = Activator.CreateInstance<ApplicationUser>();
-            int randomInt = random.Next(3);
-            user.ProfilePicturePath = $"images/profile{randomInt}.png";
+            user.ProfilePicturePath = $"images/profile0.png";
 
             await _userManager.SetUserNameAsync(user, register.Username);
             await _userManager.SetEmailAsync(user, register.Email);

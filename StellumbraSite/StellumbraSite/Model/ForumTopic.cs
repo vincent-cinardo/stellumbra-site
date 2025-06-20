@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StellumbraSite.Shared.Model
+namespace StellumbraSite.Model
 {
     [Table("topics")]
     public class ForumTopic

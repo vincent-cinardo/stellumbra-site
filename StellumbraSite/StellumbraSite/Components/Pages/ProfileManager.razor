@@ -9,13 +9,14 @@
 @using System.Security.Claims
 @using StellumbraSite.Helpers
 @using StellumbraSite.Components.Text
+@using StellumbraSite.Components.Other
 @using StellumbraSite.Components.Buttons
 
 <PageTitle>Profile-Manager</PageTitle>
 
 @if (userIsLogged)
 {
-    <img width="48" height="48" src="@userData.ProfilePicturePath"/>
+    <ProfilePicture UserData="@userData"/>
     <CustomUploadFileButton OnChange="HandleFileSelected">
         Upload Profile Picture
     </CustomUploadFileButton>

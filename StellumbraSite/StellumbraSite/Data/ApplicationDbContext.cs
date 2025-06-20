@@ -1,4 +1,4 @@
-using StellumbraSite.Shared.Model;
+using StellumbraSite.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 

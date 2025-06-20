@@ -1,8 +1,9 @@
-﻿@using StellumbraSite.Data
-@using StellumbraSite.Shared.Model
-@using StellumbraSite.Components.Text
-@using Microsoft.AspNetCore.WebUtilities
+﻿@using Microsoft.AspNetCore.WebUtilities
 @using StellumbraSite.Components.Hypertext
+@using StellumbraSite.Components.Other
+@using StellumbraSite.Components.Text
+@using StellumbraSite.Data
+@using StellumbraSite.Model
 
 @inject HttpClient HttpClient;
 
@@ -34,7 +35,7 @@
                     </div>
                 </div>
                 <div>
-                    <img style="margin: auto" width="48" height="48" src="@threadUserData.ProfilePicturePath" alt="images/profile0.png" />
+                    <ProfilePicture UserData=threadUserData Style="margin: auto" />
                 </div>
                 <div style="margin-top: auto; margin-bottom:auto">
                     <DosP Style="font-size: 12px">
@@ -65,7 +66,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        threadUserData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{Thread.PosterID}");
+        threadUserData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{Thread.PosterId}");
         views = await HttpClient.GetFromJsonAsync<int>($"/api/Thread/GetViews/{Thread.Id}");
         replies = await HttpClient.GetFromJsonAsync<int>($"/api/Thread/GetReplies/{Thread.Id}");
     }

@@ -1,10 +1,10 @@
 using StellumbraSite.Data;
+using StellumbraSite.Model;
 using StellumbraSite.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using StellumbraSite.Components.Account;
 using Microsoft.AspNetCore.Components.Authorization;
-using StellumbraSite.Shared.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 

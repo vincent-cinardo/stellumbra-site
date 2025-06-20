@@ -1,6 +1,7 @@
 ﻿@using StellumbraSite.Data
-@using StellumbraSite.Shared.Model
+@using StellumbraSite.Model
 @using StellumbraSite.Components.Text
+@using StellumbraSite.Components.Other
 
 @inject HttpClient HttpClient;
 
@@ -9,7 +10,7 @@
     {
         <!-- TODO: Replace redundant 'style' css here. Same as ForumThreadComponent.-->
         <div style="display: flex; flex-direction: row; gap: 12px">
-            <img width="48" height="48" src="@threadUserData.ProfilePicturePath" alt="images/profile0.png" />
+                <ProfilePicture UserData=threadUserData />
             <DosP>
                 @threadUserData.Username
             </DosP>
@@ -26,7 +27,7 @@
     }
 
     <!-- TODO: Allow admins to delete threads but not if that thread is an owner thread. -->
-    @if (ViewingUserId == Post.PosterID || ViewingUserRole == "Owner")
+    @if (ViewingUserId == Post.PosterId || ViewingUserRole == "Owner")
     {
         <button @onclick="() => OnClickDelete.InvokeAsync(Post)">
             X
@@ -53,6 +54,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        threadUserData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{Post.PosterID}");
+        threadUserData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{Post.PosterId}");
     }
 }

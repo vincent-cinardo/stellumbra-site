@@ -12,7 +12,7 @@ using StellumbraSite.Data;
 namespace StellumbraSite.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250618212540_Initial")]
+    [Migration("20250619234703_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -228,7 +228,7 @@ namespace StellumbraSite.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("StellumbraSite.Shared.Model.ForumPost", b =>
+            modelBuilder.Entity("StellumbraSite.Model.ForumPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -248,11 +248,11 @@ namespace StellumbraSite.Migrations
 
                     b.Property<bool>("IsFirstPost")
                         .HasColumnType("bit")
-                        .HasColumnName("is_first_thread");
+                        .HasColumnName("is_first_post");
 
-                    b.Property<string>("PosterID")
+                    b.Property<string>("PosterId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("poster_id");
 
                     b.Property<int>("ThreadID")
@@ -261,10 +261,14 @@ namespace StellumbraSite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PosterId");
+
+                    b.HasIndex("ThreadID");
+
                     b.ToTable("post");
                 });
 
-            modelBuilder.Entity("StellumbraSite.Shared.Model.ForumThread", b =>
+            modelBuilder.Entity("StellumbraSite.Model.ForumThread", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -277,9 +281,9 @@ namespace StellumbraSite.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("datetime");
 
-                    b.Property<string>("PosterID")
+                    b.Property<string>("PosterId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("poster_id");
 
                     b.Property<string>("Title")
@@ -289,7 +293,7 @@ namespace StellumbraSite.Migrations
 
                     b.Property<string>("TopicName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("topic_name");
 
                     b.Property<int>("Views")
@@ -298,10 +302,14 @@ namespace StellumbraSite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PosterId");
+
+                    b.HasIndex("TopicName");
+
                     b.ToTable("threads");
                 });
 
-            modelBuilder.Entity("StellumbraSite.Shared.Model.ForumTopic", b =>
+            modelBuilder.Entity("StellumbraSite.Model.ForumTopic", b =>
                 {
                     b.Property<string>("TopicName")
                         .HasColumnType("nvarchar(450)")
@@ -322,7 +330,7 @@ namespace StellumbraSite.Migrations
                     b.ToTable("topics");
                 });
 
-            modelBuilder.Entity("StellumbraSite.Shared.Model.NewsItem", b =>
+            modelBuilder.Entity("StellumbraSite.Model.NewsItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -340,9 +348,9 @@ namespace StellumbraSite.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("datetime");
 
-                    b.Property<int>("PostId")
+                    b.Property<int>("ThreadId")
                         .HasColumnType("int")
-                        .HasColumnName("post_id");
+                        .HasColumnName("thread_id");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -355,6 +363,8 @@ namespace StellumbraSite.Migrations
                         .HasColumnName("title_image_path");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ThreadId");
 
                     b.ToTable("news");
                 });
@@ -408,6 +418,55 @@ namespace StellumbraSite.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("StellumbraSite.Model.ForumPost", b =>
+                {
+                    b.HasOne("StellumbraSite.Data.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("PosterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StellumbraSite.Model.ForumThread", "ForumThread")
+                        .WithMany()
+                        .HasForeignKey("ThreadID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("ForumThread");
+                });
+
+            modelBuilder.Entity("StellumbraSite.Model.ForumThread", b =>
+                {
+                    b.HasOne("StellumbraSite.Data.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("PosterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StellumbraSite.Model.ForumTopic", "Topic")
+                        .WithMany()
+                        .HasForeignKey("TopicName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("StellumbraSite.Model.NewsItem", b =>
+                {
+                    b.HasOne("StellumbraSite.Model.ForumThread", "ForumThread")
+                        .WithMany()
+                        .HasForeignKey("ThreadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ForumThread");
                 });
 #pragma warning restore 612, 618
         }

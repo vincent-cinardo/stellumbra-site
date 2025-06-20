@@ -7,18 +7,18 @@
 @inject IOptions<CustomSettings> Config
 
 @using System.Net;
-@using StellumbraSite.Shared.Model
-@using Microsoft.Extensions.Options
-@using StellumbraSite.Components.Text
-@using StellumbraSite.Components.Forum
-@using StellumbraSite.Components.Shared
-@using StellumbraSite.Components.Buttons
-@using StellumbraSite.Components.Hypertext
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.Extensions.Options
+@using StellumbraSite.Components.Buttons
+@using StellumbraSite.Components.Forum
+@using StellumbraSite.Components.Hypertext
+@using StellumbraSite.Components.Shared
+@using StellumbraSite.Components.Text
+@using StellumbraSite.Model
 
 <ForumContentFrame>
     <CustomHypertext HasBlinkingArrow=true Href="/forum">
-        Back to Topics
+        Back to Home
     </CustomHypertext>
     <div>
         @if (forumTopic != null)
@@ -50,13 +50,14 @@
     {
         @for (int i = 0; i < threads.Count; i++)
         {
-            @if (i == threads.Count - 1)
+            int index = i;
+            @if (index == threads.Count - 1)
             {
-                <ForumThreadComponent Style="@LastStyle" Thread="threads[i]" ReturnUrl="@Navigate.Uri" />
+                <ForumThreadComponent Style="@LastStyle" Thread="threads[index]" ReturnUrl="@Navigate.Uri" />
             }
             else
             {
-                <ForumThreadComponent Style="@DefaultStyle" Thread="threads[i]" ReturnUrl="@Navigate.Uri" />
+                <ForumThreadComponent Style="@DefaultStyle" Thread="threads[index]" ReturnUrl="@Navigate.Uri" />
             }
         }
     }

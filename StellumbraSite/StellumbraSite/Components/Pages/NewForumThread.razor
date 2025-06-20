@@ -2,15 +2,15 @@
 @layout ForumLayout
 
 @using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.Extensions.Options
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Linq
-@using StellumbraSite.Helpers
-@using StellumbraSite.Shared.Model
-@using Microsoft.Extensions.Options
-@using StellumbraSite.Components.Text
-@using StellumbraSite.Components.Forum
 @using StellumbraSite.Components.Buttons
+@using StellumbraSite.Components.Forum
 @using StellumbraSite.Components.Hypertext
+@using StellumbraSite.Components.Text
+@using StellumbraSite.Helpers
+@using StellumbraSite.Model
 
 @inject IJSRuntime JS
 @inject HttpClient Http
@@ -86,29 +86,29 @@
     }
     private async void SendThread()
     {
-        ForumThread forumThread = new ForumThread();
+        ForumThreadDto forumThreadDto = new ForumThreadDto();
         string htmlContent = await richTextEditor.GetQuillHTMLContent();
 
-        forumThread.Id = 0;
-        forumThread.Title = title;
-        forumThread.TopicName = topicName;
-        forumThread.Views = 0;
-        forumThread.PosterID = posterID;
+        forumThreadDto.Id = 0;
+        forumThreadDto.Title = title;
+        forumThreadDto.TopicName = topicName;
+        forumThreadDto.Views = 0;
+        forumThreadDto.PosterId = posterID;
 
         // Doing this to allow SQL to set the ForumPost.Id
-        var response = await Http.PostAsJsonAsync<ForumThread>("/api/Thread/SubmitThread", forumThread);
+        var response = await Http.PostAsJsonAsync("/api/Thread/SubmitThread", forumThreadDto);
         var jsonString = await response.Content.ReadAsStringAsync();
         JObject jObject = JObject.Parse(jsonString);
-        forumThread = jObject.ToObject<ForumThread>();
+        ForumThread forumThread = jObject.ToObject<ForumThread>();
 
-        ForumPost post = new ForumPost();
+        ForumPostDto post = new ForumPostDto();
         post.Id = 0;
         post.ThreadID = forumThread.Id;
-        post.PosterID = posterID;
+        post.PosterId = posterID;
         post.Content = htmlContent;
         post.IsFirstPost = true;
 
-        await Http.PostAsJsonAsync("/api/Post/SubmitPost", post);
+        response = await Http.PostAsJsonAsync("/api/Post/SubmitPost", post);
 
         if (topicName == "news")
         {
@@ -120,8 +120,8 @@
 
             string titleImagePath = await FileHelper.UploadImage(newsImage, JS);
 
-            NewsItem news = new NewsItem();
-            news.PostId = forumThread.Id;
+            NewsItemDto news = new NewsItemDto();
+            news.ThreadId = forumThread.Id;
             news.Title = forumThread.Title;
             news.TitleImagePath = titleImagePath;
             news.Caption = caption;

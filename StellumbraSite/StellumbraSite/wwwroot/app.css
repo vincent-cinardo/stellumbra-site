@@ -318,7 +318,7 @@ img.news-viewer-img {
 .forum-main-column {
     display: flex;
     flex-direction: column;
-    gap: 2em;
+    gap: 1em;
     width: 35%;
     height: fit-content;
 }

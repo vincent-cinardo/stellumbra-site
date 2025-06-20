@@ -1,6 +1,6 @@
 ﻿using StellumbraSite.Data;
+using StellumbraSite.Model;
 using Microsoft.AspNetCore.Mvc;
-using StellumbraSite.Shared.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace StellumbraSite.Controllers
@@ -17,17 +17,6 @@ namespace StellumbraSite.Controllers
         [HttpGet("GetAllNews")]
         public async Task<IActionResult> GetAllNews()
         {
-            /*
-            var allNews = await _db.NewsItems
-                .Select(x => new NewsItem
-                {
-                    Title = x.Title,
-                    TitleImagePath = x.TitleImagePath,
-                    Date = x.Date,
-                    Caption = x.Caption,
-                    Content = x.Content,
-                })
-                .ToListAsync();*/
             return Ok(await _db.NewsItems.ToListAsync());
         }
         [HttpGet("GetNews/{page}/{pageSize}")]
@@ -41,7 +30,7 @@ namespace StellumbraSite.Controllers
                 .Select(x => new NewsItem
                 {
                     Id = x.Id,
-                    PostId = x.PostId,
+                    ThreadId = x.ThreadId,
                     Title = x.Title,
                     TitleImagePath = x.TitleImagePath,
                     Caption = x.Caption,
@@ -69,7 +58,7 @@ namespace StellumbraSite.Controllers
                 .Select(x => new NewsItem
                 {
                     Id = x.Id,
-                    PostId = x.PostId,
+                    ThreadId = x.ThreadId,
                     Title = x.Title,
                     TitleImagePath = x.TitleImagePath,
                     Caption = x.Caption,
@@ -93,7 +82,7 @@ namespace StellumbraSite.Controllers
                 .Select(x => new NewsItem
                 {
                     Id = x.Id,
-                    PostId = x.PostId,
+                    ThreadId = x.ThreadId,
                     Title = x.Title,
                     TitleImagePath = x.TitleImagePath,
                     Caption = x.Caption,
@@ -115,8 +104,15 @@ namespace StellumbraSite.Controllers
             }
         }
         [HttpPost("SubmitNews")]
-        public async Task<IActionResult> SubmitNews([FromBody] NewsItem newsItem)
+        public async Task<IActionResult> SubmitNews([FromBody] NewsItemDto newsItemDto)
         {
+            NewsItem newsItem = new NewsItem();
+            newsItem.Id = newsItemDto.Id;
+            newsItem.ThreadId = newsItemDto.ThreadId;
+            newsItem.Title = newsItemDto.Title;
+            newsItem.TitleImagePath = newsItemDto.TitleImagePath;
+            newsItem.Caption = newsItemDto.Caption;
+
             await _db.NewsItems.AddAsync(newsItem);
             await _db.SaveChangesAsync();
             return Ok();

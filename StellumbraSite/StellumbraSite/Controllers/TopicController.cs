@@ -1,6 +1,6 @@
 ﻿using StellumbraSite.Data;
+using StellumbraSite.Model;
 using Microsoft.AspNetCore.Mvc;
-using StellumbraSite.Shared.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace StellumbraSite.Server.Controllers

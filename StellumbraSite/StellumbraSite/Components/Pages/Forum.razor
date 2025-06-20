@@ -1,11 +1,13 @@
 ﻿@page "/forum"
 @layout ForumLayout
+@using StellumbraSite.Components.Other
+@using StellumbraSite.Data
+@using StellumbraSite.Model
 @using System.Security.Claims
-@using Microsoft.AspNetCore.WebUtilities
-@using StellumbraSite.Shared.Model
 @using StellumbraSite.Components.Text
 @using StellumbraSite.Components.Forum
 @using StellumbraSite.Components.Shared
+@using Microsoft.AspNetCore.WebUtilities
 @using StellumbraSite.Components.Hypertext
 
 @inject HttpClient Http
@@ -19,7 +21,7 @@
         {
             <ForumSection TitleName="Stellumbra">
                 <ForumTopicSection>
-                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/news/1">
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/0_news/1">
                         News
                         <DosP Class="dos-font light-green" Style="font-size: 12px">
                             @topics[0].Description
@@ -27,7 +29,7 @@
                     </CustomHypertext>
                 </ForumTopicSection>
                 <ForumTopicSection>
-                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/general/1">
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/1_general/1">
                         General
                         <DosP Class="dos-font light-green" Style="font-size: 12px">
                             @topics[1].Description
@@ -35,7 +37,7 @@
                     </CustomHypertext>
                 </ForumTopicSection>
                 <ForumTopicSection>
-                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/ideas/1">
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/2_ideas/1">
                         Suggestions & Ideas
                         <DosP Class="dos-font light-green" Style="font-size: 12px">
                             @topics[2].Description
@@ -43,7 +45,7 @@
                     </CustomHypertext>
                 </ForumTopicSection>
                 <ForumTopicSection>
-                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/support/1">
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/3_support/1">
                         Support
                         <DosP Class="dos-font light-green" Style="font-size: 12px">
                             @topics[3].Description
@@ -51,7 +53,7 @@
                     </CustomHypertext>
                 </ForumTopicSection>
                 <ForumTopicSection>
-                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/bugs/1">
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/4_bugs/1">
                         Bugs
                         <DosP Class="dos-font light-green" Style="font-size: 12px">
                             @topics[4].Description
@@ -59,7 +61,7 @@
                     </CustomHypertext>
                 </ForumTopicSection>
                 <ForumTopicSection>
-                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/mods/1">
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/5_mods/1">
                         Mods
                         <DosP Class="dos-font light-green" Style="font-size: 12px">
                             @topics[5].Description
@@ -69,7 +71,7 @@
             </ForumSection>
             <ForumSection TitleName="Media">
                 <ForumTopicSection>
-                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/videos/1">
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/6_videos/1">
                         Videos
                         <DosP Class="dos-font light-green" Style="font-size: 12px">
                             @topics[6].Description
@@ -77,7 +79,7 @@
                     </CustomHypertext>
                 </ForumTopicSection>
                 <ForumTopicSection>
-                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/streams/1">
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/7_streams/1">
                         Streams
                         <DosP Class="dos-font light-green" Style="font-size: 12px">
                             @topics[7].Description
@@ -87,7 +89,7 @@
             </ForumSection>
             <ForumSection TitleName="Other">
                 <ForumTopicSection>
-                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/off-topic/1">
+                    <CustomHypertext HasBlinkingArrow Href="/forum/threads/8_off-topic/1">
                         Off-Topic
                         <DosP Class="dos-font light-green" Style="font-size: 12px">
                             @topics[8].Description
@@ -111,18 +113,28 @@
                     );
 
                     <ForumTopicSection>
-                        <div style="width: 70%">
+                        <div style="width: 55%">
                             <CustomHypertext HasBlinkingArrow Href=@urlWithQuery>
                                 @thread.Title
                                 <DosP Class="dos-font light-green" Style="font-size: 12px">
-                                    @thread.DateTime
+                                    @threadTopics[index].TopicShownName
                                 </DosP>
                             </CustomHypertext>
                         </div>
-                        <div style="width: 30%;">
-                            <DosSpan Class="dos-font light-green" Style="font-size: 12px; vertical-align: bottom;">
-                                @($"{replies[index]}") Replies
-                            </DosSpan>
+                        <div style="display: flex; gap: 1em; justify-content: right; width: 45%; align-items: center; text-align: right;">
+                            <div style="width: fit-content">
+                                <DosP Class="dos-font light-green" Style="font-size: 12px; vertical-align: bottom;">
+                                    @threadPosters[index].Username
+                                </DosP>
+                                <DosP Class="dos-font light-green" Style="font-size: 12px; vertical-align: bottom;">
+                                    @($"{replies[index]}") Replies
+                                </DosP>
+                                <DosP Class="dos-font light-green" Style="font-size: 12px">
+                                    @thread.DateTime
+                                </DosP>
+                            </div>
+
+                            <ProfilePicture UserData="@threadPosters[index]"/>
                         </div>
                     </ForumTopicSection>
                 }
@@ -135,7 +147,9 @@
     private bool threadsInitialized = false;
     private List<ForumTopic> topics;
     private List<ForumThread> threads;
+    private UserData[] threadPosters;
     private int[] replies;
+    private ForumTopic[] threadTopics;
     private string userID, userRole;
     protected override async Task OnInitializedAsync()
     {
@@ -149,14 +163,20 @@
             userRole = user.FindFirst(ClaimTypes.Role)?.Value;
         }
 
-        int recentThreadLimit = 15;
+        int recentThreadLimit = 11;
         topics = await Http.GetFromJsonAsync<List<ForumTopic>>("/api/Topic/GetAllTopics");
         threads = await Http.GetFromJsonAsync<List<ForumThread>>($"/api/Thread/GetRecentThreads/{recentThreadLimit}");
         replies = new int[threads.Count];
+        threadTopics = new ForumTopic[threads.Count];
+        threadPosters = new UserData[threads.Count];
+
         for (int i = 0; i < threads.Count; i++)
         {
-            var thread = threads[i];
-            replies[i] = await Http.GetFromJsonAsync<int>($"api/Thread/GetReplies/{thread.Id}");
+            int index = i;
+            var thread = threads[index];
+            replies[index] = await Http.GetFromJsonAsync<int>($"/api/Thread/GetReplies/{thread.Id}");
+            threadTopics[index] = await Http.GetFromJsonAsync<ForumTopic>($"/api/Topic/GetTopic/{thread.TopicName}");
+            threadPosters[index] = await Http.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{thread.PosterId}");
         }
 
         threadsInitialized = true;
