@@ -48,7 +48,7 @@ else
             var userID = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             userData = await HttpClient.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{userID}");
             postCount = await HttpClient.GetFromJsonAsync<int>($"/api/Post/GetUserPostCount/{userID}");
-            replyCount = await HttpClient.GetFromJsonAsync<int>($"/api/Thread/GetUserReplyCount/{userID}");
+            replyCount = await HttpClient.GetFromJsonAsync<int>($"/api/Post/GetUserReplyCount/{userID}");
             userIsLogged = true;
         }
     }

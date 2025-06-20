@@ -1,9 +1,13 @@
-﻿@using StellumbraSite.Components.Hypertext
+﻿@using StellumbraSite.Model
+@using StellumbraSite.Components.Text
+@using StellumbraSite.Components.Other
+@using StellumbraSite.Components.Hypertext
+
 @inherits LayoutComponentBase
 
 <div class="top-nav px-4 py-2">
     <div style="width: 20%;  display:flex; justify-content: left; height: 100%;">
-        <img src="images/fake_logo.png" alt="Replace this logo later, this is a prototype." />
+        <img src="images/logo.png" style="image-rendering: pixelated;" />
     </div>
 
     <div style="width: 80%; display: flex; gap: 4rem; justify-content: center;">
@@ -14,10 +18,10 @@
     </div>
 
     <div style="width: 20%; justify-content: right;" class="social-icons">
-        <a href="https://discord.gg/YOURINVITE" target="_blank"><i class="fab fa-discord fa-2x"></i></a>
-        <a href="https://www.reddit.com/r/YOURSUB/" target="_blank"><i class="fab fa-reddit fa-2x"></i></a>
-        <a href="https://store.steampowered.com/app/YOURAPPID" target="_blank"><i class="fab fa-steam fa-2x"></i></a>
-        <a href="https://youtube.com/YOURCHANNEL" target="_blank"><i class="fab fa-youtube fa-2x"></i></a>
+        <Favicon Href="https://discord.gg/YOURINVITE" Company="FaviconOption.Discord"/>
+        <Favicon Href="https://discord.gg/YOURINVITE" Company="FaviconOption.Reddit"/>
+        <Favicon Href="https://discord.gg/YOURINVITE" Company="FaviconOption.Steam"/>
+        <Favicon Href="https://discord.gg/YOURINVITE" Company="FaviconOption.YouTube"/>
     </div>
 </div>
 
@@ -31,14 +35,15 @@
 </div>
 <div style="background-color: black; width: 100%; height: 150px; justify-content: center; align-items: center; position: relative;">
     <div style="width: 90%; height: 90%">
-        <div style="position: absolute; top: 15%; left: 5%;">
-            <h3 class="dos-font">[Logo] Cintech Studios</h3>
+        <div style="position: absolute; top: 15%; left: 5%; display: flex; gap: 1em; align-items: center;">
+            <img src="images/logo.png" style="image-rendering: pixelated;" />
+            <DosSpan class="dos-font" Style="font-size: 32px">Cintech Studios</DosSpan>
         </div>
         <div class="social-icons" style="position: absolute; top: 15%; right: 5%;">
-            <a href="https://discord.gg/YOURINVITE" target="_blank"><i class="fab fa-discord fa-2x"></i></a>
-            <a href="https://www.reddit.com/r/YOURSUB/" target="_blank"><i class="fab fa-reddit fa-2x"></i></a>
-            <a href="https://store.steampowered.com/app/YOURAPPID" target="_blank"><i class="fab fa-steam fa-2x"></i></a>
-            <a href="https://youtube.com/YOURCHANNEL" target="_blank"><i class="fab fa-youtube fa-2x"></i></a>
+            <Favicon Href="https://discord.gg/YOURINVITE" Company="FaviconOption.Discord" />
+            <Favicon Href="https://discord.gg/YOURINVITE" Company="FaviconOption.Reddit" />
+            <Favicon Href="https://discord.gg/YOURINVITE" Company="FaviconOption.Steam" />
+            <Favicon Href="https://discord.gg/YOURINVITE" Company="FaviconOption.YouTube" />
         </div>
         <div>
             <p class="dos-font" style="position: absolute; bottom: 15%; left: 5%;">

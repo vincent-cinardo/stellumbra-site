@@ -14,6 +14,14 @@ namespace StellumbraSite.Server.Controllers
         {
             _db = db;
         }
+        [HttpGet("GetUserPostCount/{userId}")]
+        public async Task<IActionResult> GetThreadCount(string userId)
+        {
+            int count = await _db.ForumPosts
+                .Where(x => x.PosterId == userId)
+                .CountAsync();
+            return Ok(count);
+        }
         [HttpGet("GetPostCount/{threadID}")]
         public async Task<IActionResult> GetThreadCount(int threadID)
         {

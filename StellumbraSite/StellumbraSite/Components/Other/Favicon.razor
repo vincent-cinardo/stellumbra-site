@@ -1,0 +1,11 @@
+﻿@using StellumbraSite.Model
+
+<a href="@Href" target="_blank"><img style="image-rendering: pixelated" src="images/favicon_@(Company.ToString().ToLower()).png" /></a>
+
+@code {
+	[Parameter]
+	public FaviconOption Company { get; set; }
+
+	[Parameter]
+	public string Href { get; set; }
+}

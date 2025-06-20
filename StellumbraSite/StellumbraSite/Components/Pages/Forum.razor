@@ -119,6 +119,9 @@
                                 <DosP Class="dos-font light-green" Style="font-size: 12px">
                                     @threadTopics[index].TopicShownName
                                 </DosP>
+                                <DosP Class="dos-font light-green" Style="font-size: 12px">
+                                    @thread.DateTime
+                                </DosP>
                             </CustomHypertext>
                         </div>
                         <div style="display: flex; gap: 1em; justify-content: right; width: 45%; align-items: center; text-align: right;">
@@ -130,7 +133,7 @@
                                     @($"{replies[index]}") Replies
                                 </DosP>
                                 <DosP Class="dos-font light-green" Style="font-size: 12px">
-                                    @thread.DateTime
+                                    @($"{views[index]}") Views
                                 </DosP>
                             </div>
 
@@ -149,6 +152,7 @@
     private List<ForumThread> threads;
     private UserData[] threadPosters;
     private int[] replies;
+    private int[] views;
     private ForumTopic[] threadTopics;
     private string userID, userRole;
     protected override async Task OnInitializedAsync()
@@ -167,6 +171,7 @@
         topics = await Http.GetFromJsonAsync<List<ForumTopic>>("/api/Topic/GetAllTopics");
         threads = await Http.GetFromJsonAsync<List<ForumThread>>($"/api/Thread/GetRecentThreads/{recentThreadLimit}");
         replies = new int[threads.Count];
+        views = new int[threads.Count];
         threadTopics = new ForumTopic[threads.Count];
         threadPosters = new UserData[threads.Count];
 
@@ -175,6 +180,7 @@
             int index = i;
             var thread = threads[index];
             replies[index] = await Http.GetFromJsonAsync<int>($"/api/Thread/GetReplies/{thread.Id}");
+            views[index] = await Http.GetFromJsonAsync<int>($"/api/Thread/GetViews/{thread.Id}");
             threadTopics[index] = await Http.GetFromJsonAsync<ForumTopic>($"/api/Topic/GetTopic/{thread.TopicName}");
             threadPosters[index] = await Http.GetFromJsonAsync<UserData>($"/api/User/GetUserData/{thread.PosterId}");
         }
