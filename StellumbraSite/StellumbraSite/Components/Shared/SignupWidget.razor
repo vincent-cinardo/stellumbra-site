@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.UI.Services
 @using StellumbraSite.Components.Buttons
 @using StellumbraSite.Components.Shared
 @using Microsoft.AspNetCore.WebUtilities
@@ -12,9 +13,11 @@
 @inject IUserStore<ApplicationUser> UserStore
 @inject IdentityRedirectManager RedirectManager
 @inject UserManager<ApplicationUser> UserManager
-@inject IEmailSender<ApplicationUser> EmailSender
+@inject IEmailSender EmailSender
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IJSRuntime JS
+@inject IConfiguration Configuration
+
 
 @using System.Text
 @using StellumbraSite.Data
@@ -73,7 +76,10 @@
             Navigation.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
             new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
 
-        await EmailSender.SendConfirmationLinkAsync(user, Registration.Email, HtmlEncoder.Default.Encode(callbackUrl));
+        await EmailSender.SendEmailAsync(
+            Registration.Email, 
+            "Confirm your email",
+            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
         // TODO: Ensure that email is setup. It currently isnt.
         if (UserManager.Options.SignIn.RequireConfirmedAccount)
@@ -96,6 +102,8 @@
         }
         return (IUserEmailStore<ApplicationUser>)UserStore;
     }
+
+    // TODO: use this one and delete the other.
     private async Task RegisterTwo(EditContext editContext)
     {
         await JS.InvokeVoidAsync("auth.registerUser", Registration);

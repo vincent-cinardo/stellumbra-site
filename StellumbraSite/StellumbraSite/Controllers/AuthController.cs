@@ -3,9 +3,10 @@ using StellumbraSite.Data;
 using StellumbraSite.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace StellumbraSite.Server.Controllers
 {
@@ -17,12 +18,14 @@ namespace StellumbraSite.Server.Controllers
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public AuthController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        private readonly IEmailSender _emailSender;
+        public AuthController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
         {
             random = new Random();
             _db = db;
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailSender = emailSender;
         }
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
@@ -62,20 +65,18 @@ namespace StellumbraSite.Server.Controllers
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-            /*var callbackUrl = Navigation.GetUriWithQueryParameters(
-                Navigation.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
-                new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });*/
+            // TODO: Change URL here. Probably need to use IConfiguration file.
+            // TODO: Upgrade SendGrid plan and get domain, or else the emails will ALWAYS be sent to spam folder.
+            var callbackUrl = $"https://localhost:7247/forum/confirmemail?UserId={userId}&code={code}";
 
-            // TODO: Implement emailing later on.
-            //await EmailSender.SendConfirmationLinkAsync(user, Registration.Email, HtmlEncoder.Default.Encode(callbackUrl));
+            await _emailSender.SendEmailAsync(
+                register.Email,
+                "Confirm your email",
+                $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
 
             // TODO: Ensure that email is setup. It currently isnt.
             if (_userManager.Options.SignIn.RequireConfirmedAccount)
             {
-                // TODO: Uncomment later
-                /*RedirectManager.RedirectTo(
-                    "Account/RegisterConfirmation",
-                    new() { ["email"] = Registration.Email, ["returnUrl"] = ReturnUrl });*/
                 return Ok();
             }
 

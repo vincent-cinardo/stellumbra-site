@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using StellumbraSite.Components.Account;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,12 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 
 builder.Services.Configure<CustomSettings>(
     builder.Configuration.GetSection("CustomSettings"));
+
+
+// TODO: Should not store API keys in the appSettings.json file directly.
+builder.Services.AddTransient<IEmailSender, SendGridEmailSender>();
+builder.Services.Configure<ApiKeys>(
+    builder.Configuration.GetSection("ApiKeys"));
 
 // Add CORS services
 builder.Services.AddCors(options =>
