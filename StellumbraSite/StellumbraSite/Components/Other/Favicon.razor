@@ -1,6 +1,8 @@
 ﻿@using StellumbraSite.Model
 
-<a href="@Href" target="_blank"><img style="image-rendering: pixelated" src="images/favicon_@(Company.ToString().ToLower()).png" /></a>
+<a href="@Href" target="_blank">
+	<img style="image-rendering: pixelated" src="@Src" @onmouseenter=OnMouseEnter @onmouseleave=OnMouseLeave/>
+</a>
 
 @code {
 	[Parameter]
@@ -8,4 +10,20 @@
 
 	[Parameter]
 	public string Href { get; set; }
+
+	private bool mouseOver;
+	private string Src
+	{
+		get => mouseOver ?
+		$"images/favicon_{Company.ToString().ToLower()}_hovered.png" :
+		$"images/favicon_{Company.ToString().ToLower()}.png";
+	}
+	private async Task OnMouseEnter(MouseEventArgs args)
+	{
+		mouseOver = true;
+	}
+	private async Task OnMouseLeave(MouseEventArgs args)
+	{
+		mouseOver = false;
+	}
 }
