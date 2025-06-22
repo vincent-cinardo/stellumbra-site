@@ -51,7 +51,7 @@
     private string signupFailMessage;
     private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
 
-    private async Task Register(EditContext editContext)
+    /*private async Task Register(EditContext editContext)
     {
         string username = Registration.Username;
         var user = Activator.CreateInstance<ApplicationUser>();
@@ -93,7 +93,7 @@
         await SignInManager.SignInAsync(user, isPersistent: false);
 
         Navigation.NavigateTo("/forum");
-    }
+    }*/
     private IUserEmailStore<ApplicationUser> GetEmailStore()
     {
         if (!UserManager.SupportsUserEmail)

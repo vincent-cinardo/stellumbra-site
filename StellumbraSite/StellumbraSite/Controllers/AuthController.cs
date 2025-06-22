@@ -1,9 +1,8 @@
-﻿using System.Text;
-using StellumbraSite.Data;
+﻿using StellumbraSite.Data;
 using StellumbraSite.Model;
+using StellumbraSite.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,14 +13,13 @@ namespace StellumbraSite.Server.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private Random random;
+        private const string baseCallbackUrl = $"https://localhost:7247/forum/confirm-email";
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         public AuthController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
         {
-            random = new Random();
             _db = db;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -30,13 +28,54 @@ namespace StellumbraSite.Server.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
+            var user = await _userManager.FindByNameAsync(login.Username);
+
+            if (user == null)
+            {
+                return Unauthorized(new
+                {
+                    errorCode = "InvalidUsername",
+                    message = "Username does not exist."
+                });
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                return Unauthorized(new
+                {
+                    errorCode = "EmailNotConfirmed",
+                    message = "This user has yet to confirm their email."
+                });
+            }
             var result = await _signInManager.PasswordSignInAsync(login.Username, login.Password, login.RememberMe, lockoutOnFailure: false);
             if (result.Succeeded)
             {
                 return Ok();
             }
 
-            return BadRequest(result);
+            if (result.IsLockedOut)
+            {
+                return Unauthorized(new
+                {
+                    errorCode = "AccountLocked",
+                    message = "Your account is locked."
+                });
+            }
+
+            if (result.IsNotAllowed)
+            {
+                return Unauthorized(new
+                {
+                    errorCode = "LoginNotAllowed",
+                    message = "Login is not allowed for this user."
+                });
+            }
+
+            return Unauthorized(new
+            {
+                errorCode = "InvalidPassword",
+                message = "Incorrect password."
+            });
         }
 
         [HttpPost("Logout")]
@@ -61,18 +100,7 @@ namespace StellumbraSite.Server.Controllers
                 return BadRequest(result);
             }
 
-            var userId = await _userManager.GetUserIdAsync(user);
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-            // TODO: Change URL here. Probably need to use IConfiguration file.
-            // TODO: Upgrade SendGrid plan and get domain, or else the emails will ALWAYS be sent to spam folder.
-            var callbackUrl = $"https://localhost:7247/forum/confirmemail?UserId={userId}&code={code}";
-
-            await _emailSender.SendEmailAsync(
-                register.Email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
+            await EmailHelper.SendEmailConfirmationAsync(user, _userManager, _emailSender, baseCallbackUrl);
 
             // TODO: Ensure that email is setup. It currently isnt.
             if (_userManager.Options.SignIn.RequireConfirmedAccount)
@@ -83,7 +111,19 @@ namespace StellumbraSite.Server.Controllers
             await _signInManager.SignInAsync(user, isPersistent: false);
             return Ok();
         }
-        
+        [HttpGet("SendConfirmationLink/{userId}")]
+        public async Task<IActionResult> SendConfirmationLink(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            { 
+                return NotFound("User was not found.");
+            }
+
+            await EmailHelper.SendEmailConfirmationAsync(user, _userManager, _emailSender, baseCallbackUrl);
+            return Ok();
+        }
+
         // todo
         /*[HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)

@@ -13,9 +13,24 @@
             if (response.ok) {
                 location.reload();
             } else {
-                const err = await response.text();
-                console.error("Login failed", err);
-                alert("Login failed");
+                const errorText = await response.text();
+                let error = JSON.parse(errorText);
+                switch (error.errorCode) {
+                    case "EmailNotConfirmed":
+                        window.location.href = "/forum/resend-email-confirmation";
+                        break;
+                    case "InvalidUsername":
+                    case "InvalidPassword":
+                    case "LoginNotAllowed":
+                    case "AccountLocked":
+                        console.error("Login failed:", error.message);
+                        alert("Login failed: " + error.message);
+                        break;
+                    default:
+                        console.error("Unexpected login error:", error.message);
+                        alert("Unexpected error: " + error.message);
+                        break;
+                }
             }
         } catch (e) {
             console.error("Network or server error", e);

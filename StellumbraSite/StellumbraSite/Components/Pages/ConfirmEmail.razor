@@ -1,9 +1,11 @@
 ﻿@page "/forum/confirm-email"
 
 @using System.Text
+@using StellumbraSite.Data
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
-@using StellumbraSite.Data
+@using StellumbraSite.Components.Account
+@using StellumbraSite.Components.Account.Shared
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IdentityRedirectManager RedirectManager
@@ -29,7 +31,7 @@
     {
         if (UserId is null || Code is null)
         {
-            RedirectManager.RedirectTo("");
+            RedirectManager.RedirectTo("/forum");
         }
 
         var user = await UserManager.FindByIdAsync(UserId);

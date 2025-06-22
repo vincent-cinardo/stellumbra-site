@@ -1,16 +1,19 @@
-﻿@page "/Account/ResendEmailConfirmation"
+﻿@page "/forum/resend-email-confirmation"
 
-@using System.ComponentModel.DataAnnotations
 @using System.Text
+@using StellumbraSite.Components.Account.Shared
+@using StellumbraSite.Data
 @using System.Text.Encodings.Web
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
-@using StellumbraSite.Data
+@using StellumbraSite.Components.Account
+@using System.ComponentModel.DataAnnotations
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IEmailSender<ApplicationUser> EmailSender
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject HttpClient Http
 
 <PageTitle>Resend email confirmation</PageTitle>
 
@@ -38,7 +41,6 @@
 
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();
-
     private async Task OnValidSubmitAsync()
     {
         var user = await UserManager.FindByEmailAsync(Input.Email!);
@@ -47,18 +49,12 @@
             message = "Verification email sent. Please check your email.";
             return;
         }
+        string userId = await UserManager.GetUserIdAsync(user);
 
-        var userId = await UserManager.GetUserIdAsync(user);
-        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
-        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        var callbackUrl = NavigationManager.GetUriWithQueryParameters(
-            NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
-            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code });
-        await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
+        await Http.GetAsync($"/api/Auth/SendConfirmationLink/{userId}");
 
         message = "Verification email sent. Please check your email.";
     }
-
     private sealed class InputModel
     {
         [Required]
