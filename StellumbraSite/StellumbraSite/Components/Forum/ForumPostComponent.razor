@@ -26,8 +26,7 @@
         </div>
     }
 
-    <!-- TODO: Allow admins to delete threads but not if that thread is an owner thread. -->
-    @if (ViewingUserId == Post.PosterId || ViewingUserRole == "Owner")
+    @if (ViewingUserRole == "Admin" || ViewingUserRole == "Owner")
     {
         <button @onclick="() => OnClickDelete.InvokeAsync(Post)">
             X

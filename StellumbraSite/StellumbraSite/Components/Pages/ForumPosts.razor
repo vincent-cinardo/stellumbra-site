@@ -30,32 +30,24 @@
 <ForumContentFrame>
     @if (forumThread != null && forumThread != null)
     {
-        <CustomHypertext Href="@ReturnUrl" HasBlinkingArrow=true>
-            Back to threads: @forumTopic.TopicShownName
-        </CustomHypertext>
-        <h3 class="dos-font">@forumThread.Title</h3>
+        <div style="margin-bottom: 1em;">
+            <CustomHypertext Href="@ReturnUrl" HasBlinkingArrow=true>
+                Back to threads: @forumTopic.TopicShownName
+            </CustomHypertext>
+            <h3 class="dos-font">@forumThread.Title</h3>
+        </div>
     }
 
     @if (posts != null)
     {
         @for (int i = 0; i < posts.Count; i++)
         {
-            <!-- TODO: User posterID to get UserName from profile DB -->
             int index = i;
-            @if (index == posts.Count - 1)
-            {
-                <ForumPostComponent Style="@LastStyle" Post="posts[index]"
-                ViewingUserId="userID"
-                ViewingUserRole="userRole"
-                OnClickDelete="OnClickDeletePost" />
-            }
-            else
-            {
-                <ForumPostComponent Style="@DefaultStyle" Post="posts[index]"
-                ViewingUserId="userID"
-                ViewingUserRole="userRole"
-                OnClickDelete="OnClickDeletePost" />
-            }
+            var style = index == posts.Count - 1 ? @LastStyle : @DefaultStyle;
+            <ForumPostComponent Style="@style" Post="posts[index]"
+                                ViewingUserId="userID"
+                                ViewingUserRole="userRole"
+                                OnClickDelete="OnClickDeletePost" />
         }
     }
 
@@ -77,8 +69,8 @@
 
 @code {
     // TODO: These are reduntant see ForumThreads.razor
-    private string DefaultStyle { get => "border-top: 2px solid #00ff58 !important;"; }
-    private string LastStyle { get => "border-top: 2px solid #00ff58 !important; border-bottom: 2px solid black !important;"; }
+    private string DefaultStyle { get => "padding-top: 1em; padding-bottom: 1em; border-top: 2px solid #00ff58 !important;"; }
+    private string LastStyle { get => "padding-top: 1em; padding-bottom: 1em; border-top: 2px solid #00ff58 !important; border-bottom: 2px solid black !important;"; }
 
     private int pageSize;
     private const int PAGES_PER_DIRECTION = 3;

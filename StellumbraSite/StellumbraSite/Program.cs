@@ -4,8 +4,8 @@ using StellumbraSite.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using StellumbraSite.Components.Account;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +14,15 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-// TODO: This is hardcoded, change this later in prod
+builder.Services.Configure<CustomSettings>(
+    builder.Configuration.GetSection("CustomSettings")
+);
+
+var baseUrl = builder.Configuration.GetSection("CustomSettings")["BaseUrl"];
+
 builder.Services.AddScoped(sp => new HttpClient
 {
-    BaseAddress = new Uri("https://localhost:7247/")
+    BaseAddress = new Uri(baseUrl)
 });
 
 builder.Services.AddHttpContextAccessor();
@@ -28,13 +33,6 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
 
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-    })
-    .AddIdentityCookies();
-
 builder.Services.AddAntiforgery();
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
@@ -43,21 +41,14 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.Secure = CookieSecurePolicy.Always;
 });
 
-builder.Services.Configure<CustomSettings>(
-    builder.Configuration.GetSection("CustomSettings"));
-
-
-// TODO: Should not store API keys in the appSettings.json file directly.
 builder.Services.AddTransient<IEmailSender, SendGridEmailSender>();
-builder.Services.Configure<ApiKeys>(
-    builder.Configuration.GetSection("ApiKeys"));
 
 // Add CORS services
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://localhost:7247")
+        policy.WithOrigins(baseUrl)
               .AllowCredentials()
               .AllowAnyHeader()
               .AllowAnyMethod();
@@ -69,9 +60,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+    // You can add more Identity options here as needed
+    })
     .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddSignInManager()
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
@@ -106,7 +100,6 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(StellumbraSite.Client._Imports).Assembly);
 
-// Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
 app.MapControllers();
 

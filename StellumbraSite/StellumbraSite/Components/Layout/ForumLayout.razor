@@ -8,6 +8,7 @@
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Identity
 @using StellumbraSite.Components.Text
+@using StellumbraSite.Components.Other
 @using Microsoft.AspNetCore.WebUtilities
 @using StellumbraSite.Components.Buttons
 @using StellumbraSite.Components.Hypertext
@@ -15,22 +16,16 @@
 <main>
     @if (loginShown)
     {
-        <div class="modal-overlay">
-            <CustomFuncButton OnClick="() => ShowLogin(false)">
-                X
-            </CustomFuncButton>
-            <LoginWidget OnLogin=OnUserLogin ReturnUrl=@Navigation.Uri/>
-        </div>
+        <PromptBox OnClickClose="() => loginShown = false">
+            <LoginWidget OnLogin=OnUserLogin ReturnUrl=@Navigation.Uri />
+        </PromptBox>
     }
 
     @if (signupShown)
     {
-        <div class="modal-overlay">
-            <CustomFuncButton OnClick="() => ShowSignUp(false)">
-                X
-            </CustomFuncButton>
-            <SignupWidget />
-        </div>
+        <PromptBox OnClickClose="() => signupShown = false">
+                <SignupWidget />
+        </PromptBox>
     }
 
     <div class="crt-overlay forum-background">
@@ -57,10 +52,10 @@
                     </Authorized>
                     <NotAuthorized>
                         <div style="display: flex; width: 50%; justify-content: right; align-items: center; gap: 1rem;">
-                            <CustomFuncButton OnClick="() => ShowLogin(true)">
+                            <CustomFuncButton OnClick="() => loginShown = true">
                                 Log In
                             </CustomFuncButton>
-                            <CustomFuncButton OnClick="() => ShowSignUp(true)">
+                            <CustomFuncButton OnClick="() => signupShown = true">
                                 Sign Up
                             </CustomFuncButton>
                         </div>
@@ -93,15 +88,6 @@
         {
             { "ReturnUrl", Navigation.Uri }
         };
-    }
-    private void ShowLogin(bool shown)
-    {
-        //Navigation.NavigateTo(QueryHelpers.AddQueryString("/forum/login", ReturnQueryString), forceLoad: true);
-        loginShown = shown;
-    }
-    private void ShowSignUp(bool shown)
-    { 
-        signupShown = shown;
     }
     private async Task OnUserLogin(string user)
     {

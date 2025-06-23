@@ -18,6 +18,11 @@ a {
     text-decoration: none;
 }
 
+img {
+    max-width: 512px;
+    max-height: 512px;
+}
+
 @font-face {
     font-family: 'PerfectDOSVGA437';
     src: url('/fonts/PerfectDOSVGA437.ttf') format('truetype');
@@ -146,8 +151,6 @@ input.custom-text-input {
     font-family: 'PerfectDOSVGA437', monospace, monospace;
     color: #00ff58;
 }
-
-
 
     .scaling-dos-font {
         font-family: 'PerfectDOSVGA437', monospace, monospace;
@@ -344,8 +347,6 @@ img.news-viewer-img {
 }
 
 .modal-overlay {
-    left: 0px;
-    top: 0px;
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -355,87 +356,27 @@ img.news-viewer-img {
 
 /*ENDREGION: Forum*/
 
-/*STARTREGION: Quill text editor.*/
-
-.ql-bold::before {
-    content: 'B <br>';
-    font-family: 'PerfectDOSVGA437', monospace, monospace;
-    font-size: 16px;
-    color: #00ff58;
-}
-
-.ql-bold:hover::before {
-    color: rgb(159, 255, 127);
-}
-
-.ql-italic::before {
-    content: 'I <br>';
-    font-family: 'PerfectDOSVGA437', monospace, monospace;
-    font-size: 16px;
-    color: #00ff58;
-    font-style: italic;
-}
-
-
-.ql-italic:hover::before {
-    color: rgb(159, 255, 127);
-}
-
-.ql-underline::before {
-    content: 'U <br>';
-    font-family: 'PerfectDOSVGA437', monospace, monospace;
-    font-size: 16px;
-    color: #00ff58;
-    text-decoration: underline;
-    text-align: start;
-}
-
-.ql-underline:hover::before {
-    color: rgb(159, 255, 127);
-}
-
-.ql-italic:hover::before {
-    color: rgb(159, 255, 127);
-}
-
-.ql-toolbar .ql-stroke {
-    stroke: #00ff58 !important;
-}
-
-.ql-toolbar .ql-stroke:hover {
-    stroke: rgb(159, 255, 127);
-}
-
-.ql-toolbar *:hover {
-    font-weight: bold;
-    color: rgb(159, 255, 127);
-}
-
-.ql-toolbar .ql-picker {
-    color: #00ff58 !important;
-}
-
-.ql-toolbar button {
-    color: #00ff58 !important;
-}
-
-.ql-toolbar.ql-snow {
-    border: 2px solid #00ff58 !important;
-    align-items: center;
-}
-
-.ql-active {
-    font-weight: bold;
-    color: rgb(159, 255, 127);
-}
-
 .ql-editor {
-    /* Example: center text and change color */
-    font-family: 'PerfectDOSVGA437', monospace, monospace, monospace;
-    color: #00ff58;
+    font-family: PerfectDOSVGA437, monospace !important;
 }
 
-/*ENDREGION: Quill text editor.*/
+    .ql-editor ul:not([class]) li::before {
+        content: "o ";
+    }
+
+    .ql-editor a {
+        font-family: PerfectDOSVGA437, monospace;
+        text-decoration: underline;
+        color: #00ff58 !important;
+        cursor: pointer;
+    }
+
+        .ql-editor a:hover {
+            font-family: PerfectDOSVGA437, monospace;
+            text-decoration: underline;
+            color: rgb(159, 255, 127) !important;
+            cursor: pointer;
+        }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;

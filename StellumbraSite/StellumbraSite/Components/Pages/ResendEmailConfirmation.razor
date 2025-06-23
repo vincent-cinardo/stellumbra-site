@@ -1,40 +1,47 @@
 ﻿@page "/forum/resend-email-confirmation"
+@layout ForumLayout
 
 @using System.Text
-@using StellumbraSite.Components.Account.Shared
+@using StellumbraSite.Components.Buttons
 @using StellumbraSite.Data
 @using System.Text.Encodings.Web
 @using Microsoft.AspNetCore.Identity
+@using StellumbraSite.Components.Forum
 @using Microsoft.AspNetCore.WebUtilities
 @using StellumbraSite.Components.Account
 @using System.ComponentModel.DataAnnotations
+@using StellumbraSite.Components.Account.Shared
 
-@inject UserManager<ApplicationUser> UserManager
-@inject IEmailSender<ApplicationUser> EmailSender
+@inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
-@inject HttpClient Http
+@inject UserManager<ApplicationUser> UserManager
+@inject IEmailSender<ApplicationUser> EmailSender
 
 <PageTitle>Resend email confirmation</PageTitle>
 
-<h1>Resend email confirmation</h1>
-<h2>Enter your email.</h2>
-<hr />
-<StatusMessage Message="@message" />
-<div class="row">
-    <div class="col-md-4">
-        <EditForm Model="Input" FormName="resend-email-confirmation" OnValidSubmit="OnValidSubmitAsync" method="post">
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert" />
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Email" class="form-control" aria-required="true" placeholder="name@example.com" />
-                <label for="email" class="form-label">Email</label>
-                <ValidationMessage For="() => Input.Email" class="text-danger" />
+<ForumContentFrame>
+    <div style="display: flex; justify-content: center; flex-direction: column;">
+        <h1 class="dos-font">Resend email confirmation</h1>
+        <h2 class="dos-font">Enter your email.</h2>
+        <hr />
+        <StatusMessage Message="@message" />
+        <div class="row">
+            <div class="col-md-4">
+                <EditForm Model="Input" FormName="resend-email-confirmation" OnValidSubmit="OnValidSubmitAsync" method="post">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary class="text-danger" role="alert" />
+                    <div class="form-floating mb-3">
+                        <input class="custom-text-input" placeholder="name@example.com" @bind-value="Input.Email" />
+                        <!-- <InputText @bind-Value="Input.Email" class="form-control" aria-required="true" placeholder="name@example.com" /> -->
+                        <ValidationMessage For="() => Input.Email" class="text-danger" />
+                    </div>
+                    <CustomSubmitButton>Resend</CustomSubmitButton>
+                </EditForm>
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Resend</button>
-        </EditForm>
+        </div>
     </div>
-</div>
+</ForumContentFrame>
 
 @code {
     private string? message;

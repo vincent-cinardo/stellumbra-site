@@ -18,26 +18,46 @@
 @inject IJSRuntime JS
 @inject IConfiguration Configuration
 
-
 @using System.Text
 @using StellumbraSite.Data
 @using StellumbraSite.Model
 @using System.Security.Claims
 @using System.Text.Encodings.Web
+@using StellumbraSite.Components.Text
 
-<div>
-    <EditForm Model="Registration" method="post" OnValidSubmit="RegisterTwo" FormName="register">
-        <h3 class="dos-font">Register</h3>
-        <p>@signupFailMessage</p>
-        <input class="custom-text-input" id="email" placeholder="Email" @bind-value="Registration.Email" />
-        <input class="custom-text-input" id="username" placeholder="Username" @bind-value="Registration.Username" />
-        <input class="custom-text-input" id="password" type="password" placeholder="Password" @bind-value="Registration.Password" />
-        <input class="custom-text-input" id="confirmPassword" type="password" placeholder="Confirm Password" @bind-value="Registration.ConfirmPassword" />
+<EditForm Model="Registration" method="post" OnValidSubmit="RegisterTwo" FormName="register">
+    <h3 class="dos-font">Register</h3>
+    <p>@signupFailMessage</p>
+    <div style="display: flex; flex-direction: column; gap: 1em;">
+        <label>
+            <DosP>
+                Email
+            </DosP>
+            <input class="custom-text-input" id="email" placeholder="Email" @bind-value="Registration.Email" />
+        </label>
+        <label>
+            <DosP>
+                Username
+            </DosP>
+            <input class="custom-text-input" id="username" placeholder="Username" @bind-value="Registration.Username" />
+        </label>
+        <label>
+            <DosP>
+                Password
+            </DosP>
+            <input class="custom-text-input" id="password" type="password" placeholder="Password" @bind-value="Registration.Password" />
+        </label>
+        <label>
+            <DosP>
+                Password
+            </DosP>
+            <input class="custom-text-input" id="confirmPassword" type="password" placeholder="Confirm Password" @bind-value="Registration.ConfirmPassword" />
+        </label>
         <CustomSubmitButton>
             Sign Up
         </CustomSubmitButton>
-    </EditForm>
-</div>
+    </div>
+</EditForm>
 
 @code {
     private IEnumerable<IdentityError>? identityErrors;

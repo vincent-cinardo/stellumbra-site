@@ -18,8 +18,8 @@
 @using System.ComponentModel.DataAnnotations
 @using StellumbraSite.Components.Account.Shared
 
-<div>
-    <EditForm Model="@LoginModel" asp-route-returnUrl="@ReturnUrl" OnValidSubmit="@HandleLoginTwo" FormName="LoginForm">
+<EditForm Model="@LoginModel" asp-route-returnUrl="@ReturnUrl" OnValidSubmit="@HandleLoginTwo" FormName="LoginForm">
+    <div style="display: flex; flex-direction: column; gap: 1em;">
         <DataAnnotationsValidator />
         <h3 class="dos-font">Login</h3>
         <p>@loginFailedMessage</p>
@@ -27,19 +27,19 @@
         <ValidationMessage For="() => LoginModel.Username" />
         <input class="custom-text-input" id="password" type="password" @bind-value=@LoginModel.Password placeholder="Password" />
         <ValidationMessage For="() => LoginModel.Password" />
-        <div>
-            <label>
-                <CustomCheckbox @bind-Value=@LoginModel.RememberMe/>
-                <DosP>
+        <div >
+            <label style ="display: flex; gap: 0.5em">
+                <CustomCheckbox @bind-Value=@LoginModel.RememberMe />
+                <DosSpan Style="width: fit-content">
                     Remember me
-                </DosP>
+                </DosSpan>
             </label>
         </div>
         <CustomSubmitButton>
             Log in
         </CustomSubmitButton>
-    </EditForm>
-</div>
+    </div>
+</EditForm>
 
 @code {
     public LoginModel LoginModel { get; set; } = new();

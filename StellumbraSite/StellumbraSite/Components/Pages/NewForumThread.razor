@@ -38,7 +38,7 @@
     {
         <!-- TODO: After the owner role is set up, uncomment this.-->
         <!-- <AuthorizeView Roles="Owner">-->
-        <AuthorizeView>
+        <AuthorizeView Roles="Owner Admin">
             <Authorized>
                 <DosP>Caption</DosP>
                 <input class="custom-text-input" id="caption" @bind-value="caption" />

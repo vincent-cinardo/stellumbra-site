@@ -102,7 +102,6 @@ namespace StellumbraSite.Server.Controllers
 
             await EmailHelper.SendEmailConfirmationAsync(user, _userManager, _emailSender, baseCallbackUrl);
 
-            // TODO: Ensure that email is setup. It currently isnt.
             if (_userManager.Options.SignIn.RequireConfirmedAccount)
             {
                 return Ok();

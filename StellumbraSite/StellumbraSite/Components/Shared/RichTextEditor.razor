@@ -1,22 +1,37 @@
 ﻿@inject IJSRuntime JS
 
+@using StellumbraSite.Components.Text
 @using StellumbraSite.Data
 @using StellumbraSite.Components.Buttons
 
-<div>
-    <div id="@EditorId" style="height: 300px; background-color: rgb(10, 10, 10); border-right: solid 2px #00ff58; border-left: solid 2px #00ff58; border-bottom: solid 2px #00ff58" />
-    <div style="margin-top: 1rem; margin-bottom: 1rem;">
-        <CustomFuncButton OnClick="Submit">
-            Submit
-        </CustomFuncButton>
-    </div>
+<div id="toolbar" style="border-color: #00ff58;">
+    <span>
+        <button class="custom-hypertext dos-font" id="boldBtn" title="Bold">B</button>
+        <button class="custom-hypertext dos-font" id="italicBtn" title="Italic">I</button>
+        <button class="custom-hypertext dos-font" id="underlineBtn" title="Underline">U</button>
+    </span>
+    <span>
+        <button class="custom-hypertext dos-font" id="orderedBtn" title="Ordered List">1.</button>
+        <button class="custom-hypertext dos-font" id="bulletBtn" title="Bullet List">o</button>
+    </span>
+    <span style="display: flex; gap: 1em">
+        <button class="custom-hypertext dos-font" id="linkBtn" title="Insert Link">Link</button>
+        <input type="file" id="imageInput" accept="image/*" style="display: none">
+        <button class="custom-hypertext dos-font" id="imageBtn" title="Insert Image">Image</button>
+    </span>
 </div>
+
+<div id="editor" class="dos-font" style="height: 300px; border-color: #00ff58;"></div>
+<button type="button" class="custom-button" onclick="@Submit">
+    <DosP>
+        Submit
+    </DosP>
+</button>
 
 @code {
     [Parameter]
     [EditorRequired]
     public EventCallback OnClick { get; set; }
-    private string EditorId = "editor";
     public string HtmlContent;
 
     private ValueTask<string> submitTask;
@@ -25,14 +40,14 @@
     {
         if (firstRender)
         {
-            await JS.InvokeVoidAsync("quillEditor.initialize", EditorId);
+            await JS.InvokeVoidAsync("quill.initialize", "editor");
         }
     }
     private async Task Submit()
     {
         try
         {
-            submitTask = JS.InvokeAsync<string>("quillEditor.onSubmit");
+            submitTask = JS.InvokeAsync<string>("quill.onSubmit");
             HtmlContent = await submitTask;
             await OnClick.InvokeAsync();
         }

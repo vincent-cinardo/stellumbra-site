@@ -3,6 +3,7 @@
 
 @inject IJSRuntime JS
 @inject HttpClient HttpClient
+@inject NavigationManager Navigation;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 @using StellumbraSite.Data
@@ -10,23 +11,29 @@
 @using StellumbraSite.Helpers
 @using StellumbraSite.Components.Text
 @using StellumbraSite.Components.Other
+@using StellumbraSite.Components.Forum
 @using StellumbraSite.Components.Buttons
+@using StellumbraSite.Components.Hypertext
 
 <PageTitle>Profile-Manager</PageTitle>
 
 @if (userIsLogged)
 {
-    <ProfilePicture UserData="@userData"/>
-    <CustomUploadFileButton OnChange="HandleFileSelected">
-        Upload Profile Picture
-    </CustomUploadFileButton>
-
-    <DosP>
-        @postCount Posts
-    </DosP>
-    <DosP>
-        @replyCount Replies
-    </DosP>
+    <ForumContentFrame>
+        <CustomHypertext Href="/forum" HasBlinkingArrow=true>Back to forum</CustomHypertext>
+        <div style="display: flex; flex-direction: column; gap: 1em;">
+            <ProfilePicture UserData="@userData" />
+            <CustomUploadFileButton OnChange="HandleFileSelected">
+                Upload Profile Picture
+            </CustomUploadFileButton>
+            <DosP>
+                @postCount Posts
+            </DosP>
+            <DosP>
+                @replyCount Replies
+            </DosP>
+        </div>
+    </ForumContentFrame>
 }
 else
 { 
@@ -57,5 +64,6 @@ else
         string filepath = await FileHelper.UploadImage(args.File, JS);
         userData.ProfilePicturePath = filepath;
         await HttpClient.PostAsJsonAsync($"/api/User/SetProfilePicture", userData);
+        Navigation.Refresh(forceReload: true);
     }
 }

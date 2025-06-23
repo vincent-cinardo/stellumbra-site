@@ -1,0 +1,21 @@
+﻿@using StellumbraSite.Components.Buttons
+
+<div class="modal-overlay" style="display: flex; justify-content: center; ">
+    <div style="border: solid 2px #00ff58; background-color: black; height: fit-content; margin: 1em;">
+        <div style="border-bottom: solid 2px #00ff58; padding: 0.5em">
+            <CustomFuncButton OnClick="() => OnClickClose.InvokeAsync()">
+                X
+            </CustomFuncButton>
+        </div>
+        <div style="padding: 2em">
+            @ChildContent
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnClickClose { get; set; }
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}
